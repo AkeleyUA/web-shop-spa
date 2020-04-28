@@ -5,10 +5,10 @@ import { AuthContext } from '../../context/AuthContext'
 import './AuthForm.scss'
 
 
-export const  AuthForm = () => {
+export const AuthForm = () => {
   const auth = useContext(AuthContext)
   const message = useMessage()
-  const { loading, err, request, clearErr} = useHttp()
+  const { loading, err, request, clearErr } = useHttp()
   const [form, setForm] = useState(
     {email:'', password: ''}
   )

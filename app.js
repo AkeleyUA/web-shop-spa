@@ -7,6 +7,8 @@ const PORT = config.get('PORT') || 5000
 const app = express()
 app.use(express.json({extended: true}))
 app.use('/api/auth', require('./routes/auth.api'))
+app.use('/api/products', require('./routes/product.api'))
+app.use('/api/categories', require('./routes/categories.api'))
 
 const start = async () => {
   try {

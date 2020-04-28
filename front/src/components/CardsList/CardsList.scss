@@ -6,4 +6,8 @@
   .btn {
     padding: 0 30px;
   }
+  .card .card-image img {
+    object-fit: contain;
+    height: 250px;
+  }
 }

@@ -1,119 +1,127 @@
-import React, { useState, useEffect } from 'react'
-import { Collapsible, CollapsibleItem, Checkbox } from 'react-materialize'
-
-const categoryFromDb = [
-  {
-    name: 'Все категории',
-    id: 'category-0'
-  },
-  {
-    name: 'Категория 1',
-    id: 'category-1'
-  },
-  {
-    name: 'Категория 2',
-    id: 'category-2'
-  },
-  {
-    name: 'Категория 3',
-    id: 'category-3'
-  }
-]
+import React, { useState, useEffect, useCallback, useContext } from 'react'
+import { Collapsible, CollapsibleItem, RadioGroup, Preloader } from 'react-materialize'
+import { useMessage } from '../../Hooks/message.hook'
+import { useHttp } from '../../Hooks/http.hook'
+import './Filter.scss'
+import { CategoriesContext } from '../../context/CategoriesContext'
 
 const deliveryesFromDb = [
   {
     name: 'Все способы',
-    id: 'delivery-0'
+    _id: 'delivery-0'
   },
   {
     name: 'Доставка по почте',
-    id: 'delivery-1'
+    _id: 'delivery-1'
   },
   {
     name: 'Доставка курьером',
-    id: 'delivery-2'
+    _id: 'delivery-2'
   },
 ]
 
 const brandsFromDb = [
   {
     name: 'Все бренды',
-    id: 'brand-0'
+    _id: 'brand-0'
   },
   {
     name: 'Бренд-1',
-    id: 'brand-1'
+    _id: 'brand-1'
   },
   {
     name: 'Бренд-2',
-    id: 'brand-2'
+    _id: 'brand-2'
   },
   {
     name: 'Бренд-3',
-    id: 'brand-3'
+    _id: 'brand-3'
   },
   {
     name: 'Бренд-4',
-    id: 'brand-4'
+    _id: 'brand-4'
   },
   {
     name: 'Бренд-5',
-    id: 'brand-5'
+    _id: 'brand-5'
   },
 ]
 
 export const Filter = () => {
-  const [categoryes, setCategoryes] = useState([])
-  const [deliveryes, setDeliveryes] = useState([])
+  const curr = useContext(CategoriesContext)
+  const [categories, setCategories] = useState([])
+  const [deliveries, setDeliveries] = useState([])
   const [brands, setBrends] = useState([])
+  const { loading, err, request, clearErr } = useHttp()
+  const message = useMessage()
+
+  const getCategories = useCallback(async () => {
+    try {
+      const data = await request('/api/categories/get')
+      setCategories(data)
+      curr.setCurrentCategory(data[0].name)
+    } catch (e) {}
+  }, [request])
 
   useEffect(() => {
-    setCategoryes(categoryFromDb)
-    setDeliveryes(deliveryesFromDb)
+    getCategories()
+    setDeliveries(deliveryesFromDb)
     setBrends(brandsFromDb)
-  }, [categoryes, deliveryes, brands])
+  }, [])
 
-  const checkboxCreator = (array) => {
-    if(array.length > 0) {
-      return array.map((item, index) => {
-        return (
-          <p key={item.id}>
-            <Checkbox
-              id={item.id}
-              label={item.name}
-              value={item.name}
-              checked={ index === 0 ? true : false }
-            />
-          </p>
-        )
-      })
-    } else {
-      return null
-    }
+  useEffect(() => {
+    message(err)
+    clearErr()
+  },[err, message, clearErr])
+
+  const changeValueHendler = (event) => {
+    curr.setCurrentCategory(event.currentTarget.value)
   }
 
-  return (
-      <Collapsible
-      accordion={false}
-    >
-      <CollapsibleItem
-        expanded
-        header="Категории"
+  const checkboxCreator = (array) => {
+    return (
+      <div className="categories-group">
+        <RadioGroup
+          label="Catgories"
+          name="catgory"
+          onChange={changeValueHendler}
+          options={array.map(item => ({label: item.name, value: item.name}))}
+          value={curr.current}
+          withGap
+        />
+      </div>
+    )
+  }
+  if (loading) {
+    return (
+      <div className="preloader-center">
+        <Preloader />
+      </div>
+    )
+  } else {
+    return (
+        <Collapsible
+        accordion={false}
       >
-        {checkboxCreator(categoryes)}
-      </CollapsibleItem>
-      <CollapsibleItem
-        expanded
-        header="Бренд"
-      >
-        {checkboxCreator(brands)}
-      </CollapsibleItem>
-      <CollapsibleItem
-        expanded
-        header="Способ доставки"
-      >
-        {checkboxCreator(deliveryes)}
-      </CollapsibleItem>
-    </Collapsible>
-  )
+        <CollapsibleItem
+          expanded
+          header="Категории"
+        >
+          {checkboxCreator(categories)}
+        </CollapsibleItem>
+        <CollapsibleItem
+          expanded
+          header="Бренд"
+        >
+          {checkboxCreator(brands)}
+        </CollapsibleItem>
+        <CollapsibleItem
+          expanded
+          header="Способ доставки"
+        >
+          {checkboxCreator(deliveries)}
+        </CollapsibleItem>
+      </Collapsible>
+    )
+  }
 }

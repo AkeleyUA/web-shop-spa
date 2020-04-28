@@ -1,83 +1,60 @@
-import React, { useState, useEffect } from 'react'
-import { Card, CardTitle, Icon, Button, Col } from 'react-materialize'
-import { Link } from 'react-router-dom' 
+import React, { useState, useEffect, useCallback, useContext } from 'react'
+import { Button, Col, ProgressBar, Card, Icon, CardTitle } from 'react-materialize'
 import './CardsList.scss'
-
-const productsFromDb = [
-  { 
-    id: 0,
-    name: 'Товар-1',
-    description: 'Описание товара-1',
-    rate: 4,
-    price: 12,
-    amount: 3,
-    img: 'https://image.jimcdn.com/app/cms/image/transf/dimension=1820x1280:format=jpg/path/s0d19460186ee283c/image/i979b3aa040567fdc/version/1533817004/image.jpg'
-  },
-  { 
-    id: 1,
-    name: 'Товар-2',
-    description: 'Описание товара-2',
-    rate: 4,
-    price: 11,
-    amount: 4,
-    img: 'https://image.jimcdn.com/app/cms/image/transf/dimension=1820x1280:format=jpg/path/s0d19460186ee283c/image/i979b3aa040567fdc/version/1533817004/image.jpg'
-  },
-  { 
-    id: 2,
-    name: 'Товар-3',
-    description: 'Описание товара-3',
-    rate: 4,
-    price: 12,
-    amount: 3,
-    img: 'https://image.jimcdn.com/app/cms/image/transf/dimension=1820x1280:format=jpg/path/s0d19460186ee283c/image/i979b3aa040567fdc/version/1533817004/image.jpg'
-  },
-  { 
-    id: 3,
-    name: 'Товар-4',
-    description: 'Описание товара-4',
-    rate: 4,
-    price: 12,
-    amount: 3,
-    img: 'https://image.jimcdn.com/app/cms/image/transf/dimension=1820x1280:format=jpg/path/s0d19460186ee283c/image/i979b3aa040567fdc/version/1533817004/image.jpg'
-  }
-]
+import { useHttp } from '../../Hooks/http.hook'
+import { useMessage } from '../../Hooks/message.hook'
+import { CategoriesContext } from '../../context/CategoriesContext'
 
 export const CardsList = () => {
+  const curr = useContext(CategoriesContext)
   const [products, setProducts] = useState([])
+  const [current, setCurrent] = useState(null)
+  const message = useMessage()
+  const { loading, err, request, clearErr } = useHttp()
+
+  const getProducts = useCallback(async (category) => {
+    try {
+      const data = await request('/api/products/get-products', 'POST', { category: category || 123})
+      setProducts(data);
+    } catch (e) {}
+  }, [request])
+
+  if ( current !== curr.current) {
+    setCurrent(curr.current)
+    getProducts(curr.current)
+  }
 
   useEffect(() => {
-    setProducts(productsFromDb)
-  }, [products])
+    message(err)
+    clearErr()
+  },[err, message, clearErr])
 
   const cardsCreator = (array) => {
-    if(array.length > 0) {
-      return array.map(item => {
-        return (
-          <Col s={4} key={item.id}>
-            <div className="card">
-              <div className="card-image">
-                <img src={item.img} />
-              </div>
-              <div className="card-content">
-                <p>{item.description}</p>
-              </div>
-              <div className="card-action">
-                <Button
-                >
-                  {`$${item.price}`}
-                </Button>
-              </div>
-            </div>
-          </Col>
-        )
-      })
-    } else {
-      return null
-    }
+    return array.map(item => {
+      return (
+        <Col s={4} key={item._id}>
+          <Card
+            actions={[
+              <Button
+              key={item._id}
+              >
+                {`$${item.price}`}
+              </Button>
+            ]}
+            closeIcon={<Icon>close</Icon>}
+            header={<CardTitle image={item.img}></CardTitle>}
+            revealIcon={<Icon>more_vert</Icon>}
+          >
+            <h4 className="black-text">{item.name}</h4>
+            <p>{item.description}</p>
+          </Card>
+        </Col>
+      )
+    })
   }
   return (
     <div className="cards-list">
-      {cardsCreator(products)}
+      {loading ? <ProgressBar /> : cardsCreator(products)}
     </div>
   )
 }
