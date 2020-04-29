@@ -23,7 +23,7 @@ router.post(
   async (req, res) => {
     const { category } = req.body
     try {
-      const data = await Product.find({category})
+      const data = await Product.find({category, show: true})
       res.json(data)
     } catch (e) {
       console.log(e)
@@ -71,7 +71,8 @@ router.post(
         amount,
         img,
         description,
-        price
+        price,
+        show: false
       })
       
       await product.save()
@@ -92,6 +93,23 @@ router.post(
     try {
       await Product.findByIdAndDelete(id)
       res.json({message: "Товар был удалён", status: true})
+    } catch (e) {
+      console.log(e)
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+    }
+  }
+)
+
+router.post(
+  '/show',
+  async (req, res) => {
+    const { id, checked } = req.body
+    try {
+      await Product.findByIdAndUpdate(
+        { _id: id },
+        { $set: {"show": checked}}
+      )
+      res.json({message: "Данные обновлены", status: true})
     } catch (e) {
       console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })

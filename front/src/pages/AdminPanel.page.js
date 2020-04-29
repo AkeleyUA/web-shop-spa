@@ -3,6 +3,7 @@ import { AdminSettingsList } from '../components/AdminSettingsList/AdminSettings
 import { Button } from 'react-materialize'
 import { AuthContext } from '../context/AuthContext'
 
+
 export const AdminPanelPage = () => {
   const auth = useContext(AuthContext)
   return (
