@@ -55,6 +55,17 @@ export const Categories = () => {
     } catch (e) {}
   }
 
+  const showOnWebSite = async (event) => {
+    const id = event.target.id
+    const checked = event.target.checked
+    try {
+      const data = await request('/api/categories/show', 'POST', {id, checked})
+      if(data.status) {
+        getCategories()
+      }
+    } catch (e) {}
+  }
+
 
   if (loading) {
     return (
@@ -86,6 +97,8 @@ export const Categories = () => {
                       id={`${item._id}`}
                       label=''
                       value=''
+                      onChange={showOnWebSite}
+                      checked={item.show}
                     />
                   </td>
                 </tr>

@@ -57,7 +57,7 @@ export const Filter = () => {
 
   const getCategories = useCallback(async () => {
     try {
-      const data = await request('/api/categories/get')
+      const data = await request('/api/categories/get-for-client')
       setCategories(data)
       curr.setCurrentCategory(data[0].name)
     } catch (e) {}

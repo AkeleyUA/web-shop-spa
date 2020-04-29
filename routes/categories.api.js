@@ -51,6 +51,19 @@ router.get(
   }
 )
 
+router.get(
+  '/get-for-client',
+  async (req, res) => {
+    try {
+      const data = await Category.find({show: true})
+      res.json(data)
+    } catch (e) {
+      console.log(e)
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+    }
+  }
+)
+
 router.post(
   '/del',
   async (req, res) => {
@@ -58,6 +71,23 @@ router.post(
     try {
       await Category.findByIdAndDelete(id)
       res.json({ message: "Что-то пошло не так, перезагрузите страницу", status: true })
+    } catch (e) {
+      console.log(e)
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+    }
+  }
+)
+
+router.post(
+  '/show',
+  async (req, res) => {
+    const { id, checked } = req.body
+    try {
+      await Category.findByIdAndUpdate(
+        {_id: id},
+        {$set: {'show': checked}}
+        )
+      res.json({ message: "Обновлено", status: true })
     } catch (e) {
       console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
