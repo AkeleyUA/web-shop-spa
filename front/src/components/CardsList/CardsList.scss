@@ -1,7 +1,12 @@
 .cards-list {
   .card-action {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    justify-items: center;
+
+    .amount {
+      line-height: 2.1;
+    }
   }
   .btn {
     padding: 0 30px;

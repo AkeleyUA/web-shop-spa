@@ -3,7 +3,6 @@ import { Collapsible, CollapsibleItem, RadioGroup, Preloader } from 'react-mater
 import { useMessage } from '../../Hooks/message.hook'
 import { useHttp } from '../../Hooks/http.hook'
 import './Filter.scss'
-import { CategoriesContext } from '../../context/CategoriesContext'
 
 const deliveryesFromDb = [
   {
@@ -48,7 +47,6 @@ const brandsFromDb = [
 ]
 
 export const Filter = () => {
-  const curr = useContext(CategoriesContext)
   const [categories, setCategories] = useState([])
   const [deliveries, setDeliveries] = useState([])
   const [brands, setBrends] = useState([])
@@ -59,7 +57,7 @@ export const Filter = () => {
     try {
       const data = await request('/api/categories/get-for-client')
       setCategories(data)
-      curr.setCurrentCategory(data[0].name)
+      // home.setCurrentCategory(data[0].name)
     } catch (e) {}
   }, [request])
 
@@ -75,7 +73,7 @@ export const Filter = () => {
   },[err, message, clearErr])
 
   const changeValueHendler = (event) => {
-    curr.setCurrentCategory(event.currentTarget.value)
+    // home.setCurrentCategory(event.currentTarget.value)
   }
 
   const checkboxCreator = (array) => {
@@ -86,7 +84,7 @@ export const Filter = () => {
           name="catgory"
           onChange={changeValueHendler}
           options={array.map(item => ({label: item.name, value: item.name}))}
-          value={curr.current}
+          // value={home.current}
           withGap
         />
       </div>

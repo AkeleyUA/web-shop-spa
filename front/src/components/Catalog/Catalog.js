@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './Catalog.scss'
 import { TextInput, Row, Col, Icon, Select, Button } from 'react-materialize'
 import { Filter } from '../Filter/Filter'
@@ -19,11 +19,11 @@ export const Catalog = () => {
           className="blue-grey-text text-darken-1"
         />
         <Select
-          s="2 offset-s2"
+          s={6}
           id="Select-9"
           multiple={false}
           options={{
-            classes: '',
+            classes:'select-margin',
             dropdownOptions: {
               alignment: 'left',
               autoTrigger: true,

@@ -1,116 +1,160 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import { useHttp } from '../../Hooks/http.hook'
-import { useMessage } from '../../Hooks/message.hook'
+import React, { useEffect, useCallback, useState} from 'react'
 import { NavLink } from 'react-router-dom'
-import { Preloader, Table, Button, Checkbox, TextInput } from 'react-materialize'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
-export const ProductsList = () => {
-  const message = useMessage()
-  const { loading, err, request, clearErr } = useHttp()
-  const [products, setProducts] = useState([])
-  const [filteredProducts, setFilteredProducts] = useState([])
+import {
+  callToastAction
+} from '../Toast/action'
 
-  const getProducts = useCallback(async () => {
-    try {
-      const data = await request('/api/products/get-products')
-      setProducts(data)
-      setFilteredProducts(data)
-    } catch (e) {}
-  }, [request])
+import {
+  getProductsRequestAction,
+  showOnWebSiteRequestAction,
+} from './action'
 
-  const delProduct = useCallback(async (event) => {
-    const id = event.target.name
-    try {
-      const data = await request('/api/products/del-products', 'POST', {id})
-      if(data.status) {
-        getProducts()
-      }
-    } catch (e) {}
-  }, [request])
-  
-  const showOnWebSite = useCallback(async (event) => {
-    const id = event.target.id
-    const checked = event.target.checked
-    try {
-      const data = await request('/api/products/show', 'POST', {id, checked})
-      if(data.status) {
-        getProducts()
-      }
-    } catch (e) {}
-  }, [request])
+import {
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  InputAdornment,
+  Input,
+  Icon,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Button,
+  Checkbox,
+  Paper
+} from '@material-ui/core'
+
+import './ProductsList.scss'
+
+
+const ProductsList = ({
+  loading,
+  products,
+  error,
+  getProductsRequest,
+  callToast,
+  showOnWebSiteRequest,
+  oneProductLoading,
+}) => {
+
+  const [value, setValue] = useState('')
+
+  const getProducts = useCallback(() => {
+    getProductsRequest()
+  }, [])
 
   useEffect(() => {
     getProducts()
-  }, [getProducts])
+  }, [])
 
-  useEffect(() => {
-    message(err)
-    clearErr()
-  }, [err, message, clearErr])
-
-  const FilterExtends = (event) => {
-    const str = event.target.value;
-    const result = products.filter(item => item.name.match(str))
-    if (result !== []) {
-      setFilteredProducts(result)
-    } else {
-      setFilteredProducts(products)
-    }
+  const inputFilterHandler = (event) => {
+    setValue(event.target.value)
   }
 
-  if (loading) {
+  const checkboxChangeHendler = (event) => {
+    showOnWebSiteRequest(event.target.name, event.target.checked)
+  }
+
+  const Preloader = () => {
     return (
-      <div className="preloader-center">
-        <Preloader />
+      <div className="preloader">
+        <CircularProgress />
       </div>
     )
-  } else {
+  }
+
+  const TableCreator = () => {
     return (
-      <div className="categories">
-        <TextInput
-          icon="search"
-          id="filter"
-          label="Введите имя товара"
-          onChange={FilterExtends}
-        />
-        <Table>
-          <thead>
-            <tr>
-              <th data-field="id">Id</th>
-              <th data-field="name">Имя</th>
-              <th data-field="amount">Количество</th>
-              <th data-field="price">Цена</th>
-              <th data-field="description">Описание</th>
-              <th data-field="delete">Удалить</th>
-              <th data-field="show">Отображать</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProducts.map(item => {
+      <TableContainer className="table-container" component={Paper}>
+        <Table stickyHeader size="small" aria-label="a products table">
+          <TableHead className="table-headers">
+            <TableRow>
+              <TableCell>id</TableCell>
+              <TableCell >Имя товара</TableCell>
+              <TableCell >Количество</TableCell>
+              <TableCell >Цена</TableCell>
+              <TableCell >Описание</TableCell>
+              <TableCell >Отображать на сайте</TableCell>
+              <TableCell >Удалить</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {products.filter(row => row.name.match(value)).map(row => {
               return (
-                <tr key={item._id}>
-                  <td>{item._id}</td>
-                  <td>{item.name}</td>
-                  <td>{item.amount}</td>
-                  <td>{item.price}</td>
-                  <td>{item.description}</td>
-                  <td><Button name={item._id} onClick={delProduct}>-</Button></td>
-                  <td>
-                    <Checkbox
-                      id={`${item._id}`}
-                      label=''
-                      value=''
-                      checked={item.show}
-                      onChange={showOnWebSite}
-                    />
-                  </td>
-                </tr>
+                <TableRow key={row._id}>
+                  <TableCell component="th" scope="row">
+                    {row._id}
+                  </TableCell>
+                  <TableCell >{row.name}</TableCell>
+                  <TableCell >{row.amount}</TableCell>
+                  <TableCell >{row.price}</TableCell>
+                  <TableCell >{row.description}</TableCell>
+                  <TableCell align="center">
+                    {(
+                      oneProductLoading === row._id
+                        ? <Preloader />
+                        : <Checkbox color="primary" name={row._id} checked={row.show} onChange={checkboxChangeHendler} />
+                    )}
+                  </TableCell>
+                  <TableCell aling="center">
+                    <Button>
+                      <Icon>clear</Icon>
+                    </Button>
+                  </TableCell>
+                </TableRow>
               )
             })}
-          </tbody>
+          </TableBody>
         </Table>
-        <NavLink to="/admin/products/add">Добавить</NavLink>
-      </div>
+      </TableContainer>
     )
   }
+
+
+  if (error) {
+    callToast(error, "error")
+  }
+  return (
+    <div className="products-list">
+      <FormControl>
+        <InputLabel htmlFor="input-with-icon-search">Введите имя товара</InputLabel>
+        <Input
+          id="input-with-icon-search"
+          onChange={inputFilterHandler}
+          startAdornment={
+            <InputAdornment position="start">
+              <Icon>search</Icon>
+            </InputAdornment>
+          }
+        />
+      </FormControl>
+      {loading ? <Preloader /> : <TableCreator />}
+      <NavLink to="/admin/products/add">Добавить</NavLink>
+    </div>
+  )
 }
+
+const mapStateToProps = state => {
+  return {
+    loading: state.productsState.loading,
+    products: state.productsState.products,
+    error: state.productsState.error,
+    oneProductLoading: state.productsState.oneProductLoading
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getProductsRequest: bindActionCreators(getProductsRequestAction, dispatch),
+    callToast: bindActionCreators(callToastAction, dispatch),
+    showOnWebSiteRequest: bindActionCreators(showOnWebSiteRequestAction, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductsList)

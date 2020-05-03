@@ -1,15 +1,28 @@
 import React, { useContext } from 'react'
 import { AdminSettingsList } from '../components/AdminSettingsList/AdminSettingsList'
 import { Button } from 'react-materialize'
-import { AuthContext } from '../context/AuthContext'
+import { logoutAction } from '../components/AuthForm/action'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 
-export const AdminPanelPage = () => {
-  const auth = useContext(AuthContext)
+const AdminPanelPage = ({logout}) => {
   return (
     <div className="admin-panel">
       <AdminSettingsList />
-      <Button onClick={auth.logout}>Выйти</Button>
+      <Button onClick={logout}>Выйти</Button>
     </div>
   )
 }
+
+const mapStateToProps = state => {
+  return {}
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: bindActionCreators(logoutAction, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminPanelPage)

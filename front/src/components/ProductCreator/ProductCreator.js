@@ -1,19 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { TextInput, Button, Preloader, Select } from 'react-materialize'
-import { useHttp } from '../../Hooks/http.hook'
-import { useMessage } from '../../Hooks/message.hook'
-import './ProductCreator.scss'
+import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { CircularProgress, TextField } from '@material-ui/core'
 
-export const ProductCreator = () => {
-  const { loading, err, request, clearErr } = useHttp()
-  const message = useMessage()
-  const [categories, setCategories] = useState([])
+import './ProductCreator.scss'
+
+const ProductCreator = () => {
   const [form, setForm] = useState(
     {
-      name:'',
+      name: '',
       category: '',
-      model:'',
+      model: '',
       amount: '',
       img: '',
       description: '',
@@ -21,62 +18,41 @@ export const ProductCreator = () => {
     }
   )
 
-  const getCategories = useCallback(async () => {
-    try {
-      const data = await request('/api/categories/get')
-      setCategories(data)
-    } catch (e) {}
-  }, [request])
-
-  useEffect(() => {
-    getCategories()
-    message(err)
-    clearErr()
-  }, [err, message, clearErr])
-
-  useEffect(() => {
-    window.M.updateTextFields()
-  }, [])
-
   const changeInputHandler = event => {
     console.log(event.target.name, event.target.value)
     setForm({ ...form, [event.target.name]: event.target.value })
   }
 
   const addProductHandler = async () => {
-    try {
-      const data = await request('/api/products/add', 'POST', {...form})
-      message(data.message)
-      setForm(
-        {
-          name:'',
-          category: '',
-          model:'',
-          amount: '',
-          img: '',
-          description: '',
-          price: '',
-        }
-      )
-    } catch (e) {}
+    setForm(
+      {
+        name: '',
+        category: '',
+        model: '',
+        amount: '',
+        img: '',
+        description: '',
+        price: '',
+      }
+    )
   }
 
   if (loading) {
     return (
       <div className="preloader-center">
-        <Preloader />
+        <CircularProgress />
       </div>
     )
   } else {
     return (
       <div className="product-creator">
         <div className="form">
-          <TextInput
+          <TextField
             id="name"
             label="name"
+            variant="outlined"
             name="name"
-            onChange={changeInputHandler}
-          />
+            />
           <Select
             id="category"
             name="category"
@@ -111,7 +87,7 @@ export const ProductCreator = () => {
                 >{item.name}</option>
               )
             })}
-            
+
           </Select>
           <TextInput
             id="model"
@@ -150,3 +126,5 @@ export const ProductCreator = () => {
     )
   }
 }
+
+export default connect()(ProductCreator)

@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Navbar, Icon, Badge, NavItem } from 'react-materialize'
-
 import './NavBar.scss'
+import { useHttp } from '../../Hooks/http.hook'
+
 
 export const NavBar = ({modalHandler}) => {
+  const {request} = useHttp()
+
+  const getProducts = async () => {
+    const data = await request('/api/products/get-products-for-cart', 'POST', {})
+    if(data.status) {
+    }
+    modalHandler(true)
+  }
+
   return (
     <>
       <Navbar
@@ -27,7 +37,9 @@ export const NavBar = ({modalHandler}) => {
         <NavLink className="blue-grey-text text-darken-4" to="/" >О нас</NavLink>
         <NavItem
           className="modal-trigger"
-          onClick={() => {modalHandler(true)}}
+          onClick={() => {
+            getProducts()
+          }}
           node="button"
         >
           <Icon left className="blue-grey-text text-darken-4">shopping_cart</Icon>

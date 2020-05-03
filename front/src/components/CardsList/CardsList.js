@@ -3,10 +3,8 @@ import { Button, Col, ProgressBar, Card, Icon, CardTitle } from 'react-materiali
 import './CardsList.scss'
 import { useHttp } from '../../Hooks/http.hook'
 import { useMessage } from '../../Hooks/message.hook'
-import { CategoriesContext } from '../../context/CategoriesContext'
 
 export const CardsList = () => {
-  const curr = useContext(CategoriesContext)
   const [products, setProducts] = useState([])
   const [current, setCurrent] = useState(null)
   const message = useMessage()
@@ -15,14 +13,15 @@ export const CardsList = () => {
   const getProducts = useCallback(async (category) => {
     try {
       const data = await request('/api/products/get-products', 'POST', { category: category || 123})
-      setProducts(data);
+      setProducts(data)
+      // home.setProductsLength(data.length)
     } catch (e) {}
   }, [request])
 
-  if ( current !== curr.current) {
-    setCurrent(curr.current)
-    getProducts(curr.current)
-  }
+  // if ( current !== home.current) {
+  //   setCurrent(home.current)
+  //   getProducts(home.current)
+  // }
 
   useEffect(() => {
     message(err)
@@ -33,13 +32,18 @@ export const CardsList = () => {
     return array.map(item => {
       return (
         <Col s={4} key={item._id}>
-          <Card
+          <Card key={item._id + "card"}
             actions={[
-              <Button
-              key={item._id}
-              >
-                {`$${item.price}`}
-              </Button>
+                <p key={item._id + "amount"} className="amount">
+                  В наличии: {item.amount}
+                </p>,
+                <Button
+                  className="blue darken-1"
+                  key={item._id + "button"}
+                  // onClick={() => home.addToCart(item._id)}
+                >
+                  {`$${item.price}`}
+                </Button>
             ]}
             closeIcon={<Icon>close</Icon>}
             header={<CardTitle image={item.img}></CardTitle>}

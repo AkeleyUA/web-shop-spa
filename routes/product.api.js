@@ -10,7 +10,26 @@ router.get(
   async (req, res) => {
     try {
       const data = await Product.find()
-      res.json(data)
+      setTimeout(() => {
+        res.json(data)
+      }, 3000)
+    } catch (e) {
+      console.log(e)
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+    }
+  }
+)
+
+router.post(
+  '/get-products-for-cart',
+  async (req, res) => {
+    const { id } = req.body
+    if(id.length < 1) {
+      return res.json({status: false, message:"Корзина пуста"})
+    }
+    try {
+      const data = await Product.find({_id: id})
+      res.json({status:true, data})
     } catch (e) {
       console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
@@ -109,10 +128,13 @@ router.post(
         { _id: id },
         { $set: {"show": checked}}
       )
-      res.json({message: "Данные обновлены", status: true})
+      const products = await Product.find()
+      setTimeout(() => {
+        res.json({message: "Данные обновлены", status: true, products})
+      }, 3000)
     } catch (e) {
       console.log(e)
-      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
     }
   }
 )

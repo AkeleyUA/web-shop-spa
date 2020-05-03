@@ -17,7 +17,6 @@ router.post(
   async (req, res) => {
     try {
       const errors = validationResult(req)
-      console.log(errors)
 
       if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -29,7 +28,7 @@ router.post(
       const candidate = await User.findOne({ email })
 
       if (candidate) {
-        return res.status(400).json({ message: "Данный email уже зарегестрирован" })
+        return res.status(400).json({ message: "Данный email уже зарегестрирован", errors: "this email has been used" })
       }
 
       const hashedPassword = await bcrypt.hash(password, 12)
@@ -52,7 +51,6 @@ router.post(
   ],
   async (req, res) => {
     try {
-      
       const error = validationResult(req)
       if (!error.isEmpty()) {
         return res.status(400).json({
@@ -63,16 +61,18 @@ router.post(
 
       const { email, password } = req.body
 
+      console.log(email, password)
+
       const user = await User.findOne({ email })
 
       if (!user) {
-        return res.status(400).json({ message: "Такой пользователь не найден"} )
+        return res.status(400).json({ message: "Такой пользователь не найден", errors: "user not found"})
       }
 
       const isMatch = await bcrypt.compare(password, user.password)
 
       if (!isMatch) {
-        return res.status(400).json({message: "Пароль не совпадает"})
+        return res.status(400).json({message: "Пароль не совпадает", errors: "incorrect password"})
       }
 
       const token = jwt.sign(
@@ -84,7 +84,7 @@ router.post(
       res.status(200).json({ token, userId: user.id })
     
     } catch (e) {
-      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", errors: "something is wrong" })
     }
   }
 )

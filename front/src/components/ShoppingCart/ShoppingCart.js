@@ -1,18 +1,73 @@
-import React from 'react'
-import { Button, Modal, Table } from 'react-materialize'
+import React, { useContext } from 'react'
+import { Button, Modal, Table, Icon } from 'react-materialize'
 import './ShoppingCart.scss'
+import { useHttp } from '../../Hooks/http.hook'
 
 export const ShoppingCart = ({modalStatus, modalHandler}) => {
+  const { loading } = useHttp()
+
+  const tBodyCreator = (arr) => {
+    console.log(arr)
+    if (arr.status && !loading) {
+      return arr.data.map((item) => {
+        return (
+          <tr key={item._id}>
+            <td>{item.name}</td>
+            <td>{item.price}</td>
+            <td
+              onClick={() => {
+              }}
+            >
+              <Icon>highlight_off</Icon>
+            </td>
+          </tr>
+        )
+      })
+    }
+  }
+
+  const tableCreator = () => {
+    return (
+      <Table
+        s={6}
+        striped
+        centered={false}
+        responsive
+      >
+        <thead>
+          <tr>
+            <th data-field="name">
+              Название
+            </th>
+            <th data-field="price">
+              Цена
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </Table>
+    )
+  }
+
 
   if (modalStatus) {
     return (
       <Modal
+        className="my-modal"
         actions={[
-          <Button flat onClick={() => {modalHandler(false)}} node="button" waves="green">Close</Button>
+          <img
+            width="30%"
+            src="https://www.pngarts.com/files/1/Visa-Logo-PNG-Image-Background.png"
+          />,
+          <div className="button-wrapper">
+            <Button flat onClick={() => {modalHandler(false)}} node="button" waves="green">Close</Button>
+            <Button className="blue darken-1" node="button" waves="light">Купить</Button>
+          </div>
         ]}
         bottomSheet={false}
         fixedFooter={false}
-        header="Modal Header"
+        header="Корзина"
         id="Modal-0"
         open={modalStatus}
         options={{
@@ -21,64 +76,11 @@ export const ShoppingCart = ({modalStatus, modalHandler}) => {
           inDuration: 250,
           opacity: 0.5,
           outDuration: 250,
-          onCloseEnd: () => {modalHandler(false)},
           preventScrolling: true,
           startingTop: '4%'
         }}
       >
-        <Table
-            striped
-            centered
-          >
-            <thead>
-              <tr>
-                <th data-field="id">
-                  Номер
-                </th>
-                <th data-field="name">
-                  Название
-                </th>
-                <th data-field="price">
-                  Цена
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  1
-                </td>
-                <td>
-                  Товар-1
-                </td>
-                <td>
-                  $11.99
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  2
-                </td>
-                <td>
-                  Товар-2
-                </td>
-                <td>
-                  $12.99
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  3
-                </td>
-                <td>
-                  Товар-3
-                </td>
-                <td>
-                  $13.99
-                </td>
-              </tr>
-            </tbody>
-          </Table>
+        {tableCreator()}
       </Modal>
     )
   } else {

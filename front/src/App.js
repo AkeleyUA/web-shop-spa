@@ -1,21 +1,19 @@
 import React from 'react'
-import { useRoutes } from './routes/routes';
-import { useAuth } from './Hooks/auth.hool';
-import 'materialize-css'
-import { AuthContext } from './context/AuthContext';
-
+import Routes from './routes/routes'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { Provider } from 'react-redux';
+import store from './store/store'
+import Toast from './components/Toast/Toast'
 
 function App() {
-  const {token, login, logout, userId} = useAuth()
-  const isAuthenticated = !!token
-  const routes = useRoutes(isAuthenticated)
   return (
-    <AuthContext.Provider
-      value={{token, userId, login, logout, isAuthenticated}}
-    >
-      {routes}
-    </AuthContext.Provider>
-  );
+    <Provider store={store}>
+      <Router>
+        <Routes />
+      </Router>
+      <Toast/>
+    </Provider>
+  )
 }
 
 export default App
