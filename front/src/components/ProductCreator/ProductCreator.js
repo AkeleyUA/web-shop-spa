@@ -1,16 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { CircularProgress, TextField } from '@material-ui/core'
+import { TextField, Button, Select, MenuItem, FormHelperText, FormControl, Paper } from '@material-ui/core'
 
 import './ProductCreator.scss'
+import { callToastAction } from '../Toast/action'
+import { bindActionCreators } from 'redux'
+import { addProductRequestAction, addProductFailureAction, formCleanerAction } from './action'
+import { getCategoryRequestAction } from '../Categories/action'
 
-const ProductCreator = () => {
+const ProductCreator = ({
+  loading,
+  addProductRequest,
+  categories,
+  formCleaner,
+  success,
+  getCategoryRequest,
+  categoriesLoading,
+}) => {
   const [form, setForm] = useState(
     {
       name: '',
-      category: '',
-      model: '',
+      category: '123',
       amount: '',
       img: '',
       description: '',
@@ -19,112 +30,133 @@ const ProductCreator = () => {
   )
 
   const changeInputHandler = event => {
-    console.log(event.target.name, event.target.value)
     setForm({ ...form, [event.target.name]: event.target.value })
   }
 
-  const addProductHandler = async () => {
-    setForm(
-      {
+  const addProductHandler = () => {
+    addProductRequest(form)
+  }
+
+  const getCategories = useCallback(() => {
+    getCategoryRequest()
+  },[categories])
+
+  useEffect(() => {
+    getCategories()
+  }, [])
+
+  useEffect(() => {
+    formCleaner(false)
+    return () => {
+      setForm({
         name: '',
         category: '',
-        model: '',
         amount: '',
         img: '',
         description: '',
         price: '',
-      }
-    )
-  }
+      })
+    }
+  }, [success])
 
-  if (loading) {
-    return (
-      <div className="preloader-center">
-        <CircularProgress />
-      </div>
-    )
-  } else {
-    return (
-      <div className="product-creator">
-        <div className="form">
+  return (
+    <div className="product-creator">
+      <Paper className="form-wrapper">
+        <FormControl
+          className="add-product-form"
+          margin="dense"
+          required
+          size="small"
+        >
+          <FormHelperText>Добавление товара</FormHelperText>
+          <Select
+            className="categories-select"
+            value={form.category}
+            onChange={changeInputHandler}
+            name="category"
+            displayEmpty
+            variant="outlined"
+            size="small"
+            disabled={categoriesLoading}
+          >
+            <MenuItem value="" disabled>
+              Выберите категорию
+            </MenuItem>
+            {categories.map(item => {
+              return (<MenuItem key={item.name} value={item.name}>{item.name}</MenuItem>)
+            })}
+          </Select>
           <TextField
             id="name"
-            label="name"
+            label="Название"
             variant="outlined"
             name="name"
-            />
-          <Select
-            id="category"
-            name="category"
-            multiple={false}
+            size="small"
             onChange={changeInputHandler}
-            options={{
-              classes: '',
-              dropdownOptions: {
-                alignment: 'left',
-                autoTrigger: true,
-                closeOnClick: true,
-                constrainWidth: true,
-                coverTrigger: true,
-                hover: false,
-                inDuration: 150,
-                outDuration: 250
-              }
-            }}
-            value=""
-          >
-            <option
-              disabled
-              value=""
-            >
-              Выберите категорию
-            </option>
-            {categories.map(item => {
-              return (
-                <option
-                  key={item._id}
-                  value={item.name}
-                >{item.name}</option>
-              )
-            })}
-
-          </Select>
-          <TextInput
-            id="model"
-            label="model"
-            name="model"
-            onChange={changeInputHandler}
+            value={form.name}
           />
-          <TextInput
+          <TextField
             id="amount"
-            label="amount"
+            label="Колличество"
+            variant="outlined"
             name="amount"
+            size="small"
             onChange={changeInputHandler}
+            value={form.amount}
           />
-          <TextInput
-            id="img"
-            label="img"
-            name="img"
-            onChange={changeInputHandler}
-          />
-          <TextInput
-            id="description"
-            label="description"
-            name="description"
-            onChange={changeInputHandler}
-          />
-          <TextInput
-            label="price"
-            name="price"
+          <TextField
             id="price"
+            label="Цена"
+            variant="outlined"
+            name="price"
+            size="small"
             onChange={changeInputHandler}
+            value={form.price}
           />
-          <Button type="submit" onClick={addProductHandler} >Добавить</Button>
-          <NavLink className="btn" to="/admin/products">Список продуктов</NavLink>
-        </div>
-      </div>
-    )
+          <TextField
+            id="description"
+            label="Описание"
+            variant="outlined"
+            name="description"
+            size="small"
+            onChange={changeInputHandler}
+            value={form.description}
+          />
+          <TextField
+            id="img"
+            label="Изображение (url)"
+            variant="outlined"
+            name="img"
+            size="small"
+            onChange={changeInputHandler}
+            value={form.img}
+          />
+          <Button type="submit" variant="outlined" disabled={loading} onClick={addProductHandler}>Добавить</Button>
+        </FormControl>
+        <NavLink className="btn" to="/admin/products">Список продуктов</NavLink>
+      </Paper>
+    </div>
+  )
+}
+
+const mapStateToProps = state => {
+  return {
+    loading: state.productCreatorState.loading,
+    err: state.productCreatorState.err,
+    success: state.productCreatorState.success,
+    categories: state.categoriesState.categories,
+    categoriesLoading: state.categoriesState.loading,
   }
 }
 
-export default connect()(ProductCreator)
+const mapDispatchToProps = dispatch => {
+  return {
+    callToast: bindActionCreators(callToastAction, dispatch),
+    addProductRequest: bindActionCreators(addProductRequestAction, dispatch),
+    addProductFailure: bindActionCreators(addProductFailureAction, dispatch),
+    formCleaner: bindActionCreators(formCleanerAction, dispatch),
+    getCategoryRequest: bindActionCreators(getCategoryRequestAction, dispatch),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCreator)

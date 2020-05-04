@@ -1,114 +1,148 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Table, TextInput, Button, Preloader, Checkbox } from 'react-materialize'
-import { useHttp } from '../../Hooks/http.hook'
-import { useMessage } from '../../Hooks/message.hook'
+import React, { useCallback, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import {getCategoryRequestAction, deleteCategoryRequestAction, showCategoryOnWebSiteRequestAction} from './action'
+import CategoryCreator from '../CategoryCreator/CategoryCreator'
+
+import {
+  TableContainer,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableBody,
+  CircularProgress,
+  Button,
+  Checkbox,
+  Icon,
+  Paper,
+  Breadcrumbs,
+  Link
+} from '@material-ui/core'
+import { NavLink } from 'react-router-dom'
+
 import './Categories.scss'
 
-export const Categories = () => {
-  const { loading, err, request, clearErr } = useHttp()
-  const message = useMessage()
-  const [category, setCategory] = useState({ name:'' })
-  const [categories, setCategories] = useState([])
 
-  const getCategories = useCallback(async () => {
-    try {
-      const data = await request('/api/categories/get')
-      setCategories(data)
-    } catch (e) {}
-  }, [request])
+const BreadcrumbsCreator = [
+  {
+    name: 'Панель управления',
+    path: '/admin'
+  },
+  {
+    name: 'Категории',
+    path: '/admin/categories',
+    active: true
+  },
+]
+
+const Categories = ({
+  categories,
+  getCategoryRequest,
+  deleteCategoryRequest,
+  showCategoryOnWebSiteRequest,
+  oneCategoryLoading,
+  loading,
+  match
+}) => {
+
+  const getCategory = useCallback(
+    () => {
+      getCategoryRequest()
+    },
+    [categories],
+  )
+
+  const showCategoryOnWebSiteHendler = (id, checked) => {
+    showCategoryOnWebSiteRequest(id, checked)
+  }
 
   useEffect(() => {
-    getCategories()
+    getCategory()
   }, [])
 
-  useEffect(() => {
-    message(err)
-    clearErr()
-  }, [err, message, clearErr])
-
-  useEffect(() => {
-    window.M.updateTextFields()
-  }, [])
-
-  const addCategoriesHendler = (event) => {
-    setCategory({...category, [event.target.name]: event.target.value})
-  }
-
-  const addCategory = async () => {
-    try {
-      const data = await request('/api/categories/add', 'POST', {...category})
-      message(data.message)
-      if (data.status) {
-        getCategories()
-      }
-      setCategory({name: ''})
-    } catch (e) {}
-  }
-
-  const delCategory = async (event) => {
-    const id = event.target.name
-    try {
-      const data = await request('/api/categories/del', 'POST', {id})
-      if(data.status) {
-        getCategories()
-      }
-    } catch (e) {}
-  }
-
-  const showOnWebSite = async (event) => {
-    const id = event.target.id
-    const checked = event.target.checked
-    try {
-      const data = await request('/api/categories/show', 'POST', {id, checked})
-      if(data.status) {
-        getCategories()
-      }
-    } catch (e) {}
-  }
-
-
-  if (loading) {
+  const Preloader = () => {
     return (
-      <div className="preloader-center">
-        <Preloader />
+      <div className="preloader">
+        <CircularProgress />
       </div>
     )
-  } else {
-    return (
-      <div className="categories">
-        <Table>
-          <thead>
-            <tr>
-              <th data-field="id">Id</th>
-              <th data-field="name">Имя категории</th>
-              <th data-field="delete">Удалить</th>
-              <th data-field="show">Отображать</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map(item => {
+  }
+
+  return (
+    <div className="categories">
+      <Breadcrumbs separator="›" aria-label="breadcrumb">
+        {BreadcrumbsCreator.map(item => (
+          <NavLink key={item.name} to={item.path} className={item.active ? 'active-link link' : 'link' }>{item.name}</NavLink>
+        ))}
+      </Breadcrumbs>
+      <TableContainer className="table-container" component={Paper}>
+        <Table stickyHeader size="small" aria-label="a categories table">
+          <TableHead className="table-headers">
+            <TableRow>
+              <TableCell>id</TableCell>
+              <TableCell>Название категории</TableCell>
+              <TableCell align="center">Отображать на сайте</TableCell>
+              <TableCell align="center">Удалить</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {categories.map(row => {
               return (
-                <tr key={item._id}>
-                  <td>{item._id}</td>
-                  <td>{item.name}</td>
-                  <td><Button name={item._id} onClick={delCategory}>-</Button></td>
-                  <td>
-                    <Checkbox
-                      id={`${item._id}`}
-                      label=''
-                      value=''
-                      onChange={showOnWebSite}
-                      checked={item.show}
-                    />
-                  </td>
-                </tr>
+                <TableRow key={row._id}>
+                  <TableCell component="th" scope="row">
+                    {row._id}
+                  </TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell align="center">
+                    {(
+                      '123' === row._id
+                        ? <Preloader />
+                        : <Checkbox
+                        color="primary"
+                        name={row._id}
+                        checked={row.show || false}
+                        onChange={(event) => {
+                          showCategoryOnWebSiteHendler(row._id, event.target.checked)
+                        }}
+                        disabled={loading || oneCategoryLoading}
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell align="center">
+                    <Button
+                    className="centered-btn"
+                    onClick={() => {deleteCategoryRequest(row._id)}}
+                    disabled={loading || oneCategoryLoading}
+                  >
+                      <Icon>clear</Icon>
+                    </Button>
+                  </TableCell>
+                </TableRow>
               )
             })}
-          </tbody>
+          </TableBody>
         </Table>
-        <TextInput name="name" onChange={addCategoriesHendler}/>
-        <Button onClick={addCategory}>Добавить</Button>
-      </div>
-    )
+      </TableContainer>
+      <CategoryCreator />
+    </div>
+  )
+}
+
+const mapStateToProps = state => {
+  return {
+    categories: state.categoriesState.categories,
+    loading: state.categoriesState.loading,
+    oneCategoryLoading: state.categoryCreatorState.loading
   }
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getCategoryRequest: bindActionCreators(getCategoryRequestAction, dispatch),
+    deleteCategoryRequest: bindActionCreators(deleteCategoryRequestAction, dispatch),
+    showCategoryOnWebSiteRequest: bindActionCreators(showCategoryOnWebSiteRequestAction, dispatch),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Categories)

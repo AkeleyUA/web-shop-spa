@@ -1,31 +1,32 @@
 import React, { useEffect } from 'react'
 import { Alert } from '@material-ui/lab'
+import { Snackbar, Slide } from '@material-ui/core'
 
 import './Toast.scss'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { closeToastAction } from './action'
 
-const Toast = ({ message, category, isShow, closeToast}) => {
 
-  useEffect(() => {
-    if(isShow) {
-      const timer = setTimeout(() => {
-        closeToast()
-      }, 1500)
-      return () => clearTimeout(timer)
-    }
-  }, [isShow])
+const Toast = ({ message, category, isShow, closeToast }) => {
 
-  if (isShow) {
-    return (
-      <Alert className="toast" severity={category}>
+  const TransitionDown = (props) => {
+    return <Slide {...props} direction="down" />;
+  }
+
+  return (
+    <Snackbar
+      open={isShow}
+      autoHideDuration={5000}
+      onClose={closeToast}
+      anchorOrigin={{ vertical:'top', horizontal:'right' }}
+      TransitionComponent={TransitionDown}
+    >
+      <Alert onClose={closeToast} severity={category}>
         {message}
       </Alert>
-    )
-  } else {
-    return null
-  }
+    </Snackbar>
+  )
 }
 
 const mapDispatchToProps = dispatch => {

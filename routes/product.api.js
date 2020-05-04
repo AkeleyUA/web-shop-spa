@@ -10,9 +10,7 @@ router.get(
   async (req, res) => {
     try {
       const data = await Product.find()
-      setTimeout(() => {
-        res.json(data)
-      }, 3000)
+      res.json(data)
     } catch (e) {
       console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
@@ -56,7 +54,6 @@ router.post(
   [
     check('name', 'name isEmpty').isLength({min:2}),
     check('category', 'category isEmpty').isLength({min:2}),
-    check('model', 'model isEmpty').isLength({min:2}),
     check('amount', 'amount isEmpty').isNumeric(),
     check('img', 'img isEmpty').isLength({min:2}),
     check('description', 'description isEmpty').isLength({min:2}),
@@ -76,7 +73,6 @@ router.post(
       const {
         name,
         category,
-        model,
         amount,
         img,
         description,
@@ -86,7 +82,6 @@ router.post(
       const product = new Product({
         name,
         category,
-        model,
         amount,
         img,
         description,
@@ -96,22 +91,23 @@ router.post(
       
       await product.save()
 
-      res.status(201).json({message: "Новый товар добавлен"})
+      res.status(201).json({message: "Новый товар добавлен", status: true})
 
     } catch (e) {
       console.log(e)
-      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
     }
   }
 )
 
 router.post(
-  '/del-products',
+  '/del',
   async (req, res) => {
     const { id } = req.body
     try {
-      await Product.findByIdAndDelete(id)
-      res.json({message: "Товар был удалён", status: true})
+      await Product.findByIdAndDelete({ _id: id })
+      const products = await Product.find()
+      res.json({message: "Товар был удалён", status: true, products})
     } catch (e) {
       console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
@@ -129,9 +125,7 @@ router.post(
         { $set: {"show": checked}}
       )
       const products = await Product.find()
-      setTimeout(() => {
-        res.json({message: "Данные обновлены", status: true, products})
-      }, 3000)
+      res.json({message: "Данные обновлены", status: true, products})
     } catch (e) {
       console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })

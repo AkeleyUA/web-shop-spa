@@ -1,89 +1,154 @@
-import React, { useContext } from 'react'
-import { Button, Modal, Table, Icon } from 'react-materialize'
+import React, { useState } from 'react'
+
+import Paper from '@material-ui/core/Paper'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TablePagination from '@material-ui/core/TablePagination'
+import TableRow from '@material-ui/core/TableRow'
+
 import './ShoppingCart.scss'
-import { useHttp } from '../../Hooks/http.hook'
 
-export const ShoppingCart = ({modalStatus, modalHandler}) => {
-  const { loading } = useHttp()
+export const ShoppingCart = () => {
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
 
-  const tBodyCreator = (arr) => {
-    console.log(arr)
-    if (arr.status && !loading) {
-      return arr.data.map((item) => {
-        return (
-          <tr key={item._id}>
-            <td>{item.name}</td>
-            <td>{item.price}</td>
-            <td
-              onClick={() => {
-              }}
-            >
-              <Icon>highlight_off</Icon>
-            </td>
-          </tr>
-        )
-      })
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  }
+
+  const rows = [
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
+    },
+    {
+      name: 'Товар1',
+      price: 100
     }
-  }
+  ]
+  const columns = [
+    {
+      id: 'name',
+      label: "Название",
+    },
+    {
+      id: 'price',
+      label: "Цена",
+    },
+    {
+      id: 'delete',
+      label: "Удалить",
+    },
+  ]
 
-  const tableCreator = () => {
-    return (
-      <Table
-        s={6}
-        striped
-        centered={false}
-        responsive
-      >
-        <thead>
-          <tr>
-            <th data-field="name">
-              Название
-            </th>
-            <th data-field="price">
-              Цена
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </Table>
-    )
-  }
-
-
-  if (modalStatus) {
-    return (
-      <Modal
-        className="my-modal"
-        actions={[
-          <img
-            width="30%"
-            src="https://www.pngarts.com/files/1/Visa-Logo-PNG-Image-Background.png"
-          />,
-          <div className="button-wrapper">
-            <Button flat onClick={() => {modalHandler(false)}} node="button" waves="green">Close</Button>
-            <Button className="blue darken-1" node="button" waves="light">Купить</Button>
-          </div>
-        ]}
-        bottomSheet={false}
-        fixedFooter={false}
-        header="Корзина"
-        id="Modal-0"
-        open={modalStatus}
-        options={{
-          dismissible: true,
-          endingTop: '10%',
-          inDuration: 250,
-          opacity: 0.5,
-          outDuration: 250,
-          preventScrolling: true,
-          startingTop: '4%'
-        }}
-      >
-        {tableCreator()}
-      </Modal>
-    )
-  } else {
-    return null
-  }
+  return (
+    <Paper style={{ width: "100%" }} className="table-wrapper">
+      <TableContainer style={{ height: 325 }}>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                >
+                  {column.label}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+              return (
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.name}>
+                  {columns.map((column) => {
+                    const value = row[column.id];
+                    return (
+                      <TableCell key={column.id}>
+                        {value}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        labelRowsPerPage="Товаров на странице"
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
+      <div>Всего: {rows.map(item => item.price).reduce((a, b) => (a + b))}</div>
+    </Paper>
+  )
 }

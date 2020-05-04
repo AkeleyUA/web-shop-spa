@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState} from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -10,6 +10,7 @@ import {
 import {
   getProductsRequestAction,
   showOnWebSiteRequestAction,
+  deleteProductRequestAction,
 } from './action'
 
 import {
@@ -36,11 +37,10 @@ import './ProductsList.scss'
 const ProductsList = ({
   loading,
   products,
-  error,
   getProductsRequest,
-  callToast,
   showOnWebSiteRequest,
   oneProductLoading,
+  deleteProductRequest,
 }) => {
 
   const [value, setValue] = useState('')
@@ -80,8 +80,8 @@ const ProductsList = ({
               <TableCell >Количество</TableCell>
               <TableCell >Цена</TableCell>
               <TableCell >Описание</TableCell>
-              <TableCell >Отображать на сайте</TableCell>
-              <TableCell >Удалить</TableCell>
+              <TableCell align="center">Отображать на сайте</TableCell>
+              <TableCell align="center">Удалить</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -96,14 +96,13 @@ const ProductsList = ({
                   <TableCell >{row.price}</TableCell>
                   <TableCell >{row.description}</TableCell>
                   <TableCell align="center">
-                    {(
-                      oneProductLoading === row._id
-                        ? <Preloader />
-                        : <Checkbox color="primary" name={row._id} checked={row.show} onChange={checkboxChangeHendler} />
-                    )}
+                    <Checkbox disabled={oneProductLoading} color="primary" name={row._id} checked={row.show} onChange={checkboxChangeHendler} />
                   </TableCell>
-                  <TableCell aling="center">
-                    <Button>
+                  <TableCell align="center">
+                    <Button
+                      onClick={() => { deleteProductRequest(row._id) }}
+                      disabled={oneProductLoading}
+                    >
                       <Icon>clear</Icon>
                     </Button>
                   </TableCell>
@@ -116,10 +115,6 @@ const ProductsList = ({
     )
   }
 
-
-  if (error) {
-    callToast(error, "error")
-  }
   return (
     <div className="products-list">
       <FormControl>
@@ -135,7 +130,17 @@ const ProductsList = ({
         />
       </FormControl>
       {loading ? <Preloader /> : <TableCreator />}
-      <NavLink to="/admin/products/add">Добавить</NavLink>
+      <NavLink
+        to="/admin/products/add"
+        color="primary"
+        variant="outlined"
+        component={Button}
+      >Добавить</NavLink>
+      <NavLink
+        to="/admin"
+        variant="outlined"
+        component={Button}
+      >Панель управления</NavLink>
     </div>
   )
 }
@@ -153,7 +158,8 @@ const mapDispatchToProps = dispatch => {
   return {
     getProductsRequest: bindActionCreators(getProductsRequestAction, dispatch),
     callToast: bindActionCreators(callToastAction, dispatch),
-    showOnWebSiteRequest: bindActionCreators(showOnWebSiteRequestAction, dispatch)
+    showOnWebSiteRequest: bindActionCreators(showOnWebSiteRequestAction, dispatch),
+    deleteProductRequest: bindActionCreators(deleteProductRequestAction, dispatch),
   }
 }
 

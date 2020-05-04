@@ -1,0 +1,19 @@
+.category-creator {
+}
+
+.category-creator-body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  .add-category-form {
+    background: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    width: 50%;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
