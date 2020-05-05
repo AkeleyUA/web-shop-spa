@@ -1,83 +1,119 @@
-import React, { useState, useEffect } from 'react'
-import { Card, CardTitle, Icon, Button, Col } from 'react-materialize'
-import { Link } from 'react-router-dom' 
+import React, { useState, useEffect, useCallback } from 'react'
+import {
+  Paper,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+  Grid,
+  Box,
+  Icon,
+  Button,
+} from '@material-ui/core'
+import { Rating } from '@material-ui/lab'
+import { useSnackbar } from 'notistack';
+
 import './CardsList.scss'
+import { connect } from 'react-redux';
+import { getProductsForClientRequestAction } from '../../pages/Home.page/action';
+import { bindActionCreators } from 'redux';
+import Preloader from '../Preloader/Preloader';
 
-const productsFromDb = [
-  { 
-    id: 0,
-    name: 'Товар-1',
-    description: 'Описание товара-1',
-    rate: 4,
-    price: 12,
-    amount: 3,
-    img: 'https://image.jimcdn.com/app/cms/image/transf/dimension=1820x1280:format=jpg/path/s0d19460186ee283c/image/i979b3aa040567fdc/version/1533817004/image.jpg'
-  },
-  { 
-    id: 1,
-    name: 'Товар-2',
-    description: 'Описание товара-2',
-    rate: 4,
-    price: 11,
-    amount: 4,
-    img: 'https://image.jimcdn.com/app/cms/image/transf/dimension=1820x1280:format=jpg/path/s0d19460186ee283c/image/i979b3aa040567fdc/version/1533817004/image.jpg'
-  },
-  { 
-    id: 2,
-    name: 'Товар-3',
-    description: 'Описание товара-3',
-    rate: 4,
-    price: 12,
-    amount: 3,
-    img: 'https://image.jimcdn.com/app/cms/image/transf/dimension=1820x1280:format=jpg/path/s0d19460186ee283c/image/i979b3aa040567fdc/version/1533817004/image.jpg'
-  },
-  { 
-    id: 3,
-    name: 'Товар-4',
-    description: 'Описание товара-4',
-    rate: 4,
-    price: 12,
-    amount: 3,
-    img: 'https://image.jimcdn.com/app/cms/image/transf/dimension=1820x1280:format=jpg/path/s0d19460186ee283c/image/i979b3aa040567fdc/version/1533817004/image.jpg'
+
+const CardsList = ({ products, getProductsForClientRequest, currentCategory, loadingProducts }) => {
+  const [ratingValue, setRatinValue] = useState(3)
+  const { enqueueSnackbar } = useSnackbar();
+
+  const ratingHandler = (event, newValue) => {
+    setRatinValue(+newValue)
   }
-]
 
-export const CardsList = () => {
-  const [products, setProducts] = useState([])
+  const addToCartHandler = () => {
+    enqueueSnackbar('Добавлено в корзину')
+  }
 
   useEffect(() => {
-    setProducts(productsFromDb)
-  }, [products])
+    getProductsForClientRequest(currentCategory)
+  }, [currentCategory, getProductsForClientRequest])
 
-  const cardsCreator = (array) => {
-    if(array.length > 0) {
-      return array.map(item => {
-        return (
-          <Col s={4} key={item.id}>
-            <div className="card">
-              <div className="card-image">
-                <img src={item.img} />
-              </div>
-              <div className="card-content">
-                <p>{item.description}</p>
-              </div>
-              <div className="card-action">
-                <Button
+  if (loadingProducts) {
+    return (
+      <Preloader />
+    )
+  } else {
+    return (
+      <Paper className="cards-list">
+        <Grid container spacing={3}>
+          {products.map(item => {
+            return (
+              <Grid item xs={4} key={item._id}>
+                <Card
+                  className="card"
+                  variant="outlined"
                 >
-                  {`$${item.price}`}
-                </Button>
-              </div>
-            </div>
-          </Col>
-        )
-      })
-    } else {
-      return null
-    }
+                  <CardActionArea>
+                    <CardMedia
+                      className="card-img"
+                      image={item.img}
+                      title={item.name}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {item.name}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" component="p">
+                        {item.description}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions
+                    disableSpacing={true}
+                  >
+                    <Box component="div">
+                      <Typography component="legend" variant="caption">Оценка: {ratingValue}</Typography>
+                      <Rating
+                        name="product-rating"
+                        value={ratingValue}
+                        onChange={ratingHandler}
+                      />
+                    </Box>
+                    <Box component="div" className="card-button-wrapper">
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        aria-label="add to shopping cart"
+                        onClick={addToCartHandler}
+                        endIcon={<Icon>shopping_cart</Icon>}
+                      >
+                        {item.price} $
+                      </Button>
+                    </Box>
+                  </CardActions>
+                </Card>
+              </Grid>
+            )
+          })}
+        </Grid>
+      </Paper>
+    )
   }
-  return (
-    <div className="cards-list">
-      {cardsCreator(products)}
-    </div>
-  )
+
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getProductsForClientRequest: bindActionCreators(getProductsForClientRequestAction, dispatch)
+  }
+}
+
+const mapStateToProps = state => {
+  return {
+    products: state.forClientState.products,
+    loadingProducts: state.forClientState.loadingProducts,
+    currentCategory: state.currentCategoryState.currentCategory
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardsList)

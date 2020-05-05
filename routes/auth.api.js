@@ -17,29 +17,29 @@ router.post(
   async (req, res) => {
     try {
       const errors = validationResult(req)
-      console.log(errors)
 
       if (!errors.isEmpty()) {
         return res.status(400).json({
           errors: errors.array(),
-          message: "Некоректные данные регистрации"
+          message: "Некорректные данные",
+          status: false
         })
       }
       const { email, password } = req.body
       const candidate = await User.findOne({ email })
 
       if (candidate) {
-        return res.status(400).json({ message: "Данный email уже зарегестрирован" })
+        return res.status(400).json({ message: "Данный email уже зарегестрирован", status: false })
       }
 
       const hashedPassword = await bcrypt.hash(password, 12)
       const user = new User({ email, password: hashedPassword })
       await user.save()
 
-      res.status(201).json({message: "Запрос на создание пользователя отправлен"})
+      res.status(201).json({message: "Запрос на создание пользователя отправлен", status: true})
 
     } catch (e) {
-      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
     }
   }
 )
@@ -47,32 +47,30 @@ router.post(
 router.post(
   '/login',
   [
-    check('email', 'enter correct email').isEmail().normalizeEmail(),
-    check('password', 'password incorrect').isLength({ min:6 })
+    check('email', 'Некорретный email').isEmail().normalizeEmail(),
+    check('password', 'Пароль не заполнен').isLength({ min:6 })
   ],
   async (req, res) => {
     try {
-      
-      const error = validationResult(req)
-      if (!error.isEmpty()) {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
         return res.status(400).json({
           errors: errors.array(),
-          message: "Данные некорректные"
+          message: (errors.errors.length === 1 ? errors.errors[0].msg : "Данные некорректные")
         })
       }
 
       const { email, password } = req.body
-
       const user = await User.findOne({ email })
 
       if (!user) {
-        return res.status(400).json({ message: "Такой пользователь не найден"} )
+        return res.status(400).json({ message: "Такой пользователь не найден", status: false})
       }
 
       const isMatch = await bcrypt.compare(password, user.password)
 
       if (!isMatch) {
-        return res.status(400).json({message: "Пароль не совпадает"})
+        return res.status(400).json({message: "Пароль не совпадает", status: false})
       }
 
       const token = jwt.sign(
@@ -81,10 +79,11 @@ router.post(
         { expiresIn: '1h'}
       )
       
-      res.status(200).json({ token, userId: user.id })
+      res.status(200).json({ token, userId: user.id, status: true })
     
     } catch (e) {
-      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+      console.log(e.message)
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false})
     }
   }
 )

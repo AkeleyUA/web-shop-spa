@@ -1,11 +1,20 @@
 .catalog-wrapper {
-  padding: 35px;
-  .full-width-btn {
-    width: 100%;
-    margin-bottom: 15px;
-    margin-top: .5rem;
+  width: calc(100% - 16px);
+  padding: 5px;
+  .header {
+    padding: 10px 19px;
   }
-  .filter-title {
-    font-weight: lighter;
+  .filter {
+    padding: 10px 19px;
+  }
+  .products-counter {
+    margin: 15px 0;
+  }
+  .buttons-wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    min-height: 100px;
+    margin-bottom: 30px;
   }
 }

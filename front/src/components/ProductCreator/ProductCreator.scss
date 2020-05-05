@@ -1,0 +1,21 @@
+.preloader-center {
+  display: 'flex';
+  justify-content: 'center';
+  padding-top: 80px;
+}
+.product-creator {
+  padding: 0 35px;
+  .add-product-form {
+    width: 100%;
+    height: 670px;
+    justify-content: space-around;
+  }
+  
+  .form-wrapper {
+    width: 50%;
+    display: inline-flex;
+    flex-direction: column;
+    background: #FFFFFF;
+    padding: 15px;
+  }
+}

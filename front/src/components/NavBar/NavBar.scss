@@ -1,5 +1,27 @@
 .nav-bar {
-  padding: 0 35px;
+  padding: 10px 0px;
   background-color: #FFFFFF;
   z-index: 5;
+  margin-bottom: 15px;
+  .tool-bar {
+    display: flex;
+    justify-content: space-between;
+  }
+  .search-wrapper {
+    width: 40%;
+  }
+  .phones-wrapper {
+    width: 30%;
+    display: flex;
+    justify-content: space-around;
+  }
 }
+
+.body-container-for-modal {
+  position: absolute;
+  top: 15%;
+  left: 25%;
+  width: 50%;
+  min-height: 440px;
+}
+
