@@ -25,7 +25,8 @@ const start = async () => {
     await moongose.connect(config.get('mongoUri'), {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useCreateIndex: true
+      useCreateIndex: true,
+      useFindAndModify: true,
     })
     app.listen(PORT, () => {
       console.log(`server started. PORT: ${PORT}`)
