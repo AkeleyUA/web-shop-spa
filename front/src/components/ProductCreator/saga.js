@@ -8,7 +8,7 @@ import {
   addProductSuccessAction,
   addProductFailureAction
 } from './action';
-import { callToastAction } from '../Toast/action';
+
 
 const fetchAddNewProduct = (form) => {
   return fetch('/api/products/add', {
@@ -23,18 +23,14 @@ const fetchAddNewProduct = (form) => {
 function* addProductWorker(action) {
   try {
     const data = yield call(fetchAddNewProduct, action.payload)
-    console.log(data)
     if (data.status) {
-      yield put(addProductSuccessAction())
-      yield put(callToastAction(data.message))
+      yield put(addProductSuccessAction(data.message))
     } 
     if (data.errors) {
       yield put(addProductFailureAction(data.message))
-      yield put(callToastAction(data.message, 'error'))
     }
   } catch (e) {
-    yield put(addProductFailureAction(e))
-    yield put(callToastAction(e.message, 'error'))
+    yield put(addProductFailureAction(e.message))
   }
 }
 

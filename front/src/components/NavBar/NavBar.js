@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
 import {
   AppBar,
   Typography,
@@ -9,13 +8,10 @@ import {
   Icon,
   InputAdornment,
   Button,
-  ThemeProvider,
-  createMuiTheme,
   IconButton,
   withStyles,
   Badge,
   Modal,
-  Paper
 } from '@material-ui/core';
 
 import './NavBar.scss'

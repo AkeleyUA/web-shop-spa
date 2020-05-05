@@ -15,29 +15,29 @@ const initialState = {
   oneProductLoading: '',
   loading: false,
   products: [],
-  error: ''
+  message: null
 }
 
 export const productsState = (state = initialState, action) => {
   switch (action.type) {
     case GET_PRODUCTS_REQUEST:
-      return {...state, loading: true, error: null}
+      return {...state, loading: true, message: null}
     case GET_PRODUCTS_SUCCESS: 
       return {...state, loading: false, products: action.payload}
     case GET_PRODUCTS_FAILURE: 
-      return {...state, loading: false, products: [], error: action.payload}
+      return {...state, loading: false, products: [], message: action.payload}
     case SHOW_ON_WEB_SITE_REQUEST: 
-      return {...state, oneProductLoading: action.payload.id, error: null}
+      return {...state, oneProductLoading: action.payload.id, message: null}
     case SHOW_ON_WEB_SITE_SUCCESS: 
-      return {...state, oneProductLoading: '', error: null, products: action.payload}
+      return {...state, oneProductLoading: '', message: action.payload}
     case SHOW_ON_WEB_SITE_FAILURE: 
-      return {...state, oneProductLoading: '', error: action.payload}
+      return {...state, oneProductLoading: '', message: action.payload}
     case DEL_PRODUCT_REQUEST:
-      return {...state, oneProductLoading: action.payload.id, error: null}
+      return {...state, oneProductLoading: action.payload.id, message: null}
     case DEL_PRODUCT_SUCCESS: 
-      return {...state, oneProductLoading: '', error: null, products: action.payload}
+      return {...state, oneProductLoading: '', message: action.payload}
     case DEL_PRODUCT_FAILURE: 
-      return {...state, oneProductLoading: '', error: action.payload}
+      return {...state, oneProductLoading: '', message: action.payload}
     default: 
       return { ...state }
   } 

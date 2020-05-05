@@ -11,9 +11,9 @@ import {
  deleteCategoryFailureAction,
  SHOW_CATEGORY_ON_WEB_SITE_REQUEST,
  showCategoryOnWebSiteFailureAction,
- showCategoryOnWebSiteSuccessAction
+ showCategoryOnWebSiteSuccessAction,
+ deleteCategorySuccessAction
 } from './action';
-import { callToastAction } from '../Toast/action';
 
 const fetchCategories = () => {
   return fetch('/api/categories/get', {
@@ -48,7 +48,6 @@ function* getCategoriesWorker () {
     yield put(getCategorySuccessAction(data))
   } catch (e) {
     yield put(getCategoryFailureAction(e.message))
-    yield put(callToastAction('Что-то пошло не так, перезагрузите страницу', 'error'))
   }
 }
 
@@ -57,14 +56,12 @@ function* delCategoryWorker(action) {
     const data = yield call(fetchDeleteCategory, action.payload)
     if (data.status) {
       yield put(getCategorySuccessAction(data.categories))
-      yield put(callToastAction(data.message))
+      yield put(deleteCategorySuccessAction(data.message))
     } else {
       yield put(deleteCategoryFailureAction(data.message))
-      yield put(callToastAction(data.message, 'error'))
     }
   } catch (e) {
     yield put(deleteCategoryFailureAction(e.message))
-    yield put(callToastAction(e.message, 'error'))
   }
  }
 
@@ -73,15 +70,12 @@ function* delCategoryWorker(action) {
     const data = yield call(fetchShowCategoryOnWebSite, action.payload)
     if (data.status) {
       yield put(getCategorySuccessAction(data.categories))
-      yield put(showCategoryOnWebSiteSuccessAction())
-      yield put(callToastAction(data.message))
+      yield put(showCategoryOnWebSiteSuccessAction(data.message))
     } else {
       yield put(showCategoryOnWebSiteFailureAction(data.message))
-      yield put(callToastAction(data.message, 'error'))
     }
    } catch (e) {
     yield put(showCategoryOnWebSiteFailureAction(e.message))
-    yield put(callToastAction(e.message, 'error'))
    }
  }
 

@@ -3,7 +3,7 @@ import { ADD_CATEGORY_REQUEST, ADD_CATEGORY_SUCCESS, ADD_CATEGORY_FAILURE } from
 
 const initialState = {
   loading: false,
-  err: null,
+  message: null,
   success: false
 }
 
@@ -13,23 +13,23 @@ export const categoryCreatorState = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        err: null,
-        success: false,
+        message: null,
+        success: false
       }
     }
     case ADD_CATEGORY_SUCCESS: {
       return {
         ...state,
         loading: false,
-        err: null,
-        success: true,
+        message: action.payload,
+        success: true
       }
     }
     case ADD_CATEGORY_FAILURE: {
       return {
         ...state,
         loading: false,
-        err: action.payload,
+        message: action.payload,
         success: false
       }
     }

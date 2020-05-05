@@ -1,18 +1,16 @@
 .cards-list {
-  .card-action {
-    display: flex;
+  width: calc(100% - 24px);
+  margin: 12px 0;
+  padding: 0 12px;
+  height: 100%;
+  .card-img {
+    height: 240px;
+    background-size: cover;
+  }
+  .MuiCardActions-root {
     justify-content: space-between;
-    justify-items: center;
+    align-items: flex-end;
+    padding: 16px;
+  }
 
-    .amount {
-      line-height: 2.1;
-    }
-  }
-  .btn {
-    padding: 0 30px;
-  }
-  .card .card-image img {
-    object-fit: contain;
-    height: 250px;
-  }
 }

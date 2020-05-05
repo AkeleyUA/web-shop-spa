@@ -4,12 +4,13 @@ import { connect } from 'react-redux'
 import { TextField, Button, Select, MenuItem, FormHelperText, FormControl, Paper } from '@material-ui/core'
 
 import './ProductCreator.scss'
-import { callToastAction } from '../Toast/action'
 import { bindActionCreators } from 'redux'
 import { addProductRequestAction, addProductFailureAction, formCleanerAction } from './action'
 import { getCategoryRequestAction } from '../Categories/action'
+import { useSnackbar } from 'notistack'
 
 const ProductCreator = ({
+  message,
   loading,
   addProductRequest,
   categories,
@@ -18,10 +19,11 @@ const ProductCreator = ({
   getCategoryRequest,
   categoriesLoading,
 }) => {
+  const {enqueueSnackbar} = useSnackbar()
   const [form, setForm] = useState(
     {
       name: '',
-      category: '123',
+      category: '',
       amount: '',
       img: '',
       description: '',
@@ -58,6 +60,12 @@ const ProductCreator = ({
       })
     }
   }, [success])
+
+  useEffect(() => {
+    if (message) {
+      enqueueSnackbar(message)
+    }
+  }, [message])
 
   return (
     <div className="product-creator">
@@ -146,12 +154,12 @@ const mapStateToProps = state => {
     success: state.productCreatorState.success,
     categories: state.categoriesState.categories,
     categoriesLoading: state.categoriesState.loading,
+    message: state.productCreatorState.message
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    callToast: bindActionCreators(callToastAction, dispatch),
     addProductRequest: bindActionCreators(addProductRequestAction, dispatch),
     addProductFailure: bindActionCreators(addProductFailureAction, dispatch),
     formCleaner: bindActionCreators(formCleanerAction, dispatch),

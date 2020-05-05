@@ -4,17 +4,18 @@ import {
   call,
 } from 'redux-saga/effects';
 import {
+  GET_PRODUCTS_REQUEST,
   getProductsSuccessAction,
   getProductsFailureAction,
-  GET_PRODUCTS_REQUEST,
+  
   SHOW_ON_WEB_SITE_REQUEST,
   showOnWebSiteSuccessAction,
   showOnWebSiteFailureAction,
+  
   DEL_PRODUCT_REQUEST,
+  deleteProductSuccessAction,
   deleteProductFailureAction
 } from './action';
-
-import {callToastAction} from '../Toast/action'
 
 const fetchProducts = () => {
   return fetch('/api/products/get-products', {
@@ -55,15 +56,13 @@ function* showOnWebSideWorker(action) {
   try {
     const data = yield call(fetchShowOnWebSite, action.payload)
     if(data.status) {
-      yield put(showOnWebSiteSuccessAction(data.products))
-      yield put(callToastAction(data.message))
+      yield put(showOnWebSiteSuccessAction(data.message))
+      yield put(getProductsSuccessAction(data.products))
     } else {
       yield put(showOnWebSiteFailureAction(data.message))
-      yield put(callToastAction(data.message))
     }
   } catch (e) {
-    yield put(showOnWebSiteFailureAction(e))
-    yield put(callToastAction(e.message))
+    yield put(showOnWebSiteFailureAction(e.message))
   }
 }
 
@@ -71,15 +70,13 @@ function* delProductWorker(action) {
   try {
     const data = yield call(fetchDelProduct, action.payload)
     if (data.status) {
+      yield put(deleteProductSuccessAction(data.message))
       yield put(getProductsSuccessAction(data.products))
-      yield put(callToastAction(data.message))
     } else {
       yield put(getProductsFailureAction(data.message))
-      yield put(callToastAction(data.message))
     }
   } catch (e) {
-    yield put(deleteProductFailureAction(e))
-    yield put(callToastAction(e.message))
+    yield put(deleteProductFailureAction(e.message))
   }
 }
 

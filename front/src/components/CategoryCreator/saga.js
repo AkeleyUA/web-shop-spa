@@ -3,7 +3,6 @@ import {
   put,
   call,
 } from 'redux-saga/effects';
-import { callToastAction } from '../Toast/action';
 import { addCategorySuccessAction, addCategoryFailureAction, ADD_CATEGORY_REQUEST } from './action';
 import { getCategorySuccessAction } from '../Categories/action';
 
@@ -22,15 +21,12 @@ function* addCategoryWorker(action) {
     const data = yield call(fetchAddNewCategory, action.payload)
     if (data.status) {
       yield put(getCategorySuccessAction(data.categories))
-      yield put(addCategorySuccessAction())
-      yield put(callToastAction(data.message))
+      yield put(addCategorySuccessAction(data.message))
     } else {
       yield put(addCategoryFailureAction(data.message))
-      yield put(callToastAction(data.message, 'error'))
     }
   } catch (e) {
-    yield put(addCategoryFailureAction(e))
-    yield put(callToastAction(e.message, 'error'))
+    yield put(addCategoryFailureAction(e.message))
   }
 }
 

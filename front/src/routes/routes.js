@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import HomePage from '../pages/Home.page'
+import HomePage from '../pages/Home.page/Home.page'
 import { AuthPage } from '../pages/Auth.page'
 import AdminPanelPage from '../pages/AdminPanel.page'
 import Categories from '../components/Categories/Categories'

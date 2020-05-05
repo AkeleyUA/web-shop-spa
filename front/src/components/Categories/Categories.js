@@ -12,16 +12,16 @@ import {
   TableRow,
   TableBody,
   CircularProgress,
-  Button,
+  IconButton,
   Checkbox,
   Icon,
   Paper,
-  Breadcrumbs,
-  Link
+  Breadcrumbs
 } from '@material-ui/core'
 import { NavLink } from 'react-router-dom'
 
 import './Categories.scss'
+import { useSnackbar } from 'notistack'
 
 
 const BreadcrumbsCreator = [
@@ -43,8 +43,10 @@ const Categories = ({
   showCategoryOnWebSiteRequest,
   oneCategoryLoading,
   loading,
-  match
+  message,
 }) => {
+  
+  const {enqueueSnackbar} = useSnackbar()
 
   const getCategory = useCallback(
     () => {
@@ -60,6 +62,12 @@ const Categories = ({
   useEffect(() => {
     getCategory()
   }, [])
+
+  useEffect(() => {
+    if (message) {
+      enqueueSnackbar(message)
+    }
+  }, [message])
 
   const Preloader = () => {
     return (
@@ -110,13 +118,13 @@ const Categories = ({
                     )}
                   </TableCell>
                   <TableCell align="center">
-                    <Button
+                    <IconButton
                     className="centered-btn"
                     onClick={() => {deleteCategoryRequest(row._id)}}
                     disabled={loading || oneCategoryLoading}
                   >
-                      <Icon>clear</Icon>
-                    </Button>
+                      <Icon>delete_outline</Icon>
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               )
@@ -131,6 +139,7 @@ const Categories = ({
 
 const mapStateToProps = state => {
   return {
+    message: state.categoriesState.message,
     categories: state.categoriesState.categories,
     loading: state.categoriesState.loading,
     oneCategoryLoading: state.categoryCreatorState.loading

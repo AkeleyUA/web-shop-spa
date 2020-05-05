@@ -53,8 +53,8 @@ router.get(
   '/get-for-client',
   async (req, res) => {
     try {
-      const data = await Category.find({show: true})
-      res.json(data)
+      const categories = await Category.find({show: true})
+      res.json({categories, status: true})
     } catch (e) {
       console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })

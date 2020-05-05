@@ -12,7 +12,6 @@ router.get(
       const data = await Product.find()
       res.json(data)
     } catch (e) {
-      console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
     }
   }
@@ -22,29 +21,27 @@ router.post(
   '/get-products-for-cart',
   async (req, res) => {
     const { id } = req.body
-    if(id.length < 1) {
-      return res.json({status: false, message:"Корзина пуста"})
+    if (id.length < 1) {
+      return res.json({ status: false, message: "Корзина пуста" })
     }
     try {
-      const data = await Product.find({_id: id})
-      res.json({status:true, data})
+      const data = await Product.find({ _id: id })
+      res.json({ status: true, data })
     } catch (e) {
-      console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
     }
   }
 )
 
 router.post(
-  '/get-products',
+  '/get-products-for-clients',
   async (req, res) => {
     const { category } = req.body
     try {
-      const data = await Product.find({category, show: true})
-      res.json(data)
+      const products = await Product.find({ category, show: true })
+      res.json({ products, status: true })
     } catch (e) {
-      console.log(e)
-      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
     }
   }
 )
@@ -52,11 +49,11 @@ router.post(
 router.post(
   '/add',
   [
-    check('name', 'name isEmpty').isLength({min:2}),
-    check('category', 'category isEmpty').isLength({min:2}),
+    check('name', 'name isEmpty').isLength({ min: 2 }),
+    check('category', 'category isEmpty').isLength({ min: 2 }),
     check('amount', 'amount isEmpty').isNumeric(),
-    check('img', 'img isEmpty').isLength({min:2}),
-    check('description', 'description isEmpty').isLength({min:2}),
+    check('img', 'img isEmpty').isLength({ min: 2 }),
+    check('description', 'description isEmpty').isLength({ min: 2 }),
     check('price', 'price isEmpty').isNumeric(),
   ],
   async (req, res) => {
@@ -88,13 +85,12 @@ router.post(
         price,
         show: false
       })
-      
+
       await product.save()
 
-      res.status(201).json({message: "Новый товар добавлен", status: true})
+      res.status(201).json({ message: "Новый товар добавлен", status: true })
 
     } catch (e) {
-      console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
     }
   }
@@ -107,9 +103,8 @@ router.post(
     try {
       await Product.findByIdAndDelete({ _id: id })
       const products = await Product.find()
-      res.json({message: "Товар был удалён", status: true, products})
+      res.json({ message: "Товар был удалён", status: true, products })
     } catch (e) {
-      console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
     }
   }
@@ -122,12 +117,11 @@ router.post(
     try {
       await Product.findByIdAndUpdate(
         { _id: id },
-        { $set: {"show": checked}}
+        { $set: { "show": checked } }
       )
       const products = await Product.find()
-      res.json({message: "Данные обновлены", status: true, products})
+      res.json({ message: "Данные обновлены", status: true, products })
     } catch (e) {
-      console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
     }
   }

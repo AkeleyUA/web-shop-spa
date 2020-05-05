@@ -1,0 +1,11 @@
+.tabs-wrapper {
+  & * {
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+  .tabs-title {
+    margin-bottom: 15px;
+  }
+  .MuiTab-wrapper {
+    align-items: flex-start;
+  }
+}

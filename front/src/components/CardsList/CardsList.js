@@ -1,64 +1,119 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
-import { Button, Col, ProgressBar, Card, Icon, CardTitle } from 'react-materialize'
+import React, { useState, useEffect, useCallback } from 'react'
+import {
+  Paper,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+  Grid,
+  Box,
+  Icon,
+  Button,
+} from '@material-ui/core'
+import { Rating } from '@material-ui/lab'
+import { useSnackbar } from 'notistack';
+
 import './CardsList.scss'
-import { useHttp } from '../../Hooks/http.hook'
-import { useMessage } from '../../Hooks/message.hook'
+import { connect } from 'react-redux';
+import { getProductsForClientRequestAction } from '../../pages/Home.page/action';
+import { bindActionCreators } from 'redux';
+import Preloader from '../Preloader/Preloader';
 
-export const CardsList = () => {
-  const [products, setProducts] = useState([])
-  const [current, setCurrent] = useState(null)
-  const message = useMessage()
-  const { loading, err, request, clearErr } = useHttp()
 
-  const getProducts = useCallback(async (category) => {
-    try {
-      const data = await request('/api/products/get-products', 'POST', { category: category || 123})
-      setProducts(data)
-      // home.setProductsLength(data.length)
-    } catch (e) {}
-  }, [request])
+const CardsList = ({ products, getProductsForClientRequest, currentCategory, loadingProducts }) => {
+  const [ratingValue, setRatinValue] = useState(3)
+  const { enqueueSnackbar } = useSnackbar();
 
-  // if ( current !== home.current) {
-  //   setCurrent(home.current)
-  //   getProducts(home.current)
-  // }
+  const ratingHandler = (event, newValue) => {
+    setRatinValue(+newValue)
+  }
+
+  const addToCartHandler = () => {
+    enqueueSnackbar('Добавлено в корзину')
+  }
 
   useEffect(() => {
-    message(err)
-    clearErr()
-  },[err, message, clearErr])
+    getProductsForClientRequest(currentCategory)
+  }, [currentCategory, getProductsForClientRequest])
 
-  const cardsCreator = (array) => {
-    return array.map(item => {
-      return (
-        <Col s={4} key={item._id}>
-          <Card key={item._id + "card"}
-            actions={[
-                <p key={item._id + "amount"} className="amount">
-                  В наличии: {item.amount}
-                </p>,
-                <Button
-                  className="blue darken-1"
-                  key={item._id + "button"}
-                  // onClick={() => home.addToCart(item._id)}
+  if (loadingProducts) {
+    return (
+      <Preloader />
+    )
+  } else {
+    return (
+      <Paper className="cards-list">
+        <Grid container spacing={3}>
+          {products.map(item => {
+            return (
+              <Grid item xs={4} key={item._id}>
+                <Card
+                  className="card"
+                  variant="outlined"
                 >
-                  {`$${item.price}`}
-                </Button>
-            ]}
-            closeIcon={<Icon>close</Icon>}
-            header={<CardTitle image={item.img}></CardTitle>}
-            revealIcon={<Icon>more_vert</Icon>}
-          >
-            <h4 className="black-text">{item.name}</h4>
-            <p>{item.description}</p>
-          </Card>
-        </Col>
-      )
-    })
+                  <CardActionArea>
+                    <CardMedia
+                      className="card-img"
+                      image={item.img}
+                      title={item.name}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {item.name}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" component="p">
+                        {item.description}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions
+                    disableSpacing={true}
+                  >
+                    <Box component="div">
+                      <Typography component="legend" variant="caption">Оценка: {ratingValue}</Typography>
+                      <Rating
+                        name="product-rating"
+                        value={ratingValue}
+                        onChange={ratingHandler}
+                      />
+                    </Box>
+                    <Box component="div" className="card-button-wrapper">
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        aria-label="add to shopping cart"
+                        onClick={addToCartHandler}
+                        endIcon={<Icon>shopping_cart</Icon>}
+                      >
+                        {item.price} $
+                      </Button>
+                    </Box>
+                  </CardActions>
+                </Card>
+              </Grid>
+            )
+          })}
+        </Grid>
+      </Paper>
+    )
   }
-  return (
-    <div className="cards-list">
-      {loading ? <ProgressBar /> : cardsCreator(products)}
-    </div>
-  )
+
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getProductsForClientRequest: bindActionCreators(getProductsForClientRequestAction, dispatch)
+  }
+}
+
+const mapStateToProps = state => {
+  return {
+    products: state.forClientState.products,
+    loadingProducts: state.forClientState.loadingProducts,
+    currentCategory: state.currentCategoryState.currentCategory
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardsList)

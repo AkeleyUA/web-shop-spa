@@ -1,11 +1,18 @@
 import {
   takeLatest,
-  select,
   put,
   call
 } from 'redux-saga/effects';
-import { REGISTRATION, LOGIN, loadingAction, tokenAction, LOGOUT } from './action';
-import { callToastAction } from '../Toast/action';
+import {
+  registrationSuccessAction,
+  REGISTRATION_REQUEST,
+  registrationFailureAction,
+  LOGIN_REQUEST,
+  loginSuccessAction,
+  loginFailureAction,
+  LOGOUT
+} from './action';
+
 
 const fetchRegister = form => {
   return fetch('/api/auth/register', {
@@ -27,35 +34,30 @@ const fetchLogin = (form) => {
   }).then(response => response.json())
 }
 
-function* registrationWorker() {
-  yield put(loadingAction(true))
-  const form = yield select(state => state.authState.form)
+function* registrationWorker(action) {
   try {
-    const data = yield call(fetchRegister, form)
-    yield put(callToastAction(data.message, (data.errors ? 'error' : 'success')))
-    yield put(loadingAction(false))
+    const data = yield call(fetchRegister, action.payload)
+    if(data.status) {
+      yield put(registrationSuccessAction(data.message))
+    } else {
+      yield put(registrationFailureAction(data.message))
+    }
   } catch (e) {
-    yield put(callToastAction(e, 'error'))
-    yield put(loadingAction(false))
+    yield put(registrationFailureAction(e.message))
   }
 }
 
-function* loginWorker() {
-  yield put(loadingAction(true))
-  const form = yield select(state => state.authState.form)
+function* loginWorker(action) {
   try {
-    const data = yield call(fetchLogin, form)
-    if (data.errors) {
-      yield put(callToastAction(data.message, 'error'))
+    const data = yield call(fetchLogin, action.payload)
+    if (data.status) {
+      yield put(loginSuccessAction(data.token))
+      yield sessionStorage.setItem('token', data.token)
+    } else {
+      yield put(loginFailureAction(data.message))
     }
-    if (data.token) {
-      yield put(tokenAction(data.token))
-      sessionStorage.setItem('token', data.token)
-    }
-    yield put(loadingAction(false))
   } catch (e) {
-    yield put(callToastAction(e, 'error'))
-    yield put(loadingAction(false))
+    yield put(loginFailureAction(e.message))
   }
 }
 
@@ -64,8 +66,8 @@ function* logoutWorker() {
 }
 
 function* authWatcher() {
-  yield takeLatest(REGISTRATION, registrationWorker)
-  yield takeLatest(LOGIN, loginWorker)
+  yield takeLatest(REGISTRATION_REQUEST, registrationWorker)
+  yield takeLatest(LOGIN_REQUEST, loginWorker)
   yield takeLatest(LOGOUT, logoutWorker)
 }
 

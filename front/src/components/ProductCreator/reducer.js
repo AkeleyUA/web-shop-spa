@@ -3,7 +3,7 @@ import { ADD_PRODUCT_FAILURE, ADD_PRODUCT_REQUEST, ADD_PRODUCT_SUCCESS, CLEAR_FO
 
 const initialState = {
   loading: false,
-  err: null,
+  message: null,
   success: false
 }
 
@@ -13,14 +13,14 @@ export const productCreatorState = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        err: null
+        message: null
       }
     }
     case ADD_PRODUCT_SUCCESS: {
       return {
         ...state,
         loading: false,
-        err: null,
+        message: action.payload,
         success: true,
       }
     }
@@ -28,7 +28,7 @@ export const productCreatorState = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        err: action.payload
+        message: action.payload
       }
     }
     case CLEAR_FORM: {

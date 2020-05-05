@@ -19,10 +19,10 @@ export const getCategorySuccessAction = categories => {
     payload: categories
   }
 }
-export const getCategoryFailureAction = err => {
+export const getCategoryFailureAction = message => {
   return {
     type: GET_CATEGORIES_FAILURE,
-    payload: err
+    payload: message
   }
 }
 
@@ -33,16 +33,17 @@ export const deleteCategoryRequestAction = id => {
   }
 }
 
-export const deleteCategorySuccessAction = () => {
+export const deleteCategorySuccessAction = message => {
   return {
     type: DEL_CATEGORY_SUCCESS,
+    payload: message
   }
 }
 
-export const deleteCategoryFailureAction = err => {
+export const deleteCategoryFailureAction = message => {
   return {
     type: DEL_CATEGORY_FAILURE,
-    payload: err
+    payload: message
   }
 }
 
@@ -56,15 +57,16 @@ export const showCategoryOnWebSiteRequestAction = (id, checked) => {
   }
 }
 
-export const showCategoryOnWebSiteSuccessAction = () => {
+export const showCategoryOnWebSiteSuccessAction = message => {
   return {
-    type: SHOW_CATEGORY_ON_WEB_SITE_SUCCESS
+    type: SHOW_CATEGORY_ON_WEB_SITE_SUCCESS,
+    payload: message
   }
 }
 
-export const showCategoryOnWebSiteFailureAction = (err) => {
+export const showCategoryOnWebSiteFailureAction = (message) => {
   return {
     type: SHOW_CATEGORY_ON_WEB_SITE_FAILURE,
-    payload: err
+    payload: message
   }
 }

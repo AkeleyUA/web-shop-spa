@@ -9,15 +9,16 @@ export const addCategoryRequestAction = (name) => {
   }
 }
 
-export const addCategorySuccessAction = () => {
+export const addCategorySuccessAction = message => {
   return {
-    type: ADD_CATEGORY_SUCCESS
+    type: ADD_CATEGORY_SUCCESS,
+    payload: message
   }
 }
 
-export const addCategoryFailureAction = (err) => {
+export const addCategoryFailureAction = (message) => {
   return {
     type: ADD_CATEGORY_FAILURE,
-    payload: err
+    payload: message
   }
 }

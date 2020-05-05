@@ -14,17 +14,17 @@ export const getProductsRequestAction = () => {
   }
 }
 
-export const getProductsSuccessAction = (products) => {
+export const getProductsSuccessAction = products => {
   return {
     type: GET_PRODUCTS_SUCCESS,
     payload: products
   }
 }
 
-export const getProductsFailureAction = (error) => {
+export const getProductsFailureAction = message => {
   return {
     type: GET_PRODUCTS_FAILURE,
-    payload: error
+    payload: message
   }
 }
 
@@ -38,36 +38,37 @@ export const showOnWebSiteRequestAction = (id, checked) => {
   }
 }
 
-export const showOnWebSiteSuccessAction = (products) => {
+export const showOnWebSiteSuccessAction = message => {
   return {
     type: SHOW_ON_WEB_SITE_SUCCESS,
-    payload: products
+    payload: message
   }
 }
 
-export const showOnWebSiteFailureAction = (err) => {
+export const showOnWebSiteFailureAction = message => {
   return {
     type: SHOW_ON_WEB_SITE_FAILURE,
-    payload: err
+    payload: message
   }
 }
 
-export const deleteProductRequestAction = (id) => {
+export const deleteProductRequestAction = id => {
   return {
     type: DEL_PRODUCT_REQUEST,
     payload: id
   }
 }
 
-export const deleteProductSuccessAction = () => {
+export const deleteProductSuccessAction = message => {
   return {
-    type: DEL_PRODUCT_SUCCESS
+    type: DEL_PRODUCT_SUCCESS,
+    payload: message
   }
 }
 
-export const deleteProductFailureAction = (err) => {
+export const deleteProductFailureAction = message => {
   return {
     type: DEL_PRODUCT_FAILURE,
-    payload: err
+    payload: message
   }
 }

@@ -15,7 +15,7 @@ import {
 const initialState = {
   categories: [],
   loading: false,
-  err: null
+  message: null
 }
 
 export const categoriesState = (state = initialState, action) => {
@@ -24,7 +24,7 @@ export const categoriesState = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        err: null
+        message: null
       }
     }
     case GET_CATEGORIES_SUCCESS: {
@@ -32,56 +32,57 @@ export const categoriesState = (state = initialState, action) => {
         ...state,
         loading: false,
         err: null,
-        categories: action.payload
+        categories: action.payload,
+        message: null
       }
     }
     case GET_CATEGORIES_FAILURE: {
       return {
         ...state,
         loading: false,
-        err: action.payload,
+        message: action.payload,
       }
     }
     case DEL_CATEGORY_REQUEST: {
       return {
         ...state,
         loading: true,
-        err: null
+        message: null
       }
     }
     case DEL_CATEGORY_SUCCESS: {
       return {
         ...state,
         loading: false,
-        err: null
+        message: action.payload
       }
     }
     case DEL_CATEGORY_FAILURE: {
       return {
         ...state,
         loading: false,
-        err: action.payload
+        message: action.payload
       }
     }
     case SHOW_CATEGORY_ON_WEB_SITE_REQUEST: {
       return {
         ...state,
         loading: true,
-        err: null
+        message: null
       }
     }
     case SHOW_CATEGORY_ON_WEB_SITE_SUCCESS: {
       return {
         ...state,
         loading: false,
-        err: null
+        message: action.payload
       }
     }
     case SHOW_CATEGORY_ON_WEB_SITE_FAILURE: {
       return {
         ...state,
         loading: false,
-        err: action.payload
+        message: action.payload
       }
     }
     default: {

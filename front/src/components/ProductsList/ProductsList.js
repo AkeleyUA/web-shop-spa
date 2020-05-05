@@ -4,10 +4,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import {
-  callToastAction
-} from '../Toast/action'
-
-import {
   getProductsRequestAction,
   showOnWebSiteRequestAction,
   deleteProductRequestAction,
@@ -30,6 +26,7 @@ import {
   Checkbox,
   Paper
 } from '@material-ui/core'
+import { useSnackbar } from 'notistack'
 
 import './ProductsList.scss'
 
@@ -41,8 +38,9 @@ const ProductsList = ({
   showOnWebSiteRequest,
   oneProductLoading,
   deleteProductRequest,
+  message
 }) => {
-
+  const { enqueueSnackbar } = useSnackbar();
   const [value, setValue] = useState('')
 
   const getProducts = useCallback(() => {
@@ -52,6 +50,12 @@ const ProductsList = ({
   useEffect(() => {
     getProducts()
   }, [])
+
+  useEffect(() => {
+    if (message) {
+      enqueueSnackbar(message)
+    }
+  }, [message])
 
   const inputFilterHandler = (event) => {
     setValue(event.target.value)
@@ -96,12 +100,12 @@ const ProductsList = ({
                   <TableCell >{row.price}</TableCell>
                   <TableCell >{row.description}</TableCell>
                   <TableCell align="center">
-                    <Checkbox disabled={oneProductLoading} color="primary" name={row._id} checked={row.show} onChange={checkboxChangeHendler} />
+                    <Checkbox disabled={oneProductLoading === row.id} color="primary" name={row._id} checked={row.show} onChange={checkboxChangeHendler} />
                   </TableCell>
                   <TableCell align="center">
                     <Button
                       onClick={() => { deleteProductRequest(row._id) }}
-                      disabled={oneProductLoading}
+                      disabled={oneProductLoading === row.id}
                     >
                       <Icon>clear</Icon>
                     </Button>
@@ -134,12 +138,10 @@ const ProductsList = ({
         to="/admin/products/add"
         color="primary"
         variant="outlined"
-        component={Button}
       >Добавить</NavLink>
       <NavLink
         to="/admin"
         variant="outlined"
-        component={Button}
       >Панель управления</NavLink>
     </div>
   )
@@ -149,7 +151,7 @@ const mapStateToProps = state => {
   return {
     loading: state.productsState.loading,
     products: state.productsState.products,
-    error: state.productsState.error,
+    message: state.productsState.message,
     oneProductLoading: state.productsState.oneProductLoading
   }
 }
@@ -157,7 +159,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getProductsRequest: bindActionCreators(getProductsRequestAction, dispatch),
-    callToast: bindActionCreators(callToastAction, dispatch),
     showOnWebSiteRequest: bindActionCreators(showOnWebSiteRequestAction, dispatch),
     deleteProductRequest: bindActionCreators(deleteProductRequestAction, dispatch),
   }

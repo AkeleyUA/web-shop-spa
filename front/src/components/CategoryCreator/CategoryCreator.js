@@ -6,15 +6,17 @@ import { TextField, Paper, Button, FormControl, FormHelperText, Modal } from '@m
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addCategoryRequestAction } from './action'
+import { useSnackbar } from 'notistack'
 
 const CategoryCreator = ({
-  categories,
+  message,
   addCategoryRequest,
   loading,
   success,
 }) => {
   const [category, setCategory] = useState({ name: '' })
   const [isOpen, setIsOpen] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
 
   const changeInputHandler = event => {
     setCategory({ name: event.target.value })
@@ -37,9 +39,17 @@ const CategoryCreator = ({
 
   useEffect(() => {
     if (success) {
-      return setCategory({name: ''})
+      modalCloseHendler()
+      setCategory({name: ''})
+      
     }
   }, [success])
+
+  useEffect(() => {
+    if (message) {
+      enqueueSnackbar(message)
+    }
+  }, [message])
 
   return (
     <Paper className="category-creator">
@@ -79,7 +89,7 @@ const CategoryCreator = ({
 
 const mapStateToProps = state => {
   return {
-    categories: state.categoriesState.categories,
+    message: state.categoryCreatorState.message,
     loading: state.categoryCreatorState.loading,
     success: state.categoryCreatorState.success,
   }
