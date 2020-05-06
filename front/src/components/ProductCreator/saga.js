@@ -30,7 +30,7 @@ function* addProductWorker(action) {
       yield put(addProductFailureAction(data.message))
     }
   } catch (e) {
-    yield put(addProductFailureAction(e.message))
+    yield put(addProductFailureAction('Неизвестная ошибка'))
   }
 }
 

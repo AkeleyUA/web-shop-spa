@@ -1,5 +1,8 @@
-.auth-page {
 
+.popper-content {
+  padding: 2px 15px;
+}
+.auth-page {
   .title {
     width: 100%;
     text-align: center;
@@ -7,16 +10,17 @@
     margin-bottom: 30px;
   }
   .container {
-    min-height: 250px;
+    min-height: 450px;
     display: flex;
     justify-content: center;
     align-items: center;
     .form-wrapper {
+      position: relative;
       background-color: #FFFFFF;
       border-radius: 10px;
       padding: 35px;
-      min-height: 200px;
-      width: 30%;
+      min-height: 350px;
+      width: 25%;
       display: flex;
       flex-direction: column;
       justify-content: space-around;
@@ -25,10 +29,16 @@
         width: 90%;
       }
       .button-wrapper {
-        width: 70%;
+        margin-top: 25px;
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
       }
+    }
+    .test-info-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
     }
   }
 }

@@ -47,7 +47,7 @@ function* getCategoriesWorker () {
     const data = yield call(fetchCategories)
     yield put(getCategorySuccessAction(data))
   } catch (e) {
-    yield put(getCategoryFailureAction(e.message))
+    yield put(getCategoryFailureAction('Неизвестная ошибка'))
   }
 }
 
@@ -61,7 +61,7 @@ function* delCategoryWorker(action) {
       yield put(deleteCategoryFailureAction(data.message))
     }
   } catch (e) {
-    yield put(deleteCategoryFailureAction(e.message))
+    yield put(deleteCategoryFailureAction('Неизвестная ошибка'))
   }
  }
 
@@ -75,7 +75,7 @@ function* delCategoryWorker(action) {
       yield put(showCategoryOnWebSiteFailureAction(data.message))
     }
    } catch (e) {
-    yield put(showCategoryOnWebSiteFailureAction(e.message))
+    yield put(showCategoryOnWebSiteFailureAction('Неизвестная ошибка'))
    }
  }
 

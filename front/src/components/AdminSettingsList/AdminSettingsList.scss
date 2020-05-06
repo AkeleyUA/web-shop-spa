@@ -1,0 +1,60 @@
+$primary: #0e4686;
+$secondary: #ef6c00;
+
+.admin-drawer {
+  .to-home {
+    display: block;
+    text-decoration: none;
+    width: 90%;
+    margin: 0 auto;
+    color: $secondary;
+    .drawer-btn {
+      background: transparent;
+      color: inherit;
+      box-shadow: none;
+    }
+    .drawen-icon {
+      color: inherit;
+    }
+  }
+  .admin-drawer-link {
+    display: block;
+    text-decoration: none;
+    width: 90%;
+    margin: 10px auto;
+    .drawer-btn {
+      background: transparent;
+      color: #fff;
+      box-shadow: none;
+      &:hover {
+        background: darken($color: $primary, $amount: 5%);
+      }
+      .drawen-icon {
+        color: inherit;
+      }
+    }
+    .drawer-btn-selected {
+      background: $secondary;
+      box-shadow: 0px 3px 3px -2px rgba($color: $secondary, $alpha: 0.8),
+        0px 2px 2px 0px rgba($color: $secondary, $alpha: 0.6),
+        0px 1px 5px 0px rgba($color: $secondary, $alpha: 0.6);
+      &:hover {
+        background: darken($color: $secondary, $amount: 10%);
+      }
+    }
+  }
+  .drawer-bg {
+    background-color: $primary;
+    min-width: 255px;
+    justify-content: space-between;
+    .to-developer {
+      margin-bottom: 15px;
+    }
+    .divider {
+      height: 1px;
+      background-color: lighten($color: $primary, $amount: 10);
+      margin-bottom: 10px;
+    }
+  }
+
+}

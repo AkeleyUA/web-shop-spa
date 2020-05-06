@@ -1,5 +1,5 @@
 import React from 'react'
-import Routes from './routes/routes'
+import { Routes } from './routes/routes'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import store from './store/store'
@@ -29,7 +29,7 @@ function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <SnackbarProvider maxSnack={5} autoHideDuration={2000}>
+        <SnackbarProvider maxSnack={5} autoHideDuration={2000} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
           <Router>
             <Routes />
           </Router>

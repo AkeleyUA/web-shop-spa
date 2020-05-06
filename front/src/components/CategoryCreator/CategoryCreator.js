@@ -35,13 +35,12 @@ const CategoryCreator = ({
 
   const addCatogory = useCallback(() => {
     addCategoryRequest(category.name)
-  }, [category.name])
+  }, [category.name, addCategoryRequest])
 
   useEffect(() => {
     if (success) {
       modalCloseHendler()
       setCategory({name: ''})
-      
     }
   }, [success])
 
@@ -49,7 +48,7 @@ const CategoryCreator = ({
     if (message) {
       enqueueSnackbar(message)
     }
-  }, [message])
+  }, [message, enqueueSnackbar])
 
   return (
     <Paper className="category-creator">

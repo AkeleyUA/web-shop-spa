@@ -26,7 +26,7 @@ function* addCategoryWorker(action) {
       yield put(addCategoryFailureAction(data.message))
     }
   } catch (e) {
-    yield put(addCategoryFailureAction(e.message))
+    yield put(addCategoryFailureAction('Неизвестная ошибка'))
   }
 }
 

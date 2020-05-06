@@ -45,7 +45,7 @@ const ProductsList = ({
 
   const getProducts = useCallback(() => {
     getProductsRequest()
-  }, [])
+  }, [getProductsRequest])
 
   useEffect(() => {
     getProducts()
@@ -53,7 +53,7 @@ const ProductsList = ({
 
   useEffect(() => {
     if (message) {
-      enqueueSnackbar(message)
+      enqueueSnackbar( typeof message === "string" ? message : 'Неизвестная ошибка')
     }
   }, [message])
 

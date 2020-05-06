@@ -48,7 +48,7 @@ function* getProductsWorker() {
     const data = yield call(fetchProducts)
     yield put(getProductsSuccessAction(data))
   } catch (e) {
-    yield put(getProductsFailureAction(e))
+    yield put(getProductsFailureAction('Неизвестная ошибка'))
   }
 }
 
@@ -62,7 +62,7 @@ function* showOnWebSideWorker(action) {
       yield put(showOnWebSiteFailureAction(data.message))
     }
   } catch (e) {
-    yield put(showOnWebSiteFailureAction(e.message))
+    yield put(showOnWebSiteFailureAction('Неизвестная ошибка'))
   }
 }
 
@@ -76,7 +76,7 @@ function* delProductWorker(action) {
       yield put(getProductsFailureAction(data.message))
     }
   } catch (e) {
-    yield put(deleteProductFailureAction(e.message))
+    yield put(deleteProductFailureAction('Неизвестная ошибка'))
   }
 }
 

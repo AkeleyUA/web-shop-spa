@@ -41,7 +41,7 @@ const ProductCreator = ({
 
   const getCategories = useCallback(() => {
     getCategoryRequest()
-  },[categories])
+  },[getCategoryRequest])
 
   useEffect(() => {
     getCategories()

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import {
   Button,
@@ -10,12 +10,11 @@ import {
 
 import CategoriesList from '../CategoriesList/CategoriesList'
 import CardsList from '../CardsList/CardsList'
-import Preloader from '../Preloader/Preloader'
 
 import './Catalog.scss'
 
 
-const Catalog = ({products, loadingProducts, loadingCategories}) => {
+const Catalog = ({products}) => {
   return (
     <Box className="catalog-wrapper">
       <Grid
