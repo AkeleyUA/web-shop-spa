@@ -12,10 +12,13 @@ import {
   withStyles,
   Badge,
   Modal,
+  Hidden,
+  Menu,
 } from '@material-ui/core';
 
 import './NavBar.scss'
 import { ShoppingCart } from '../ShoppingCart/ShoppingCart';
+import CategoriesList from '../CategoriesList/CategoriesList';
 
 
 const StyledBadge = withStyles((theme) => ({
@@ -30,12 +33,21 @@ const StyledBadge = withStyles((theme) => ({
 export const NavBar = () => {
   const [focus, setFocus] = useState(false)
   const [open, setOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const handleClose = () => {
     setOpen(false)
   }
   const handleOpen = () => {
     setOpen(true)
+  }
+
+  const handleMenuOpen = () => {
+    setMenuOpen(true)
+  }
+  
+  const handleMenuClose = () => {
+    setMenuOpen(false)
   }
 
   const ShoppingCartWithRef = React.forwardRef((props, ref) => {
@@ -51,23 +63,49 @@ export const NavBar = () => {
   return (
     <AppBar position="static" className="nav-bar" color="inherit" component="nav">
       <Toolbar className="tool-bar">
-        <Typography variant="h3">LOGOtip</Typography>
-        <Box className="phones-wrapper">
-          <Button
-            variant="outlined"
-            color="primary"
-            startIcon={<Icon>phone</Icon>}
+        <Hidden lgUp>
+          <IconButton
+            aria-label="more"
+            aria-controls="long-menu"
+            aria-haspopup="true"
+            onClick={handleMenuOpen}
           >
-            +380 73 049 XX XX
-              </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            startIcon={<Icon>phone</Icon>}
+            <Icon>{menuOpen ? 'close' : 'menu'}</Icon>
+          </IconButton>
+          <Menu
+            id="simple-menu"
+            keepMounted
+            open={menuOpen}
+            onClose={handleMenuClose}
+            classes={{
+              paper: "mobile-menu"
+            }}
+            anchorEl
           >
-            +380 73 049 XX XX
+            <CategoriesList/>
+          </Menu>
+        </Hidden>
+        <Hidden smDown >
+          <Typography variant="h3">LOGOtip</Typography>
+        </Hidden>
+        <Hidden mdDown>
+          <Box className="phones-wrapper">
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<Icon>phone</Icon>}
+            >
+              +380 73 049 XX XX
               </Button>
-        </Box>
+            <Button
+              variant="outlined"
+              color="secondary"
+              startIcon={<Icon>phone</Icon>}
+            >
+              +380 73 049 XX XX
+              </Button>
+          </Box>
+        </Hidden>
         <Box className="search-wrapper">
           <TextField
             fullWidth
@@ -101,9 +139,10 @@ export const NavBar = () => {
       <Modal
         open={open}
         onClose={handleClose}
+        BackdropProps={{style: {display: 'flex', justifyContent: 'center'}}}
       >
         <ShoppingCartWithRef ref={ref}>
-            <ShoppingCart/>
+          <ShoppingCart />
         </ShoppingCartWithRef>
       </Modal>
     </AppBar>

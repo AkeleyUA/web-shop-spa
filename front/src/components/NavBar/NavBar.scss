@@ -8,7 +8,7 @@
     justify-content: space-between;
   }
   .search-wrapper {
-    width: 40%;
+    min-width: 40%;
   }
   .phones-wrapper {
     width: 30%;
@@ -17,11 +17,16 @@
   }
 }
 
+.mobile-menu {
+  width: 100%;
+  margin-top: 45px;
+}
+
 .body-container-for-modal {
   position: absolute;
   top: 15%;
-  left: 25%;
-  width: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 60%;
   min-height: 440px;
 }
-

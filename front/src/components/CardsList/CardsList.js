@@ -48,7 +48,7 @@ const CardsList = ({ products, getProductsForClientRequest, currentCategory, loa
         <Grid container spacing={3}>
           {products.map(item => {
             return (
-              <Grid item xs={4} key={item._id}>
+              <Grid item xs={12} sm={6} md={6} lg={4} key={item._id}>
                 <Card
                   className="card"
                   variant="outlined"
