@@ -8,6 +8,7 @@
 }
 
 body {
+  overflow-y: scroll;
   font-family: "Roboto";
   background-color: #eeeeee;
 }
@@ -23,7 +24,7 @@ body {
   border: 1px solid #F3f3f3;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #FFFFFF;
 }
 ::-webkit-scrollbar {
   background: transparent;

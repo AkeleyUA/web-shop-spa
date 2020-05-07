@@ -21,13 +21,7 @@ import PriceToggleButton from '../ToggleButton/ToggleButton'
 import { RatingButton } from '../RatingBurron/RatingBurron'
 
 
-const CardsList = ({ products, getProductsForClientRequest, currentCategory, loadingProducts }) => {
-
-  useEffect(() => {
-    if (currentCategory !== '') {
-      getProductsForClientRequest(currentCategory)
-    }
-  }, [currentCategory])
+const CardsList = ({ products, loadingProducts }) => {
 
   if (loadingProducts) {
     return (
@@ -91,8 +85,7 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     products: state.forClientState.products,
-    loadingProducts: state.forClientState.loadingProducts,
-    currentCategory: state.currentCategoryState.currentCategory,
+    loadingProducts: state.forClientState.loadingProducts
   }
 }
 

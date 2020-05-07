@@ -12,20 +12,15 @@ import { bindActionCreators } from 'redux'
 import { setCurrentCategoryAction } from './action'
 
 import './CategoriesList.scss'
-import { getCategoriesForClientRequestAction } from '../../pages/Home.page/action'
 import Preloader from '../Preloader/Preloader'
 
-const CategoriesList = ({ categories, setCurrentCategory, getCategoriesForClientRequest, loadingCategories, currentCategory }) => {
-
-  useEffect(() => {
-    getCategoriesForClientRequest()
-  }, [getCategoriesForClientRequest])
-
+const CategoriesList = ({ categories, setCurrentCategory, loadingCategories, currentCategory }) => {
   if (loadingCategories) {
     return (
       <Preloader />
     )
   } else {
+    console.log(1)
     return (
       <List className="categories-list">
         {categories.map((item) => (
@@ -60,8 +55,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setCurrentCategory: bindActionCreators(setCurrentCategoryAction, dispatch),
-    getCategoriesForClientRequest: bindActionCreators(getCategoriesForClientRequestAction, dispatch)
+    setCurrentCategory: bindActionCreators(setCurrentCategoryAction, dispatch)
   }
 }
 

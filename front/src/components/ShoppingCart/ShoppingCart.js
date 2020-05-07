@@ -11,6 +11,7 @@ import TableRow from '@material-ui/core/TableRow'
 
 import './ShoppingCart.scss'
 import { connect } from 'react-redux'
+import { Grid } from '@material-ui/core'
 
 const ShoppingCart = ({ cart }) => {
   const [page, setPage] = useState(0)
@@ -50,7 +51,7 @@ const ShoppingCart = ({ cart }) => {
   ]
 
   return (
-    <Paper style={{ width: "100%" }} className="table-wrapper">
+    <Paper className="table-wrapper">
       <TableContainer style={{ height: 325 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

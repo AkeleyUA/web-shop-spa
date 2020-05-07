@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, createRef, forwardRef } from 'react'
 import {
   AppBar,
   Typography,
@@ -12,8 +12,12 @@ import {
   Badge,
   Modal,
   Hidden,
-  Menu,
+  Drawer,
   FormControl,
+  Backdrop,
+  Grow,
+  Divider,
+  Link
 } from '@material-ui/core';
 
 import './NavBar.scss'
@@ -65,15 +69,14 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
     setFilterValue(value)
   }
 
-  const ShoppingCartWithRef = React.forwardRef((props, ref) => {
-    return (
-      <div tabIndex={-1} ref={ref} className="body-container-for-modal">
-        {props.children}
-      </div>
-    )
-  })
+  const keyHandler = event => {
+    if (event.key === 'Enter') {
+      searchHandler()
+      inputRef.current.blur()
+    }
+  }
 
-  const MenuItemsWithRef = React.forwardRef((props, ref) => {
+  const MenuItemsWithRef = forwardRef((props, ref) => {
     return (
       <div ref={ref} className="body-for-menu-items">
         {props.children}
@@ -81,13 +84,61 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
     )
   })
 
-  const ref = React.createRef()
+  const modalRef = createRef()
+  const inputRef = createRef()
+  const menuRef = createRef()
 
   return (
-    <AppBar position="static" className="nav-bar" color="inherit" component="nav">
+    <AppBar position="fixed" style={{ zIndex: 1201 }} className="nav-bar" color="inherit" component="nav">
       <Toolbar className="tool-bar">
-        <Hidden lgUp>
+        <Hidden mdUp>
           <IconButton
+            aria-label="more"
+            aria-controls="long-menu"
+            aria-haspopup="true"
+            onClick={handleMenuOpen}
+          >
+            <Icon>{menuOpen ? 'close' : 'menu'}</Icon>
+          </IconButton>
+          <Drawer
+            variant="temporary"
+            onClose={handleMenuClose}
+            open={menuOpen}
+            classes={{
+              paper: 'mobild-drawer-papper'
+            }}
+          >
+            <Box>
+              <Box className="menu-header-group">
+                <Typography variant="h3" className="logo-mobile">LOGOtip</Typography>
+                <IconButton
+                  className="menu-close-btn"
+                  onClick={handleMenuClose}
+                >
+                  <Icon>close</Icon>
+                </IconButton>
+              </Box>
+              <Divider variant="middle" className="menu-divider" />
+              <Typography variant="caption" className="menu-caption">Категории товаров</Typography>
+              <CategoriesList />
+              <Divider variant="middle" className="menu-divider" />
+            </Box>
+            <Box
+              aria-label="social-links"
+              className="social-btn-group"
+            >
+              <Link className="git" href="https://github.com/AkeleyUA" target="_blank" rel="noreferrer">
+                <Icon className="fab fa-github" fontSize="large" color="action" />
+              </Link>
+              <Link className="fb" href="https://www.facebook.com/profile.php?id=100017178317539" target="_blank" rel="noreferrer">
+                <Icon className="fab fa-facebook" fontSize="large" color="action" />
+              </Link>
+              <Link className="tlg" href="https://t.me/AkeleyUA" target="_blank" rel="noreferrer">
+                <Icon className="fab fa-telegram" fontSize="large" color="action" />
+              </Link>
+            </Box>
+          </Drawer>
+          {/* <IconButton
             aria-label="more"
             aria-controls="long-menu"
             aria-haspopup="true"
@@ -105,30 +156,33 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
             }}
             anchorEl={anchorEl}
           >
-            <MenuItemsWithRef ref={ref}>
+            <MenuItemsWithRef ref={menuRef}>
               <CategoriesList />
             </MenuItemsWithRef>
-          </Menu>
+          </Menu> */}
         </Hidden>
         <Hidden smDown >
           <Typography variant="h3">LOGOtip</Typography>
         </Hidden>
         <Hidden mdDown>
           <Box className="phones-wrapper">
+            <Divider orientation="vertical" flexItem />
             <Button
               variant="outlined"
               color="primary"
               startIcon={<Icon>phone</Icon>}
             >
-              +380 73 049 XX XX
-              </Button>
+              +380 73 069 XX XX
+            </Button>
+            <Divider orientation="vertical" flexItem />
             <Button
               variant="outlined"
               color="secondary"
               startIcon={<Icon>phone</Icon>}
             >
-              +380 73 049 XX XX
-              </Button>
+              +380 95 069 XX XX
+            </Button>
+            <Divider orientation="vertical" flexItem />
           </Box>
         </Hidden>
         <FormControl
@@ -138,15 +192,19 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
             variant="outlined"
             label="Поиск"
             onChange={inputFilterHandler}
-            onFocus={() => setFocus(true)}
-            onBlur={() => setFocus(false)}
+            onKeyPress={keyHandler}
+            inputProps={{
+              ref: inputRef,
+              onFocus: () => setFocus(true),
+              onBlur: () => setFocus(false)
+            }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     color={focus ? 'primary' : 'default'}
                     onClick={searchHandler}
-                    >
+                  >
                     <Icon>search</Icon>
                   </IconButton>
                 </InputAdornment>
@@ -165,12 +223,19 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
       </Toolbar>
       <Modal
         open={open}
+        aria-describedby="spring-modal-description"
         onClose={handleClose}
-        BackdropProps={{ style: { display: 'flex', justifyContent: 'center' } }}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
       >
-        <ShoppingCartWithRef ref={ref}>
-          <ShoppingCart />
-        </ShoppingCartWithRef>
+        <Grow in={open}>
+          <div className='body-container-for-modal'>
+            <ShoppingCart id="spring-modal-description" />
+          </div>
+        </Grow>
       </Modal>
     </AppBar>
   )

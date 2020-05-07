@@ -9,8 +9,15 @@ export const RatingButton = ({id}) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const ratingHandler = (event, newValue) => {
+    console.log(newValue)
     setRatinValue(+newValue)
-    enqueueSnackbar('Спасибо за оценку')
+    if(+newValue === 0) {
+      enqueueSnackbar('Оценка удалена')
+    } else if (ratingValue !== +newValue && ratingValue !== 0) {
+      enqueueSnackbar('Оценка изменена')
+    } else {
+      enqueueSnackbar('Спасибо за оценку')
+    }
   }
 
   return (

@@ -1,20 +1,21 @@
 .catalog-wrapper {
+  margin-top: 100px;
   width: calc(100% - 16px);
   padding: 5px;
-  .header {
-    padding: 10px 19px;
-  }
-  .filter {
-    padding: 10px 19px;
+  .MuiDrawer-paper {
+    position: static;
+    width: 100%;
+    border-radius: 4px;
+    min-height: 360px;
   }
   .products-counter {
-    margin: 15px 0;
+    margin: 15px;
   }
   .buttons-wrapper {
     display: flex;
     justify-content: space-around;
     flex-direction: column;
     min-height: 100px;
-    margin-bottom: 30px;
+    margin: 15px;
   }
 }
