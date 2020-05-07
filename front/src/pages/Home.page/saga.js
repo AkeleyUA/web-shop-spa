@@ -42,9 +42,9 @@ function* getCategoriesForClientWorker () {
   }
 }
 
-function* ForClientWatcher () {
+function* forClientWatcher () {
   yield takeLatest(GET_PRODUCTS_FOR_CLIENT_REQUEST, getProductsForClientWorker)
   yield takeLatest(GET_CATEGORIES_FOR_CLIENT_REQUEST, getCategoriesForClientWorker)
 }
 
-export default ForClientWatcher
+export default forClientWatcher

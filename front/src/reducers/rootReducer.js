@@ -6,6 +6,8 @@ import { categoriesState } from '../components/Categories/reducer'
 import { categoryCreatorState } from '../components/CategoryCreator/reducer'
 import { currentCategoryState } from '../components/CategoriesList/reducer'
 import { forClientState } from '../pages/Home.page/reducer'
+import { filterState } from '../components/NavBar/reducer'
+import { shoppingCartState } from '../components/ToggleButton/reducer'
 
 
 export const rootReducer = combineReducers({
@@ -16,4 +18,6 @@ export const rootReducer = combineReducers({
   categoryCreatorState,
   forClientState,
   currentCategoryState,
+  filterState,
+  shoppingCartState,
 })

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { registrationRequestAction, loginRequestAction } from './action';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { registrationRequestAction, loginRequestAction } from './action'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
 import {
   TextField,
@@ -14,7 +14,8 @@ import {
   Fade,
   Popper,
   FormControl,
-  ButtonGroup
+  ButtonGroup,
+  Grid
 } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 
@@ -64,7 +65,7 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message }) => {
 
   return (
     <div className="auth-page">
-      <Popper open={open} anchorEl={anchorEl} placement="right" transition>
+      <Popper open={open} anchorEl={anchorEl} onClick={popperHandler} placement="bottom-start" transition>
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
@@ -73,63 +74,65 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message }) => {
           </Fade>
         )}
       </Popper>
-      <Box className="container">
-        <FormControl className="form-wrapper">
-          <Typography variant="h3" className="title">
-            LOGOtip
+      <Grid container justify='center' alignContent='center' className="container">
+        <Grid item xs={12} sm={8} md={6} lg={4} component={Paper}>
+          <FormControl className="form-wrapper">
+            <Typography variant="h3" className="title">
+              LOGOtip
             <Typography variant="caption">
-              админ
+                админ
             </Typography>
-          </Typography>
-          <TextField
-            error={err.email}
-            className="auth-input"
-            id="email"
-            label="email"
-            variant="outlined"
-            name="email"
-            type="email"
-            inputProps={{ value: form.email }}
-            onChange={changeInputHandler}
-            required
-          />
-          <TextField
-            error={err.password}
-            className="auth-input"
-            id="password"
-            label="password"
-            variant="outlined"
-            name="password"
-            type="password"
-            onChange={changeInputHandler}
-            inputProps={{ value: form.password }}
-            required
-          />
-          <ButtonGroup variant="contained" className="button-wrapper">
-            <Button
-              color="primary"
-              startIcon={<Icon>forward</Icon>}
-              type="submit"
-              onClick={loginHandler}
-              disabled={loading}
-            >
-              Войти
+            </Typography>
+            <TextField
+              error={err.email}
+              className="auth-input"
+              id="email"
+              label="email"
+              variant="outlined"
+              name="email"
+              type="email"
+              inputProps={{ value: form.email }}
+              onChange={changeInputHandler}
+              required
+            />
+            <TextField
+              error={err.password}
+              className="auth-input"
+              id="password"
+              label="password"
+              variant="outlined"
+              name="password"
+              type="password"
+              onChange={changeInputHandler}
+              inputProps={{ value: form.password }}
+              required
+            />
+            <ButtonGroup variant="contained" className="button-wrapper">
+              <Button
+                color="primary"
+                startIcon={<Icon>forward</Icon>}
+                type="submit"
+                onClick={loginHandler}
+                disabled={loading}
+              >
+                <Typography variant="button">Войти</Typography>
             </Button>
-            <Button
-              color="primary"
-              startIcon={<Icon>add_box</Icon>}
-              type="submit"
-              onClick={registerHandler}
-              disabled={loading}
-            >
-              Регистрация
+              <Button
+                color="primary"
+                startIcon={<Icon>add_box</Icon>}
+                type="submit"
+                onClick={registerHandler}
+                disabled={loading}
+              >
+                <Typography variant="button">Регистрация</Typography>
             </Button>
-            <Button onClick={popperHandler} className="login-helper" color="primary">
-              <Icon>help_outline</Icon>
-            </Button>
-          </ButtonGroup>
-        </FormControl>
-      </Box>
+              <Button onClick={popperHandler} className="login-helper" color="primary">
+                <Icon>help_outline</Icon>
+              </Button>
+            </ButtonGroup>
+          </FormControl>
+        </Grid>
+      </Grid>
     </div>
   )
 }
@@ -149,4 +152,4 @@ const mapStateToProps = (state) => {
 }
 
 
-export default connect(mapStateToProps, mapDispathToProps)(AuthForm);
+export default connect(mapStateToProps, mapDispathToProps)(AuthForm)

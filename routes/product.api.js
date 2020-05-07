@@ -18,6 +18,35 @@ router.get(
 )
 
 router.post(
+  '/get-filtered-products',
+  check('filterValue', 'filterValue isEmpty').isLength({ min: 1 }),
+  async (req, res) => {
+    const { filterValue } = req.body
+
+    try {
+      const errors = validationResult(req)
+
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array(),
+          message: "Введите имя товара"
+        })
+      }
+      const data = await Product.find()
+      const newData = data.filter(item => item.name.match(filterValue))
+      if (newData.length > 0) {
+        return res.json({products: newData, status: true})
+      } else {
+        return res.json({message: 'Товар не найден'})
+      }
+    } catch (e) {
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу"})
+    }
+  }
+)
+
+
+router.post(
   '/get-products-for-cart',
   async (req, res) => {
     const { id } = req.body
@@ -126,5 +155,23 @@ router.post(
     }
   }
 )
+
+// for( i = 0; i < 30; i++) {
+//   const product = new Product({
+//     name: `test ${i}-2`,
+//     category: 'Популярно',
+//     amount: i,
+//     img: 'https://babylike.com.ua/image/cache/catalog/3ad91c2c2e47f64c527b615851e492e1-450x450.jpg',
+//     description: `test 2, product ${i}`,
+//     price: i*5,
+//     show: true,
+//     test: true,
+//   })
+//   try {
+//     product.save()
+//   } catch (e) {
+//     throw e
+//   }
+// }
 
 module.exports = router

@@ -10,8 +10,9 @@ import TablePagination from '@material-ui/core/TablePagination'
 import TableRow from '@material-ui/core/TableRow'
 
 import './ShoppingCart.scss'
+import { connect } from 'react-redux'
 
-export const ShoppingCart = () => {
+const ShoppingCart = ({ cart }) => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
@@ -24,72 +25,15 @@ export const ShoppingCart = () => {
     setPage(0);
   }
 
-  const rows = [
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
-    },
-    {
-      name: 'Товар1',
-      price: 100
+  const total = () => {
+    const prices = cart.map(item => item.price)
+    if (prices.length > 0) {
+      return prices.reduce((a, b) => a + b)
+    } else {
+      return 0
     }
-  ]
+  }
+
   const columns = [
     {
       id: 'name',
@@ -121,9 +65,9 @@ export const ShoppingCart = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+            {cart.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.name}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -141,14 +85,28 @@ export const ShoppingCart = () => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={rows.length}
+        count={cart.length}
         rowsPerPage={rowsPerPage}
         labelRowsPerPage="Товаров на странице"
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-      <div>Всего: {rows.map(item => item.price).reduce((a, b) => (a + b))}</div>
+      <div>Всего: {total()}</div>
     </Paper>
   )
 }
+
+const mapStateToProps = state => {
+  return {
+    cart: state.shoppingCartState.cart
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShoppingCart)

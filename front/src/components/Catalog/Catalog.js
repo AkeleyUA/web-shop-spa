@@ -74,7 +74,8 @@ const Catalog = ({ products }) => {
 
 const mapStateToProps = state => {
   return {
-    products: state.forClientState.products
+    products: state.forClientState.products,
+    message: state.forClientState.message
   }
 }
 

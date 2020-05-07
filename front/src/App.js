@@ -29,7 +29,7 @@ function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <SnackbarProvider maxSnack={5} autoHideDuration={2000} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
+        <SnackbarProvider maxSnack={3} autoHideDuration={2000} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
           <Router>
             <Routes />
           </Router>

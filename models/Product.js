@@ -7,7 +7,8 @@ const schema = new Schema({
   img: {type: String, required: true},
   description: {type: String, required: true},
   price: {type: Number, required: true},
-  show: {type: Boolean}
+  show: {type: Boolean},
+  test: {type: Boolean}
 })
 
 module.exports = model('Product', schema)

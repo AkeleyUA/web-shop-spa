@@ -4,7 +4,8 @@ import {
   GET_PRODUCTS_FOR_CLIENT_FAILURE,
   GET_CATEGORIES_FOR_CLIENT_REQUEST,
   GET_CATEGORIES_FOR_CLIENT_SUCCESS,
-  GET_CATEGORIES_FOR_CLIENT_FAILURE
+  GET_CATEGORIES_FOR_CLIENT_FAILURE,
+  CLEAR_PRODUCTS_MESSAGE
 } from "./action"
 
 
@@ -38,8 +39,8 @@ export const forClientState = (state = initialState, action) => {
       return {
         ...state,
         loadingProducts: false,
-        message: action.payload,
-        products: []
+        products: [],
+        message: action.payload
       }
     }
     case GET_CATEGORIES_FOR_CLIENT_REQUEST: {
@@ -64,6 +65,12 @@ export const forClientState = (state = initialState, action) => {
         loadingCategories: false,
         categories: [],
         message: action.payload
+      }
+    }
+    case CLEAR_PRODUCTS_MESSAGE: {
+      return {
+        ...state,
+        message: null
       }
     }
     default: {

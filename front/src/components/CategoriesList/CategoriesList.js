@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Typography,
-  Tab,
-  Tabs,
-  Box
+  Icon,
+  List,
+  ListItem,
+  Button,
+  Typography
 } from '@material-ui/core'
 
 import { connect } from 'react-redux'
@@ -14,13 +15,7 @@ import './CategoriesList.scss'
 import { getCategoriesForClientRequestAction } from '../../pages/Home.page/action'
 import Preloader from '../Preloader/Preloader'
 
-const CategoriesList = ({categories, setCurrentCategory, getCategoriesForClientRequest, loadingCategories }) => {
-  const [checkedCategory, setCheckCategory] = useState(0)
-
-  const changeHandler = event => {
-    setCheckCategory(event.currentTarget.tabIndex)
-    setCurrentCategory(categories[event.currentTarget.tabIndex].name)
-  }
+const CategoriesList = ({ categories, setCurrentCategory, getCategoriesForClientRequest, loadingCategories, currentCategory }) => {
 
   useEffect(() => {
     getCategoriesForClientRequest()
@@ -28,50 +23,38 @@ const CategoriesList = ({categories, setCurrentCategory, getCategoriesForClientR
 
   if (loadingCategories) {
     return (
-      <Preloader/>
+      <Preloader />
     )
   } else {
     return (
-      <Box className="tabs-wrapper">
-        <Typography className="tabs-title" variant="subtitle2">Категория</Typography>
-        <Tabs
-          orientation="vertical"
-          variant="fullWidth"
-          value={checkedCategory}
-          onChange={changeHandler}
-          TabIndicatorProps={{ style: { left: 0, right: 'auto' } }}
-          label="Категория"
-        >
-          {categories.map((item, index) => {
-            return (
-              <Tab
-                key={item._id}
-                type="button"
-                label={
-                  <Typography
-                    variant={checkedCategory === index ? "h6" : "body2"}
-                    color={checkedCategory === index ? 'secondary' : 'initial'}
-                    component="p"
-                  >
-                    {item.name}
-                  </Typography>
-                }
-                tabIndex={index}
-                value={index}
-              />
-            )
-          })}
-        </Tabs>
-      </Box>
+      <List className="categories-list">
+        {categories.map((item) => (
+          <ListItem key={item.name}>
+            <Button
+              fullWidth
+              classes={{
+                fullWidth: (currentCategory === item.name ? 'full-width-btn active' : 'full-width-btn')
+              }}
+              variant='text'
+              onClick={() => setCurrentCategory(item.name)}
+              color={currentCategory === item.name ? 'secondary' : 'default'}
+              endIcon={currentCategory === item.name ? <Icon>beenhere</Icon> : null}
+            >
+              <Typography variant="button">{item.name}</Typography>
+            </Button>
+          </ListItem>
+        ))}
+      </List>
     )
-  } 
+  }
 }
 
 
 const mapStateToProps = state => {
   return {
     categories: state.forClientState.categories,
-    loadingCategories: state.forClientState.loadingCategories
+    loadingCategories: state.forClientState.loadingCategories,
+    currentCategory: state.currentCategoryState.currentCategory
   }
 }
 

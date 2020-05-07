@@ -4,6 +4,7 @@ export const GET_PRODUCTS_FOR_CLIENT_FAILURE = 'GET_PRODUCTS_FOR_CLIENT_FAILURE'
 export const GET_CATEGORIES_FOR_CLIENT_REQUEST ='GET_CATEGORIES_FOR_CLIENT_REQUEST'
 export const GET_CATEGORIES_FOR_CLIENT_SUCCESS ='GET_CATEGORIES_FOR_CLIENT_SUCCESS'
 export const GET_CATEGORIES_FOR_CLIENT_FAILURE ='GET_CATEGORIES_FOR_CLIENT_FAILURE'
+export const CLEAR_PRODUCTS_MESSAGE = 'CLEAR_PRODUCTS_MESSAGE'
 
 
 export const getProductsForClientRequestAction = category => {
@@ -44,5 +45,11 @@ export const getCategoriesForClientFailureAction = message => {
   return {
     type: GET_CATEGORIES_FOR_CLIENT_FAILURE,
     payload: message
+  }
+}
+
+export const clearProductsMessageAction = () => {
+  return {
+    type: CLEAR_PRODUCTS_MESSAGE
   }
 }

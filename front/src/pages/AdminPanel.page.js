@@ -36,6 +36,9 @@ const AdminPanelPage = ({ logout, location }) => {
           <Typography variant="body1">
             {findName !== undefined ? findName.name : ''}
           </Typography>
+          <Typography variant="caption" color="secondary">
+            Дисклеймер: Админ панель ещё в разработке
+          </Typography>
           <CustomLink to='/admin' onClick={logout}/>
         </Box>
       </Grid>
