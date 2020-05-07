@@ -54,7 +54,7 @@ router.get(
   async (req, res) => {
     try {
       const categories = await Category.find({show: true})
-      setTimeout(() => {res.json({categories, status: true})}, 3000)
+      res.json({categories, status: true})
     } catch (e) {
       console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })

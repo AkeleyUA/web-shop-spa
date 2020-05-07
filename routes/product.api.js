@@ -68,7 +68,7 @@ router.post(
     const { category } = req.body
     try {
       const products = await Product.find({ category, show: true })
-      setTimeout(() => {res.json({ products, status: true })}, 3000)
+      res.json({ products, status: true })
     } catch (e) {
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
     }
