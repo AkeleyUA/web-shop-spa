@@ -11,10 +11,10 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { setCurrentCategoryAction } from './action'
 
-import './CategoriesList.scss'
+import './Categories.Client.scss'
 import Preloader from '../Preloader/Preloader'
 
-const CategoriesList = ({ categories, setCurrentCategory, loadingCategories, currentCategory }) => {
+const CategoriesForClient = ({ categories, setCurrentCategory, loadingCategories, currentCategory }) => {
   if (loadingCategories) {
     return (
       <Preloader />
@@ -59,4 +59,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoriesList)
+export default connect(mapStateToProps, mapDispatchToProps)(CategoriesForClient)

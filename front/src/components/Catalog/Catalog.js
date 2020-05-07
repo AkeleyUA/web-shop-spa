@@ -11,12 +11,12 @@ import {
   Divider,
 } from '@material-ui/core'
 
-import CategoriesList from '../CategoriesList/CategoriesList'
-import CardsList from '../CardsList/CardsList'
+import CategoriesForClient from '../Categories.Client/Categories.Client'
+import ProductsForClient from '../Products.Client/Products.Client'
 
 import './Catalog.scss'
 import { bindActionCreators } from 'redux'
-import { setCurrentCategoryAction } from '../CategoriesList/action'
+import { setCurrentCategoryAction } from '../Categories.Client/action'
 
 
 const Catalog = ({ products, setCurrentCategory }) => {
@@ -63,7 +63,7 @@ const Catalog = ({ products, setCurrentCategory }) => {
                 </Button>
               </Box>
               <Divider variant="middle" />
-              <CategoriesList />
+              <CategoriesForClient />
             </Drawer>
           </Grid>
         </Hidden>
@@ -73,7 +73,7 @@ const Catalog = ({ products, setCurrentCategory }) => {
           md={9}
           xs={12}
         >
-          <CardsList />
+          <ProductsForClient />
         </Grid>
       </Grid>
     </Box>

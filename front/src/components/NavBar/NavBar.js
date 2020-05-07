@@ -22,7 +22,7 @@ import {
 
 import './NavBar.scss'
 import ShoppingCart from '../ShoppingCart/ShoppingCart';
-import CategoriesList from '../CategoriesList/CategoriesList';
+import CategoriesForClient from '../Categories.Client/Categories.Client';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { setFilterValueAction } from './adction';
@@ -76,17 +76,8 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
     }
   }
 
-  const MenuItemsWithRef = forwardRef((props, ref) => {
-    return (
-      <div ref={ref} className="body-for-menu-items">
-        {props.children}
-      </div>
-    )
-  })
 
-  const modalRef = createRef()
   const inputRef = createRef()
-  const menuRef = createRef()
 
   return (
     <AppBar position="fixed" style={{ zIndex: 1201 }} className="nav-bar" color="inherit" component="nav">
@@ -120,9 +111,10 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
               </Box>
               <Divider variant="middle" className="menu-divider" />
               <Typography variant="caption" className="menu-caption">Категории товаров</Typography>
-              <CategoriesList />
+              <CategoriesForClient />
               <Divider variant="middle" className="menu-divider" />
             </Box>
+
             <Box
               aria-label="social-links"
               className="social-btn-group"

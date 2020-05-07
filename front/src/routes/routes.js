@@ -4,9 +4,9 @@ import HomePage from '../pages/Home.page/Home.page'
 import AuthPage from '../pages/Auth.page'
 import DeveloperPage from '../pages/Developer.page'
 import AdminPanelPage from '../pages/AdminPanel.page'
-import Categories from '../components/Categories/Categories'
+import CategoriesForAdmin from '../components/Categories.Admin/Categories.Admin'
 import ProductCreator from '../components/ProductCreator/ProductCreator'
-import ProductsList from '../components/ProductsList/ProductsList'
+import ProductsForAdmin from '../components/Products.Admin/Products.Admin'
 import AdminDashboard from '../components/AdminDashboard/AdminDashboard'
 import { connect } from 'react-redux'
 
@@ -26,9 +26,9 @@ export const WithOutAdminRoutes = ({ isAuth }) => {
     return (
       <Switch>
         <Route path='/admin/dashboard' exact component={AdminDashboard} />
-        <Route path='/admin/products' exact component={ProductsList} />
+        <Route path='/admin/products' exact component={ProductsForAdmin} />
         <Route path='/admin/products/add' exact component={ProductCreator} />
-        <Route path='/admin/categories' exact component={Categories} />
+        <Route path='/admin/categories' exact component={CategoriesForAdmin} />
         <Redirect to='/admin/dashboard' />
       </Switch>
     )

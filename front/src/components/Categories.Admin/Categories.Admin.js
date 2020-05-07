@@ -20,7 +20,7 @@ import {
 } from '@material-ui/core'
 import { NavLink } from 'react-router-dom'
 
-import './Categories.scss'
+import './Categories.Admin.scss'
 import { useSnackbar } from 'notistack'
 
 
@@ -36,7 +36,7 @@ const BreadcrumbsCreator = [
   },
 ]
 
-const Categories = ({
+const CategoriesForAdmin = ({
   categories,
   getCategoryRequest,
   deleteCategoryRequest,
@@ -154,4 +154,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Categories)
+export default connect(mapStateToProps, mapDispatchToProps)(CategoriesForAdmin)

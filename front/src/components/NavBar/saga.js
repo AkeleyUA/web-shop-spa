@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
 import { SET_FILTER_VALUE } from './adction'
 import { getProductsForClientSuccessAction, getProductsForClientFailreAction } from '../../pages/Home.page/action'
-import { setCurrentCategoryAction } from '../CategoriesList/action'
+import { setCurrentCategoryAction } from '../Categories.Client/action'
 
 const fetchFilteredProducts = (filterValue) => {
   return fetch('/api/products/get-filtered-products', {

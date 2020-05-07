@@ -28,10 +28,10 @@ import {
 } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 
-import './ProductsList.scss'
+import './Products.Admin.scss'
 
 
-const ProductsList = ({
+const ProductsForAdmin = ({
   loading,
   products,
   getProductsRequest,
@@ -164,4 +164,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductsList)
+export default connect(mapStateToProps, mapDispatchToProps)(ProductsForAdmin)

@@ -6,7 +6,7 @@ import { TextField, Button, Select, MenuItem, FormHelperText, FormControl, Paper
 import './ProductCreator.scss'
 import { bindActionCreators } from 'redux'
 import { addProductRequestAction, addProductFailureAction, formCleanerAction } from './action'
-import { getCategoryRequestAction } from '../Categories/action'
+import { getCategoryRequestAction } from '../Categories.Admin/action'
 import { useSnackbar } from 'notistack'
 
 const ProductCreator = ({

@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 
 
-import './CardsList.scss'
+import './Products.Client.scss'
 import { connect } from 'react-redux'
 import { getProductsForClientRequestAction } from '../../pages/Home.page/action'
 import { bindActionCreators } from 'redux'
@@ -21,7 +21,7 @@ import PriceToggleButton from '../ToggleButton/ToggleButton'
 import { RatingButton } from '../RatingBurron/RatingBurron'
 
 
-const CardsList = ({ products, loadingProducts }) => {
+const ProductsForClient = ({ products, loadingProducts }) => {
 
   if (loadingProducts) {
     return (
@@ -89,4 +89,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardsList)
+export default connect(mapStateToProps, mapDispatchToProps)(ProductsForClient)
