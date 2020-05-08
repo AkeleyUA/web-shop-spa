@@ -7,10 +7,14 @@ export const GET_CATEGORIES_FOR_CLIENT_FAILURE ='GET_CATEGORIES_FOR_CLIENT_FAILU
 export const CLEAR_PRODUCTS_MESSAGE = 'CLEAR_PRODUCTS_MESSAGE'
 
 
-export const getProductsForClientRequestAction = category => {
+export const getProductsForClientRequestAction = (category, limit, page) => {
   return {
     type: GET_PRODUCTS_FOR_CLIENT_REQUEST,
-    payload: category
+    payload: {
+      category,
+      limit,
+      page
+    }
   }
 }
 

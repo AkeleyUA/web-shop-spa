@@ -1,8 +1,7 @@
 .nav-bar {
   padding: 10px 0px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   z-index: 5;
-  margin-bottom: 15px;
   .tool-bar {
     display: flex;
     justify-content: space-between;
@@ -17,24 +16,26 @@
   }
 }
 
-.mobild-drawer-papper{
+.mobild-drawer-papper {
   min-width: 320px;
   border-radius: 5px;
-  justify-content: space-around;
+  justify-content: space-between;
+
   .menu-header-group {
     display: flex;
     padding: 0 8px 0 24px;
     justify-content: space-between;
     align-items: center;
   }
-  .menu-divider {
-    margin-top: 15px;
-    margin-bottom: 15px;
-  }
   .menu-caption {
     margin-left: 24px;
-    margin-bottom: 15px;
   }
+
+  .categories-list-wrapper {
+    height: 100%;
+    margin-top: 20px;
+  }
+  
   .categories-list {
     height: auto;
   }
@@ -45,12 +46,4 @@
     justify-content: space-between;
     justify-self: flex-end;
   }
-}
-
-.body-container-for-modal {
-  position: absolute;
-  top: 15%;
-  left: 50%;
-  transform: translateX(-50%);
-  min-height: 440px;
 }

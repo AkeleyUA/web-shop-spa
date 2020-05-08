@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
   Paper,
   Card,
@@ -7,8 +7,7 @@ import {
   CardContent,
   CardMedia,
   Typography,
-  Grid,
-  Box
+  Grid
 } from '@material-ui/core'
 
 
@@ -22,7 +21,6 @@ import { RatingButton } from '../RatingBurron/RatingBurron'
 
 
 const ProductsForClient = ({ products, loadingProducts }) => {
-
   if (loadingProducts) {
     return (
       <Preloader />
@@ -56,7 +54,7 @@ const ProductsForClient = ({ products, loadingProducts }) => {
                   <CardActions
                     disableSpacing={true}
                   >
-                    <RatingButton 
+                    <RatingButton
                       id={item._id}
                     />
                     <PriceToggleButton

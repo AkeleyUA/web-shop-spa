@@ -33,14 +33,14 @@ router.post(
         })
       }
       const data = await Product.find()
-      const newData = data.filter(item => item.name.match(filterValue))
+      const newData = data.filter(item => item.name.toLowerCase().match(filterValue.toLowerCase()))
       if (newData.length > 0) {
-        return res.json({products: newData, status: true})
+        return res.json({ products: newData, status: true })
       } else {
-        return res.json({message: 'Товар не найден'})
+        return res.json({ message: 'Товар не найден' })
       }
     } catch (e) {
-      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу"})
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
     }
   }
 )
@@ -65,9 +65,11 @@ router.post(
 router.post(
   '/get-products-for-clients',
   async (req, res) => {
-    const { category } = req.body
+    const { category, limit, page } = req.body
+    const skip = page*18
+
     try {
-      const products = await Product.find({ category, show: true })
+      const products = await Product.find({ category, show: true }).limit(limit).skip(skip)
       res.json({ products, status: true })
     } catch (e) {
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })

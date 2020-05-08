@@ -2,10 +2,10 @@ import { takeLatest, call, put } from 'redux-saga/effects'
 import { GET_PRODUCTS_FOR_CLIENT_REQUEST, getProductsForClientSuccessAction, getProductsForClientFailreAction, GET_CATEGORIES_FOR_CLIENT_REQUEST, getCategoriesForClientSuccessAction, getCategoriesForClientFailureAction } from './action'
 
 
-const fetchProductsForClient = category => {
+const fetchProductsForClient = ({category, limit, page}) => {
   return fetch('/api/products/get-products-for-clients', {
     method: 'POST',
-    body: JSON.stringify({category}),
+    body: JSON.stringify({category, limit, page}),
     headers: {
       'Content-type': 'application/json'
     }

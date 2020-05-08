@@ -10,14 +10,12 @@ import {
   Button,
   IconButton,
   Badge,
-  Modal,
   Hidden,
   Drawer,
   FormControl,
-  Backdrop,
-  Grow,
   Divider,
-  Link
+  Link,
+  Grid
 } from '@material-ui/core';
 
 import './NavBar.scss'
@@ -33,16 +31,15 @@ import { clearProductsMessageAction } from '../../pages/Home.page/action';
 const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
   const { enqueueSnackbar } = useSnackbar()
   const [focus, setFocus] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [cartOpen, setCartOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = useState()
   const [value, setValue] = useState('')
 
-  const handleClose = () => {
-    setOpen(false)
+  const cartHandleClose = () => {
+    setCartOpen(false)
   }
-  const handleOpen = () => {
-    setOpen(true)
+  const CartHandleOpen = () => {
+    setCartOpen(true)
   }
 
   useEffect(() => {
@@ -54,7 +51,6 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
 
   const handleMenuOpen = event => {
     setMenuOpen(true)
-    setAnchorEl(event.currentTarget)
   }
 
   const handleMenuClose = () => {
@@ -67,6 +63,11 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
 
   const searchHandler = () => {
     setFilterValue(value)
+    setFocus(false)
+  }
+
+  const clearHandler = () => {
+    setValue('')
   }
 
   const keyHandler = event => {
@@ -99,59 +100,54 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
               paper: 'mobild-drawer-papper'
             }}
           >
-            <Box>
-              <Box className="menu-header-group">
+            <AppBar
+              position="sticky"
+              className="menu-app-bar nav-bar"
+              color="inherit"
+            >
+              <Toolbar className="cart-bar">
                 <Typography variant="h3" className="logo-mobile">LOGOtip</Typography>
                 <IconButton
-                  className="menu-close-btn"
+                  edge="end"
+                  color="inherit"
+                  aria-label="close-modal"
                   onClick={handleMenuClose}
+                  className="btn-close-cart"
+                  variant="outlined"
                 >
-                  <Icon>close</Icon>
+                  <Icon>arrow_forward_ios</Icon>
                 </IconButton>
-              </Box>
-              <Divider variant="middle" className="menu-divider" />
+              </Toolbar>
+            </AppBar>
+            <div className="categories-list-wrapper ">
               <Typography variant="caption" className="menu-caption">Категории товаров</Typography>
+              <Divider variant="middle" className="menu-divider" />
               <CategoriesForClient />
               <Divider variant="middle" className="menu-divider" />
-            </Box>
-
-            <Box
-              aria-label="social-links"
-              className="social-btn-group"
+            </div>
+            <AppBar
+              position="sticky"
+              className="menu-app-bar"
+              color="inherit"
             >
-              <Link className="git" href="https://github.com/AkeleyUA" target="_blank" rel="noreferrer">
-                <Icon className="fab fa-github" fontSize="large" color="action" />
-              </Link>
-              <Link className="fb" href="https://www.facebook.com/profile.php?id=100017178317539" target="_blank" rel="noreferrer">
-                <Icon className="fab fa-facebook" fontSize="large" color="action" />
-              </Link>
-              <Link className="tlg" href="https://t.me/AkeleyUA" target="_blank" rel="noreferrer">
-                <Icon className="fab fa-telegram" fontSize="large" color="action" />
-              </Link>
-            </Box>
+              <Toolbar className="cart-bar">
+                <Box
+                  aria-label="social-links"
+                  className="social-btn-group"
+                >
+                  <Link className="git" href="https://github.com/AkeleyUA" target="_blank" rel="noreferrer">
+                    <Icon className="fab fa-github" fontSize="large" color="action" />
+                  </Link>
+                  <Link className="fb" href="https://www.facebook.com/profile.php?id=100017178317539" target="_blank" rel="noreferrer">
+                    <Icon className="fab fa-facebook" fontSize="large" color="action" />
+                  </Link>
+                  <Link className="tlg" href="https://t.me/AkeleyUA" target="_blank" rel="noreferrer">
+                    <Icon className="fab fa-telegram" fontSize="large" color="action" />
+                  </Link>
+                </Box>
+              </Toolbar>
+            </AppBar>
           </Drawer>
-          {/* <IconButton
-            aria-label="more"
-            aria-controls="long-menu"
-            aria-haspopup="true"
-            onClick={handleMenuOpen}
-          >
-            <Icon>{menuOpen ? 'close' : 'menu'}</Icon>
-          </IconButton>
-          <Menu
-            id="simple-menu"
-            keepMounted
-            open={menuOpen}
-            onClose={handleMenuClose}
-            classes={{
-              paper: "mobile-menu"
-            }}
-            anchorEl={anchorEl}
-          >
-            <MenuItemsWithRef ref={menuRef}>
-              <CategoriesList />
-            </MenuItemsWithRef>
-          </Menu> */}
         </Hidden>
         <Hidden smDown >
           <Typography variant="h3">LOGOtip</Typography>
@@ -178,27 +174,33 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
           </Box>
         </Hidden>
         <FormControl
-          className="search-wrapper">
+          className="search-wrapper"
+        >
           <TextField
             fullWidth
             variant="outlined"
             label="Поиск"
             onChange={inputFilterHandler}
+            value={value}
             onKeyPress={keyHandler}
             inputProps={{
               ref: inputRef,
-              onFocus: () => setFocus(true),
-              onBlur: () => setFocus(false)
+              onFocus: () => setFocus(true)
             }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton
-                    color={focus ? 'primary' : 'default'}
-                    onClick={searchHandler}
-                  >
-                    <Icon>search</Icon>
-                  </IconButton>
+                  {focus
+                    ? <IconButton
+                      color="primary"
+                      onClick={searchHandler}
+                      onBlur={() => setFocus(false)}
+                    ><Icon>search</Icon></IconButton>
+                    : (value && <IconButton
+                      color="default"
+                      onClick={clearHandler}
+                    > <Icon>clear</Icon></IconButton>)
+                  }
                 </InputAdornment>
               )
             }}
@@ -206,29 +208,47 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
         </FormControl>
         <IconButton
           aria-label="cart"
-          onClick={handleOpen}
+          onClick={CartHandleOpen}
         >
           <Badge badgeContent={cart.length} color="secondary">
             <Icon>shopping_cart</Icon>
           </Badge>
         </IconButton>
       </Toolbar>
-      <Modal
-        open={open}
-        aria-describedby="spring-modal-description"
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Grow in={open}>
-          <div className='body-container-for-modal'>
-            <ShoppingCart id="spring-modal-description" />
-          </div>
-        </Grow>
-      </Modal>
+      <Hidden smDown>
+        <Drawer
+          open={cartOpen}
+          aria-describedby="spring-modal-description"
+          classes={{
+            paper: 'cart-paper'
+          }}
+          onClose={cartHandleClose}
+          anchor="right"
+          closeAfterTransition
+          BackdropProps={{
+            timeout: 225,
+          }}
+        >
+          <ShoppingCart cartHandleClose={cartHandleClose} />
+        </Drawer>
+      </Hidden>
+      <Hidden mdUp>
+        <Drawer
+          open={cartOpen}
+          aria-describedby="spring-modal-description"
+          classes={{
+            paper: 'cart-paper-mobile'
+          }}
+          onClose={cartHandleClose}
+          anchor="right"
+          closeAfterTransition
+          BackdropProps={{
+            timeout: 225,
+          }}
+        >
+          <ShoppingCart cartHandleClose={cartHandleClose} />
+        </Drawer>
+      </Hidden>
     </AppBar>
   )
 }

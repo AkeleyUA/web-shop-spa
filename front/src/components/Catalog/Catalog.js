@@ -3,13 +3,13 @@ import { connect } from 'react-redux'
 import {
   Button,
   Grid,
-  Paper,
   Typography,
   Box,
   Hidden,
   Drawer,
   Divider,
 } from '@material-ui/core'
+import { Pagination } from '@material-ui/lab'
 
 import CategoriesForClient from '../Categories.Client/Categories.Client'
 import ProductsForClient from '../Products.Client/Products.Client'
@@ -74,6 +74,7 @@ const Catalog = ({ products, setCurrentCategory }) => {
           xs={12}
         >
           <ProductsForClient />
+          <Pagination count={10} color="secondary" />
         </Grid>
       </Grid>
     </Box>

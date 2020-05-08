@@ -20,7 +20,6 @@ const CategoriesForClient = ({ categories, setCurrentCategory, loadingCategories
       <Preloader />
     )
   } else {
-    console.log(1)
     return (
       <List className="categories-list">
         {categories.map((item) => (

@@ -15,6 +15,8 @@ const PriceToggleButton = ({ children, product, addToCart, delFromCart, cart }) 
     const findProduct = cart.find(item => item._id === product._id)
     if (findProduct) {
       setSelected(true)
+    } else {
+      setSelected(false)
     }
   }, [cart])
 
@@ -40,7 +42,7 @@ const PriceToggleButton = ({ children, product, addToCart, delFromCart, cart }) 
         onClick={handler}
         endIcon={selected ? <Icon>check</Icon> : <Icon>shopping_cart</Icon>}
       >
-        {children} $
+        {children.toFixed(2)} $
     </Button>
     </Box>
   )

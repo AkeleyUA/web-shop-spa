@@ -6,6 +6,9 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getCategoriesForClientRequestAction, getProductsForClientRequestAction } from './action'
 
+const limit = 18
+const currentPage = 0
+
 const HomePage = ({  getProductsForClientRequest, getCategoriesForClientRequest, currentCategory  }) => {
   useEffect(() => {
     getCategoriesForClientRequest()
@@ -13,7 +16,7 @@ const HomePage = ({  getProductsForClientRequest, getCategoriesForClientRequest,
 
   useEffect(() => {
     if (currentCategory !== '') {
-      getProductsForClientRequest(currentCategory)
+      getProductsForClientRequest(currentCategory, limit, currentPage)
     }
   }, [currentCategory])
 
