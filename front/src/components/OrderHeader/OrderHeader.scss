@@ -1,0 +1,16 @@
+.oreder-header {
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#help-over-popover {
+  .MuiPopover-paper {
+    padding: 20px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+}

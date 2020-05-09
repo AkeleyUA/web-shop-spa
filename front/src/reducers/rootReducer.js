@@ -9,6 +9,7 @@ import { forClientState } from '../pages/Home.page/reducer'
 import { filterState } from '../components/NavBar/reducer'
 import { shoppingCartState } from '../components/ToggleButton/reducer'
 import { paginationState } from '../components/BottomNavBar/reducer'
+import { stepsState } from '../components/OrderSteps/reducer'
 
 
 export const rootReducer = combineReducers({
@@ -22,4 +23,5 @@ export const rootReducer = combineReducers({
   filterState,
   shoppingCartState,
   paginationState,
+  stepsState,
 })

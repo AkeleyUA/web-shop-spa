@@ -1,0 +1,16 @@
+.pay-way-form {
+  min-height: 330px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  .order-button-group {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+  .short-inputs {
+    display: flex;
+    justify-content: space-between;
+  }
+}

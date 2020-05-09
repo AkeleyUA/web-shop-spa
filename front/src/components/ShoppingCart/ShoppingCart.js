@@ -24,6 +24,7 @@ import {
 import { bindActionCreators } from 'redux'
 import { delFromShoppingCartAction } from '../ToggleButton/action'
 import { useSnackbar } from 'notistack'
+import { NavLink } from 'react-router-dom'
 
 const columns = [
   {
@@ -69,8 +70,12 @@ const ShoppingCart = ({ cart, cartHandleClose, delFromSoppingCart }) => {
               Корзина
           </Typography>
           </Hidden>
-          <Typography variant="button" color="primary" >Всего: {total().toFixed(2)}&nbsp;$</Typography>
-          <Button color="secondary" variant="contained" disabled={!cart.length > 0}>
+          <Button
+          color="secondary"
+          variant="contained"
+          component={NavLink}
+          to='/order'
+          disabled={!cart.length > 0}>
             Оформить заказ
           </Button>
           <Hidden only={['xs', 'md']}>
@@ -144,22 +149,7 @@ const ShoppingCart = ({ cart, cartHandleClose, delFromSoppingCart }) => {
         color="inherit"
       >
         <Toolbar className="cart-bottom-bar">
-          <Hidden xsDown>
-            <Box
-              aria-label="social-links"
-              className="social-btn-group"
-            >
-              <Link className="git" href="https://github.com/AkeleyUA" target="_blank" rel="noreferrer">
-                <Icon className="fab fa-github" fontSize="large" color="action" />
-              </Link>
-              <Link className="fb" href="https://www.facebook.com/profile.php?id=100017178317539" target="_blank" rel="noreferrer">
-                <Icon className="fab fa-facebook" fontSize="large" color="action" />
-              </Link>
-              <Link className="tlg" href="https://t.me/AkeleyUA" target="_blank" rel="noreferrer">
-                <Icon className="fab fa-telegram" fontSize="large" color="action" />
-              </Link>
-            </Box>
-          </Hidden>
+          <Typography variant="button" color="primary" >Всего: {total().toFixed(2)}&nbsp;$</Typography>
           <Typography variant="h6">LOGOtip</Typography>
         </Toolbar>
       </AppBar>

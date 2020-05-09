@@ -8,6 +8,7 @@ import CategoriesForAdmin from '../components/Categories.Admin/Categories.Admin'
 import ProductCreator from '../components/ProductCreator/ProductCreator'
 import ProductsForAdmin from '../components/Products.Admin/Products.Admin'
 import AdminDashboard from '../components/AdminDashboard/AdminDashboard'
+import OrderPage from '../pages/Order.page/Order.page'
 import { connect } from 'react-redux'
 
 const WithOutRoutes = ({ isAuth }) => {
@@ -15,6 +16,7 @@ const WithOutRoutes = ({ isAuth }) => {
     <Switch>
       <Route path='/admin' component={isAuth ? AdminPanelPage : AuthPage}/>
       <Route path='/developer' exact component={DeveloperPage} />
+      <Route path='/order' exact component={OrderPage} />
       <Route path='/' exact component={HomePage} />
       <Redirect to='/' />
     </Switch>
