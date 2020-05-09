@@ -20,12 +20,12 @@ function* getProductsForClientWorker (action) {
   try {
     const data = yield call(fetchProductsForClient, action.payload)
     if(data.status) {
-      yield put(getProductsForClientSuccessAction(data.products))
+      yield put(getProductsForClientSuccessAction(data.products, data.productsLength))
     } else {
       yield put(getProductsForClientFailreAction(data.message))
     }
   } catch (e) {
-    yield put(getProductsForClientFailreAction(e.message))
+    yield put(getProductsForClientFailreAction('Что-то пошло не так, перезагрузите страницу'))
   }
 }
 
@@ -38,7 +38,7 @@ function* getCategoriesForClientWorker () {
       yield put(getCategoriesForClientFailureAction(data.message))
     }
   } catch (e) {
-    yield put(getCategoriesForClientFailureAction(e.message))
+    yield put(getCategoriesForClientFailureAction('Что-то пошло не так, перезагрузите страницу'))
   }
 }
 

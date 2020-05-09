@@ -1,0 +1,14 @@
+.app-bottom-bar {
+  top: auto!important;
+  bottom: 0;
+  margin-top: 15px;
+
+  .bottom-bar {
+    display: flex;
+    min-height: 60px;
+    justify-content: space-between;
+    .bottom-pagination {
+      margin-left: 50px;
+    }
+  }
+}

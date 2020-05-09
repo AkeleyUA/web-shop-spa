@@ -70,7 +70,7 @@ const ShoppingCart = ({ cart, cartHandleClose, delFromSoppingCart }) => {
           </Typography>
           </Hidden>
           <Typography variant="button" color="primary" >Всего: {total().toFixed(2)}&nbsp;$</Typography>
-          <Button color="secondary" variant="contained">
+          <Button color="secondary" variant="contained" disabled={!cart.length > 0}>
             Оформить заказ
           </Button>
           <Hidden only={['xs', 'md']}>
@@ -144,20 +144,22 @@ const ShoppingCart = ({ cart, cartHandleClose, delFromSoppingCart }) => {
         color="inherit"
       >
         <Toolbar className="cart-bottom-bar">
-          <Box
-            aria-label="social-links"
-            className="social-btn-group"
-          >
-            <Link className="git" href="https://github.com/AkeleyUA" target="_blank" rel="noreferrer">
-              <Icon className="fab fa-github" fontSize="large" color="action" />
-            </Link>
-            <Link className="fb" href="https://www.facebook.com/profile.php?id=100017178317539" target="_blank" rel="noreferrer">
-              <Icon className="fab fa-facebook" fontSize="large" color="action" />
-            </Link>
-            <Link className="tlg" href="https://t.me/AkeleyUA" target="_blank" rel="noreferrer">
-              <Icon className="fab fa-telegram" fontSize="large" color="action" />
-            </Link>
-          </Box>
+          <Hidden xsDown>
+            <Box
+              aria-label="social-links"
+              className="social-btn-group"
+            >
+              <Link className="git" href="https://github.com/AkeleyUA" target="_blank" rel="noreferrer">
+                <Icon className="fab fa-github" fontSize="large" color="action" />
+              </Link>
+              <Link className="fb" href="https://www.facebook.com/profile.php?id=100017178317539" target="_blank" rel="noreferrer">
+                <Icon className="fab fa-facebook" fontSize="large" color="action" />
+              </Link>
+              <Link className="tlg" href="https://t.me/AkeleyUA" target="_blank" rel="noreferrer">
+                <Icon className="fab fa-telegram" fontSize="large" color="action" />
+              </Link>
+            </Box>
+          </Hidden>
           <Typography variant="h6">LOGOtip</Typography>
         </Toolbar>
       </AppBar>

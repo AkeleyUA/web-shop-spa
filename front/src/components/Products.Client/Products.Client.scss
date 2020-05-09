@@ -1,16 +1,22 @@
-.cards-list {
-  width: calc(100% - 24px);
-  margin: 12px 0;
-  padding: 0 12px;
-  height: 100%;
-  .card-img {
-    height: 240px;
-    background-size: cover;
-  }
-  .MuiCardActions-root {
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 16px;
-  }
+.cards-list-wrapper {
+  overflow: hidden;
+  padding: 12px 0 0 6px;
+  .cards-list {
+    overflow: scroll;
+    height: calc(100vh - 180px - 12px);
+    .card {
+      background: #f8f8f8;
+      margin: 8px;
+    }
 
+    .card-img {
+      height: 240px;
+      background-size: cover;
+    }
+    .MuiCardActions-root {
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 16px;
+    }
+  }
 }

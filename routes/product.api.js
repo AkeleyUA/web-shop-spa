@@ -70,7 +70,8 @@ router.post(
 
     try {
       const products = await Product.find({ category, show: true }).limit(limit).skip(skip)
-      res.json({ products, status: true })
+      const productsLength = (await Product.find({ category, show: true })).length
+      res.json({ products, status: true, productsLength })
     } catch (e) {
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
     }

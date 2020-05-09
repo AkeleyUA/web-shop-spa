@@ -14,7 +14,8 @@ const initialState = {
   products: [],
   loadingProducts: false,
   loadingCategories: false,
-  message: null
+  message: null,
+  productsLength: 0
 }
 
 export const forClientState = (state = initialState, action) => {
@@ -32,7 +33,8 @@ export const forClientState = (state = initialState, action) => {
         ...state,
         loadingProducts: false,
         message: null,
-        products: action.payload
+        products: action.payload.products,
+        productsLength: action.payload.productsLength,
       }
     }
     case GET_PRODUCTS_FOR_CLIENT_FAILURE: {
@@ -40,7 +42,8 @@ export const forClientState = (state = initialState, action) => {
         ...state,
         loadingProducts: false,
         products: [],
-        message: action.payload
+        message: action.payload,
+        productsLength: 0,
       }
     }
     case GET_CATEGORIES_FOR_CLIENT_REQUEST: {

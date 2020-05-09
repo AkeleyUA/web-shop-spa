@@ -2,11 +2,12 @@
   margin-top: 95px;
   width: calc(100% - 16px);
   padding: 5px;
+  overflow: hidden;
   .MuiDrawer-paper {
     position: static;
     width: 100%;
     border-radius: 4px;
-    min-height: 360px;
+    height: calc(100vh - 180px);
   }
   .products-counter {
     margin: 15px;

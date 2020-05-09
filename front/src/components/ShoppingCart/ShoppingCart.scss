@@ -1,10 +1,7 @@
 .cart-wrapper {
   height: 100%;
   overflow: auto;
-  padding: 0!important;
-  .cart-item {
-
-  }
+  padding: 0 !important;
   .card {
     width: 100%;
     display: flex;
@@ -31,12 +28,12 @@
 
 .cart-paper {
   width: 50%;
-  background-color: #eeeeee!important;
+  background-color: #eeeeee !important;
 }
 
 .cart-paper-mobile {
   width: 100%;
-  background-color: #eeeeee!important;
+  background-color: #eeeeee !important;
 }
 .cart-app-bar {
   margin-bottom: 20px;
@@ -47,9 +44,8 @@
   justify-content: space-between;
 }
 
-
 .cart-app-bottom-bar {
-  top: auto!important;
+  top: auto !important;
   bottom: 0;
   margin-top: 15px;
   .social-btn-group {
@@ -66,7 +62,7 @@
 }
 
 .btn-close-cart {
-  margin-right: 5px!important;
+  margin-right: 5px !important;
 }
 .cart-bottom-bar {
   display: flex;

@@ -18,10 +18,13 @@ export const getProductsForClientRequestAction = (category, limit, page) => {
   }
 }
 
-export const getProductsForClientSuccessAction = products => {
+export const getProductsForClientSuccessAction = (products, productsLength) => {
   return {
     type: GET_PRODUCTS_FOR_CLIENT_SUCCESS,
-    payload: products
+    payload: {
+      products,
+      productsLength
+    }
   }
 }
 

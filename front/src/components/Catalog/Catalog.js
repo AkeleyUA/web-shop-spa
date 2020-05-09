@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import {
   Button,
@@ -8,6 +8,7 @@ import {
   Hidden,
   Drawer,
   Divider,
+  Paper
 } from '@material-ui/core'
 import { Pagination } from '@material-ui/lab'
 
@@ -19,14 +20,16 @@ import { bindActionCreators } from 'redux'
 import { setCurrentCategoryAction } from '../Categories.Client/action'
 
 
-const Catalog = ({ products, setCurrentCategory }) => {
+const Catalog = ({ productsLength, setCurrentCategory }) => {
 
   const popularHandler = () => {
     setCurrentCategory('Популярно')
   }
 
   return (
-    <Box className="catalog-wrapper">
+    <Box 
+      className="catalog-wrapper"
+    >
       <Grid
         container
         spacing={2}
@@ -37,12 +40,15 @@ const Catalog = ({ products, setCurrentCategory }) => {
               variant="permanent"
               className="categories-container"
               open
+              PaperProps={{
+                elevation: 1
+              }}
             >
               <Typography
                 className="products-counter"
                 variant="h5"
               >
-                Товары ({!products.length ? "..." : products.length})
+                Товары ({!productsLength ? "..." : productsLength})
               </Typography>
               <Divider variant="middle" />
               <Box className="buttons-wrapper">
@@ -74,7 +80,6 @@ const Catalog = ({ products, setCurrentCategory }) => {
           xs={12}
         >
           <ProductsForClient />
-          <Pagination count={10} color="secondary" />
         </Grid>
       </Grid>
     </Box>
@@ -83,7 +88,7 @@ const Catalog = ({ products, setCurrentCategory }) => {
 
 const mapStateToProps = state => {
   return {
-    products: state.forClientState.products,
+    productsLength: state.forClientState.productsLength,
     message: state.forClientState.message
   }
 }

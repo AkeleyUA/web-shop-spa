@@ -6,9 +6,9 @@ import './Preloader.scss'
 
 const Preloader = () => {
   return (
-    <Paper className="preloader-wrapper">
+    <div className="preloader-wrapper">
       <CircularProgress />
-    </Paper>
+    </div>
   )
 }
 
