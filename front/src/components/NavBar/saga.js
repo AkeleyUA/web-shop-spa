@@ -18,7 +18,7 @@ function* getFilteredProductsWorker(action) {
   try {
     const data = yield call(fetchFilteredProducts, action.payload)
     if(data.status) {
-      yield put(getProductsForClientSuccessAction(data.products))
+      yield put(getProductsForClientSuccessAction(data.products, data.productsLength))
     } else {
       yield put(getProductsForClientFailreAction(data.message))
     }

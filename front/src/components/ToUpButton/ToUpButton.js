@@ -3,24 +3,11 @@ import { Fab, Icon, Zoom } from '@material-ui/core'
 import './ToUpButton.scss'
 
 
-export const ToUpButton = () => {
-  const [show, setShow] = useState(false)
+export const ToUpButton = ({show, cardsRef}) => {
 
-  const scrollHandler = () => {
-    document.documentElement.scrollTop > 400
-      ? setShow(true)
-      : setShow(false)
+  const handleScrollToTop = () => {
+    cardsRef.current.scroll({top: 0, behavior: 'smooth'})
   }
-  const scrollToTopHandler = () => {
-    window.scroll({top: 0, behavior: 'smooth'})
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', scrollHandler)
-    return () => {
-      window.removeEventListener('scroll', scrollHandler)
-    }
-  }, [])
 
   return (
     <div className="to-up-button">
@@ -32,7 +19,7 @@ export const ToUpButton = () => {
         <Fab
           color="primary"
           aria-label="up"
-          onClick={scrollToTopHandler}
+          onClick={handleScrollToTop}
         >
           <Icon>expand_less</Icon>
         </Fab>

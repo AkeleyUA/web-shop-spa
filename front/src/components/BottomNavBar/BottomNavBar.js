@@ -23,11 +23,14 @@ const BottomNavBar = ({ productsLength, changeCurrentPage, currentPage }) => {
 
   return (
     <AppBar
-      position="sticky"
+      position="static"
       className="app-bottom-bar"
       color="inherit"
+      elevation={1}
     >
-      <Toolbar className="bottom-bar">
+      <Toolbar
+      className="bottom-bar"
+      >
         <Hidden xsDown>
           <Box
             aria-label="social-links"

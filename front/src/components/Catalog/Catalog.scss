@@ -1,22 +1,21 @@
 .catalog-wrapper {
   margin-top: 95px;
-  width: calc(100% - 16px);
-  padding: 5px;
+  width: 100%;
   overflow: hidden;
   .MuiDrawer-paper {
     position: static;
     width: 100%;
     border-radius: 4px;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 95px);
   }
   .products-counter {
-    margin: 15px;
+    margin: 5px 15px;
   }
   .buttons-wrapper {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     flex-direction: column;
     min-height: 100px;
-    margin: 15px;
+    margin: 0 15px;
   }
 }

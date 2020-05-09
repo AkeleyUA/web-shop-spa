@@ -35,7 +35,7 @@ router.post(
       const data = await Product.find()
       const newData = data.filter(item => item.name.toLowerCase().match(filterValue.toLowerCase()))
       if (newData.length > 0) {
-        return res.json({ products: newData, status: true })
+        return res.json({ products: newData, status: true, productsLength: newData.length })
       } else {
         return res.json({ message: 'Товар не найден' })
       }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import {
   Paper,
   Card,
@@ -18,12 +18,13 @@ import { bindActionCreators } from 'redux'
 import Preloader from '../Preloader/Preloader'
 import PriceToggleButton from '../ToggleButton/ToggleButton'
 import { RatingButton } from '../RatingBurron/RatingBurron'
+import { ToUpButton } from '../ToUpButton/ToUpButton'
 
 
 const productCreator = (arr) => {
   return arr.map(item => {
     return (
-      <Grid item xs={12} sm={6} md={6} lg={4} key={item._id}>
+      <Grid item xs={12} sm={6} md={6} lg={3} key={item._id}>
         <Card
           className="card"
           variant="outlined"
@@ -34,11 +35,11 @@ const productCreator = (arr) => {
               image={item.img}
               title={item.name}
             />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
+            <CardContent className="card-content">
+              <Typography className="card-content-text" gutterBottom variant="h5" component="h2">
                 {item.name}
               </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
+              <Typography className="card-content-text" variant="body2" color="textSecondary" component="p">
                 {item.description}
               </Typography>
             </CardContent>
@@ -63,11 +64,23 @@ const productCreator = (arr) => {
 
 
 const ProductsForClient = ({ products, loadingProducts }) => {
+  const cardsRef = useRef(null)
+  const [showScrollTo, setShowScrollTo] = useState(false)
+
+  const handleScroll = () => {
+    if (cardsRef.current.scrollTop > 400) {
+      setShowScrollTo(true)
+    } else {
+      setShowScrollTo(false)
+    }
+  }
+
   return (
     <Paper className="cards-list-wrapper" elevation={1}>
-      <Grid container className="cards-list">
+      <Grid ref={cardsRef} onScroll={handleScroll} container className="cards-list">
         {loadingProducts ? <Preloader /> : productCreator(products)}
       </Grid>
+      <ToUpButton show={showScrollTo} cardsRef={cardsRef} />
     </Paper>
   )
 }

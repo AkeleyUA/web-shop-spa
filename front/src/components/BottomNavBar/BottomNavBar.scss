@@ -2,10 +2,11 @@
   top: auto!important;
   bottom: 0;
   margin-top: 15px;
+  border-radius: 4px;
 
   .bottom-bar {
     display: flex;
-    min-height: 60px;
+    min-height: 70px;
     justify-content: space-between;
     .bottom-pagination {
       margin-left: 50px;

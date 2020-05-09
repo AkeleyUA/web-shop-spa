@@ -18,6 +18,7 @@ import ProductsForClient from '../Products.Client/Products.Client'
 import './Catalog.scss'
 import { bindActionCreators } from 'redux'
 import { setCurrentCategoryAction } from '../Categories.Client/action'
+import BottomNavBar from '../BottomNavBar/BottomNavBar'
 
 
 const Catalog = ({ productsLength, setCurrentCategory }) => {
@@ -35,7 +36,7 @@ const Catalog = ({ productsLength, setCurrentCategory }) => {
         spacing={2}
       >
         <Hidden smDown>
-          <Grid item md={3} lg={3}>
+          <Grid item md={3} lg={2}>
             <Drawer
               variant="permanent"
               className="categories-container"
@@ -57,6 +58,7 @@ const Catalog = ({ productsLength, setCurrentCategory }) => {
                   color="primary"
                   variant="contained"
                   onClick={popularHandler}
+                  size="small"
                 >
                   Популярное
                 </Button>
@@ -64,6 +66,7 @@ const Catalog = ({ productsLength, setCurrentCategory }) => {
                   fullWidth
                   color="secondary"
                   variant="contained"
+                  size="small"
                 >
                   Лучшие цены
                 </Button>
@@ -75,11 +78,12 @@ const Catalog = ({ productsLength, setCurrentCategory }) => {
         </Hidden>
         <Grid
           item
-          lg={9}
+          lg={10}
           md={9}
           xs={12}
         >
           <ProductsForClient />
+          <BottomNavBar />
         </Grid>
       </Grid>
     </Box>

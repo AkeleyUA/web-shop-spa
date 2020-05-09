@@ -30,8 +30,6 @@ const HomePage = ({ getProductsForClientRequest, getCategoriesForClientRequest, 
     <div >
       <NavBar />
       <Catalog />
-      <ToUpButton />
-      <BottomNavBar />
     </div>
   )
 }

@@ -7,6 +7,12 @@
     .card {
       background: #f8f8f8;
       margin: 8px;
+
+      .card-content-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
 
     .card-img {

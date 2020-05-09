@@ -10,7 +10,6 @@
 body {
   font-family: "Roboto";
   background-color: #eeeeee;
-  overflow: hidden;
 }
 
 ::-webkit-scrollbar-thumb {

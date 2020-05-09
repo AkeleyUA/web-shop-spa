@@ -15,32 +15,31 @@ import './Categories.Client.scss'
 import Preloader from '../Preloader/Preloader'
 
 const CategoriesForClient = ({ categories, setCurrentCategory, loadingCategories, currentCategory }) => {
-  if (loadingCategories) {
-    return (
-      <Preloader />
-    )
-  } else {
-    return (
-      <List className="categories-list">
-        {categories.map((item) => (
-          <ListItem key={item.name}>
-            <Button
-              fullWidth
-              classes={{
-                fullWidth: (currentCategory === item.name ? 'full-width-btn active' : 'full-width-btn')
-              }}
-              variant='text'
-              onClick={() => setCurrentCategory(item.name)}
-              color={currentCategory === item.name ? 'secondary' : 'default'}
-              endIcon={currentCategory === item.name ? <Icon>beenhere</Icon> : null}
-            >
-              <Typography variant="button">{item.name}</Typography>
-            </Button>
-          </ListItem>
-        ))}
-      </List>
-    )
+  const listCreator = (arr) => {
+    return arr.map((item) => (
+      <ListItem key={item.name}>
+        <Button
+          fullWidth
+          size="small"
+          classes={{
+            fullWidth: (currentCategory === item.name ? 'full-width-btn active' : 'full-width-btn')
+          }}
+          variant='text'
+          onClick={() => setCurrentCategory(item.name)}
+          color={currentCategory === item.name ? 'secondary' : 'default'}
+          endIcon={currentCategory === item.name ? <Icon>beenhere</Icon> : null}
+        >
+          <Typography variant="button">{item.name}</Typography>
+        </Button>
+      </ListItem>
+    ))
   }
+
+  return (
+    <List className="categories-list" disablePadding>
+      {loadingCategories ? <Preloader /> : listCreator(categories)}
+    </List>
+  )
 }
 
 
