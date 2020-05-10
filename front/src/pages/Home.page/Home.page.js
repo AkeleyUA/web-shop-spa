@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux'
 import { getCategoriesForClientRequestAction, getProductsForClientRequestAction } from './action'
 import { changeCurrentPageAction } from '../../components/BottomNavBar/action'
 
-const limit = 18
+const limit = 16
 
 const HomePage = ({ getProductsForClientRequest, getCategoriesForClientRequest, currentCategory, currentPage, changeCurrentPage }) => {
   const currentPageIndex = currentPage - 1
