@@ -23,7 +23,7 @@ const BottomNavBar = ({ productsLength, changeCurrentPage, currentPage }) => {
 
   return (
     <AppBar
-      position="fixed"
+      position="sticky"
       className="app-bottom-bar"
       color="inherit"
       elevation={1}

@@ -1,12 +1,12 @@
 .catalog-wrapper {
-  margin-top: 95px;
+  margin-top: 15px;
   width: 100%;
   overflow: hidden;
   .MuiDrawer-paper {
-    position: static;
+    position: sticky;
     width: 100%;
     border-radius: 4px;
-    height: calc(95vh - 95px - 70px);
+    height: calc(100vh - 100px);
   }
   .products-counter {
     margin: 5px 15px;

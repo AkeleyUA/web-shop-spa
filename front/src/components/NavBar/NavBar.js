@@ -81,7 +81,7 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
   const inputRef = createRef()
 
   return (
-    <AppBar position="fixed" style={{ zIndex: 1201 }} className="nav-bar" color="inherit" component="nav">
+    <AppBar position="sticky" style={{ zIndex: 1201 }} className="nav-bar" color="inherit" component="nav">
       <Toolbar className="tool-bar">
         <Hidden mdUp>
           <IconButton
