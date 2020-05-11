@@ -7,14 +7,23 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE
 } from "./action"
+import jwt from 'jsonwebtoken'
 
 const token = (sessionStorage.getItem('token') ? sessionStorage.getItem('token') : false)
+
+const checkToken = () => {
+  try {
+    return jwt.verify(token, 'miraj')
+  } catch (e) {
+    return false
+  }
+}
 
 const initialState = {
   form: {},
   loading: false,
-  token,
-  isAuth: (token ? true : false),
+  token: checkToken(),
+  isAuth: !!token,
   message: null
 }
 
@@ -70,7 +79,7 @@ export const authState = (state = initialState, action) => {
         },
         loading: false,
         message: null,
-        token: action.payload,
+        token: action.payload.token,
         isAuth: true
       }
     }

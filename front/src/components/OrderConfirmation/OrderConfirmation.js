@@ -32,6 +32,7 @@ const OrderConfirmation = ({ setStep }) => {
       setStep(3)
     } else {
       setFalure(true)
+      setStep(4)
     }
   }
 

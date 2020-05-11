@@ -10,11 +10,6 @@ import {
 } from './action'
 
 import {
-  CircularProgress,
-  FormControl,
-  InputLabel,
-  InputAdornment,
-  Input,
   Icon,
   TableContainer,
   Table,
@@ -27,9 +22,10 @@ import {
   Paper
 } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
+import Preloader from '../Preloader/Preloader'
+import ProductFilter from '../ProductsFilter/ProductsFilter'
 
 import './Products.Admin.scss'
-
 
 const ProductsForAdmin = ({
   loading,
@@ -41,7 +37,6 @@ const ProductsForAdmin = ({
   message
 }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [value, setValue] = useState('')
 
   const getProducts = useCallback(() => {
     getProductsRequest()
@@ -53,24 +48,12 @@ const ProductsForAdmin = ({
 
   useEffect(() => {
     if (message) {
-      enqueueSnackbar( typeof message === "string" ? message : 'Неизвестная ошибка')
+      enqueueSnackbar(typeof message === "string" ? message : 'Неизвестная ошибка')
     }
   }, [message])
 
-  const inputFilterHandler = (event) => {
-    setValue(event.target.value)
-  }
-
   const checkboxChangeHendler = (event) => {
     showOnWebSiteRequest(event.target.name, event.target.checked)
-  }
-
-  const Preloader = () => {
-    return (
-      <div className="preloader">
-        <CircularProgress />
-      </div>
-    )
   }
 
   const TableCreator = () => {
@@ -89,7 +72,7 @@ const ProductsForAdmin = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.filter(row => row.name.match(value)).map(row => {
+            {products.map(row => {
               return (
                 <TableRow key={row._id}>
                   <TableCell component="th" scope="row">
@@ -120,30 +103,10 @@ const ProductsForAdmin = ({
   }
 
   return (
-    <div className="products-list">
-      <FormControl>
-        <InputLabel htmlFor="input-with-icon-search">Введите имя товара</InputLabel>
-        <Input
-          id="input-with-icon-search"
-          onChange={inputFilterHandler}
-          startAdornment={
-            <InputAdornment position="start">
-              <Icon>search</Icon>
-            </InputAdornment>
-          }
-        />
-      </FormControl>
+    <Paper className="products-list">
+      <ProductFilter />
       {loading ? <Preloader /> : <TableCreator />}
-      <NavLink
-        to="/admin/products/add"
-        color="primary"
-        variant="outlined"
-      >Добавить</NavLink>
-      <NavLink
-        to="/admin"
-        variant="outlined"
-      >Панель управления</NavLink>
-    </div>
+    </Paper>
   )
 }
 

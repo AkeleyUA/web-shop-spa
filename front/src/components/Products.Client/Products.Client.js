@@ -17,14 +17,14 @@ import { getProductsForClientRequestAction } from '../../pages/Home.page/action'
 import { bindActionCreators } from 'redux'
 import Preloader from '../Preloader/Preloader'
 import PriceToggleButton from '../ToggleButton/ToggleButton'
-import { RatingButton } from '../RatingBurron/RatingBurron'
-import { ToUpButton } from '../ToUpButton/ToUpButton'
+import { RatingButton } from '../RatingButton/RatingButton'
+
 
 
 const productCreator = (arr) => {
   return arr.map(item => {
     return (
-      <Grid item xs={12} sm={6} md={6} lg={3} key={item._id}>
+      <Grid key={item._id} item xs={!2} sm={6} md={4} lg={3}>
         <Card
           className="card"
           variant="outlined"
@@ -35,26 +35,25 @@ const productCreator = (arr) => {
               image={item.img}
               title={item.name}
             />
+
             <CardContent className="card-content">
-              <Typography className="card-content-text" gutterBottom variant="h5" component="h2">
+              <Typography className="card-content-text" gutterBottom variant="subtitle1">
                 {item.name}
               </Typography>
-              <Typography className="card-content-text" variant="body2" color="textSecondary" component="p">
-                {item.description}
-              </Typography>
+              <RatingButton
+                id={item._id}
+              />
             </CardContent>
           </CardActionArea>
           <CardActions
             disableSpacing={true}
           >
-            <RatingButton
-              id={item._id}
-            />
+
+            <Typography variant="h4" color="primary">{item.price} &#8372;</Typography>
+
             <PriceToggleButton
               product={item}
-            >
-              {item.price}
-            </PriceToggleButton>
+            />
           </CardActions>
         </Card>
       </Grid>
@@ -64,23 +63,15 @@ const productCreator = (arr) => {
 
 
 const ProductsForClient = ({ products, loadingProducts }) => {
-  const cardsRef = useRef(null)
-  const [showScrollTo, setShowScrollTo] = useState(false)
-
-  const handleScroll = () => {
-    if (cardsRef.current.scrollTop > 400) {
-      setShowScrollTo(true)
-    } else {
-      setShowScrollTo(false)
-    }
-  }
-
   return (
     <Paper className="cards-list-wrapper" elevation={1}>
-      <Grid ref={cardsRef} onScroll={handleScroll} container className="cards-list">
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        className="cards-list">
         {loadingProducts ? <Preloader /> : productCreator(products)}
       </Grid>
-      <ToUpButton show={showScrollTo} cardsRef={cardsRef} />
     </Paper>
   )
 }

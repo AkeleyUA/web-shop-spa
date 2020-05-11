@@ -25,10 +25,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { setFilterValueAction } from './adction';
 import { useSnackbar } from 'notistack'
-import { clearProductsMessageAction } from '../../pages/Home.page/action';
+import { clearMessageAction } from '../../pages/Home.page/action';
 
 
-const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
+const NavBar = ({ setFilterValue, message, clearMessage, cart }) => {
   const { enqueueSnackbar } = useSnackbar()
   const [focus, setFocus] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
@@ -45,7 +45,7 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
   useEffect(() => {
     if (message) {
       enqueueSnackbar(message)
-      clearProductsMessage()
+      clearMessage()
     }
   }, [message, enqueueSnackbar])
 
@@ -115,7 +115,7 @@ const NavBar = ({ setFilterValue, message, clearProductsMessage, cart }) => {
                   className="btn-close-cart"
                   variant="outlined"
                 >
-                  <Icon>arrow_forward_ios</Icon>
+                  <Icon>close</Icon>
                 </IconButton>
               </Toolbar>
             </AppBar>
@@ -263,7 +263,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     setFilterValue: bindActionCreators(setFilterValueAction, dispatch),
-    clearProductsMessage: bindActionCreators(clearProductsMessageAction, dispatch)
+    clearMessage: bindActionCreators(clearMessageAction, dispatch)
   }
 }
 

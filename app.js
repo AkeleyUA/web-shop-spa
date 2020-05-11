@@ -2,15 +2,14 @@ const express = require('express')
 const moongose = require('mongoose')
 const config = require('config');
 const path = require('path')
-
-
 const app = express()
-app.use(express.json({extended: true}))
+
+app.use(express.json({ extended: true }))
 app.use('/api/auth', require('./routes/auth.api'))
 app.use('/api/products', require('./routes/product.api'))
 app.use('/api/categories', require('./routes/categories.api'))
 
-if(process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production") {
   app.use('/', express.static(path.join(__dirname, 'front', 'build')))
 
   app.use('*', (req, res) => {

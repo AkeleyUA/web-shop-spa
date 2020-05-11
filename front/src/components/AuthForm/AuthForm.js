@@ -76,7 +76,7 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message }) => {
       </Popper>
       <Grid container justify='center' alignContent='center' className="container">
         <Grid item xs={12} sm={8} md={6} lg={4} component={Paper}>
-          <FormControl className="form-wrapper">
+          <FormControl className="auth-form-wrapper">
             <Typography variant="h3" className="title">
               LOGOtip
             <Typography variant="caption">

@@ -159,14 +159,14 @@ router.post(
   }
 )
 
-// for( i = 0; i < 30; i++) {
+// for( i = 0; i < 50; i++) {
 //   const product = new Product({
-//     name: `test ${i}-2`,
+//     name: `Продукт ${i}, небольшое описание P-${1}`,
 //     category: 'Популярно',
 //     amount: i,
-//     img: 'https://babylike.com.ua/image/cache/catalog/3ad91c2c2e47f64c527b615851e492e1-450x450.jpg',
-//     description: `test 2, product ${i}`,
-//     price: i*5,
+//     img: 'https://u01.appmifile.com/images/2017/04/01/8cd9f177-84ee-4e7e-ad39-9e6750903b0a.png',
+//     description: `Продукт ${i}, полное описание полное описание полное описание полное описание полное описание`,
+//     price: i*5 + 1.99,
 //     show: true,
 //     test: true,
 //   })

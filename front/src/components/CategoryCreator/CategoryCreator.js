@@ -7,30 +7,20 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addCategoryRequestAction } from './action'
 import { useSnackbar } from 'notistack'
+import { clearMessageAction } from '../../pages/Home.page/action'
 
 const CategoryCreator = ({
   message,
   addCategoryRequest,
   loading,
   success,
+  clearMessage
 }) => {
   const [category, setCategory] = useState({ name: '' })
-  const [isOpen, setIsOpen] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
   const changeInputHandler = event => {
     setCategory({ name: event.target.value })
-  }
-  const modalOpenHandler = () => {
-    setIsOpen(true)
-  }
-  const modalCloseWrapper = (event) => {
-    if(event.currentTarget === event.target) {
-      setIsOpen(false)
-    }
-  }
-  const modalCloseHendler = () => {
-    setIsOpen(false)
   }
 
   const addCatogory = useCallback(() => {
@@ -39,50 +29,35 @@ const CategoryCreator = ({
 
   useEffect(() => {
     if (success) {
-      modalCloseHendler()
-      setCategory({name: ''})
+      setCategory({ name: '' })
     }
   }, [success])
 
   useEffect(() => {
     if (message) {
       enqueueSnackbar(message)
+      clearMessage()
     }
   }, [message, enqueueSnackbar])
 
   return (
-    <Paper className="category-creator">
-      <Button variant="outlined" onClick={modalOpenHandler}>Добавить</Button>
-      <Modal
-        open={isOpen}
-        onClose={modalCloseHendler}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        <div className="category-creator-body" onClick={modalCloseWrapper}>
-          <FormControl
-            className="add-category-form"
-            margin="dense"
-            required
-            size="small"
-          >
-            <FormHelperText>Добавление категории</FormHelperText>
-            <TextField
-              id="name"
-              label="Название"
-              variant="outlined"
-              name="name"
-              size="small"
-              onChange={changeInputHandler}
-              value={category.name}
-              autoComplete="off"
-            />
-            <Button variant="outlined" color="primary" disabled={loading} onClick={addCatogory}>Добавить</Button>
-            <Button variant="outlined" color="secondary" onClick={modalCloseHendler}>Закрыть</Button>
-          </FormControl>
-        </div>
-      </Modal>
-    </Paper>
+    <div className="category-creator-wrapper">
+      <Paper className="category-creator-form">
+        <FormHelperText>Добавление категории</FormHelperText>
+        <TextField
+          fullWidth
+          id="name"
+          label="Название"
+          variant="outlined"
+          name="name"
+          size="small"
+          onChange={changeInputHandler}
+          value={category.name}
+          autoComplete="off"
+        />
+        <Button className="add-category-btn" variant="contained" color="primary" disabled={loading} onClick={addCatogory}>Добавить</Button>
+      </Paper>
+    </div>
   )
 }
 
@@ -96,7 +71,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addCategoryRequest: bindActionCreators(addCategoryRequestAction, dispatch)
+    addCategoryRequest: bindActionCreators(addCategoryRequestAction, dispatch),
+    clearMessage: bindActionCreators(clearMessageAction, dispatch)
   }
 }
 

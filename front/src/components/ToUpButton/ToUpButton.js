@@ -3,10 +3,10 @@ import { Fab, Icon, Zoom } from '@material-ui/core'
 import './ToUpButton.scss'
 
 
-export const ToUpButton = ({show, cardsRef}) => {
+export const ToUpButton = ({ show, containerRef }) => {
 
   const handleScrollToTop = () => {
-    cardsRef.current.scroll({top: 0, behavior: 'smooth'})
+    containerRef.current.scroll({ top: 0, behavior: 'smooth' })
   }
 
   return (

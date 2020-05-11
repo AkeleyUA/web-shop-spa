@@ -84,6 +84,9 @@ const OrderSteps = ({ step, setStep }) => {
         {steps.map((item, index) => {
           const stepProps = {}
           const labelProps = {}
+          if(index === 4) {
+            steps[2].labelProps.error = true
+          }
           return (
             <Step key={item.component} {...stepProps}>
               <StepLabel {...labelProps}>{item.label}</StepLabel>

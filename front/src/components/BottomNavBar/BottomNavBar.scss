@@ -3,6 +3,8 @@
   bottom: 0;
   margin-top: 15px;
   border-radius: 4px;
+  margin-left: 12px;
+  width: calc(100% - 12px)!important;
 
   .bottom-bar {
     display: flex;

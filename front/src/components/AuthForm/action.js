@@ -34,10 +34,10 @@ export const loginRequestAction = (form) => {
   }
 }
 
-export const loginSuccessAction = (token) => {
+export const loginSuccessAction = (token, accessLevel) => {
   return {
     type: LOGIN_SUCCESS,
-    payload: token
+    payload: {token, accessLevel}
   }
 }
 
@@ -49,8 +49,9 @@ export const loginFailureAction = (massage) => {
 }
 
 
-export const logoutAction = () => {
+export const logoutAction = userId => {
   return {
-    type: LOGOUT
+    type: LOGOUT,
+    payload: userId
   }
 }

@@ -96,7 +96,7 @@ const ShoppingCart = ({ cart, cartHandleClose, delFromSoppingCart }) => {
               className="btn-close-cart"
               variant="outlined"
             >
-              <Icon>arrow_forward_ios</Icon>
+              <Icon>close</Icon>
             </IconButton>
           </Hidden>
         </Toolbar>

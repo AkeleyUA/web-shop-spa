@@ -5,7 +5,7 @@ import {
   GET_CATEGORIES_FOR_CLIENT_REQUEST,
   GET_CATEGORIES_FOR_CLIENT_SUCCESS,
   GET_CATEGORIES_FOR_CLIENT_FAILURE,
-  CLEAR_PRODUCTS_MESSAGE
+  CLEAR_MESSAGE
 } from "./action"
 
 
@@ -70,7 +70,7 @@ export const forClientState = (state = initialState, action) => {
         message: action.payload
       }
     }
-    case CLEAR_PRODUCTS_MESSAGE: {
+    case CLEAR_MESSAGE: {
       return {
         ...state,
         message: null

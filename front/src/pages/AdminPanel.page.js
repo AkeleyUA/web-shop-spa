@@ -1,52 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { AdminSettingsList } from "../components/AdminSettingsList/AdminSettingsList"
-import { logoutAction } from "../components/AuthForm/action"
 import { AdminRoutes } from '../routes/routes'
-import { Link } from 'react-router-dom'
 import {
-  Button,
   Grid,
-  Typography,
   Box,
   Paper
 } from "@material-ui/core";
+import AdminPanelHeader from "../components/AdminPanelHeader/AdminPanelHeader";
 
-import { settingsList } from '../components/AdminSettingsList/AdminSettingsList'
-
-const CustomLink = ({to, onClick}) => {
+const AdminPanelPage = ({ location }) => {
   return (
-    <Link to={to} onClick={onClick} style={{textDecoration:'none'}}>
-      <Button>Выйти</Button>
-    </Link>
-  )
-}
-
-const AdminPanelPage = ({ logout, location }) => {
-  console.log(location)
-  const pathList = settingsList.map(item => ({ path: item.path, name: item.name }))
-  const findName = pathList.find(item => item.path === location.pathname)
-
-  return (
-    <Grid container className="admin-panel">
+    <Grid
+      container
+      className="admin-panel"
+    >
       <Grid item lg={2} />
       <Grid item lg={10}>
-        <Box style={{ margin: 20, display: 'flex', justifyContent: 'space-between' }} component={Paper}>
-          <Typography variant="body1">
-            {findName !== undefined ? findName.name : ''}
-          </Typography>
-          <Typography variant="caption" color="secondary">
-            Дисклеймер: Админ панель ещё в разработке
-          </Typography>
-          <CustomLink to='/admin' onClick={logout}/>
-        </Box>
+        <AdminPanelHeader location={location} />
       </Grid>
-      <Grid item xs={2} className="admin-drawer">
+      <Grid item lg={2} className="admin-drawer">
         <AdminSettingsList />
       </Grid>
       <Grid item lg={10}>
-        <Box style={{ margin: 20, padding: 20}} component={Paper}>
+        <Box style={{ margin: 20, padding: 20 }} >
           <AdminRoutes />
         </Box>
       </Grid>
@@ -55,12 +32,13 @@ const AdminPanelPage = ({ logout, location }) => {
 }
 
 const mapStateToProps = state => {
-  return {}
+  return {
+    userId: state.authState.token.userId,
+  }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    logout: bindActionCreators(logoutAction, dispatch),
   }
 }
 

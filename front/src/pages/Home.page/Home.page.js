@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import NavBar from '../../components/NavBar/NavBar'
 import Catalog from '../../components/Catalog/Catalog'
-import BottomNavBar from '../../components/BottomNavBar/BottomNavBar'
 import { ToUpButton } from '../../components/ToUpButton/ToUpButton'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -11,7 +10,10 @@ import { changeCurrentPageAction } from '../../components/BottomNavBar/action'
 const limit = 16
 
 const HomePage = ({ getProductsForClientRequest, getCategoriesForClientRequest, currentCategory, currentPage, changeCurrentPage }) => {
+  const containerRef = React.createRef()
   const currentPageIndex = currentPage - 1
+  const [showScrollTo, setShowScrollTo] = useState(false)
+
   useEffect(() => {
     getCategoriesForClientRequest()
   }, [getCategoriesForClientRequest])
@@ -26,10 +28,18 @@ const HomePage = ({ getProductsForClientRequest, getCategoriesForClientRequest, 
     changeCurrentPage(1)
   }, [currentCategory])
 
+  const handleScroll = () => {
+    if (containerRef.current.scrollTop > 400) {
+      setShowScrollTo(true)
+    } else {
+      setShowScrollTo(false)
+    }
+  }
   return  (
-    <div >
+    <div ref={containerRef} className="scroll-container" onScroll={handleScroll}>
       <NavBar />
       <Catalog />
+      <ToUpButton show={showScrollTo} containerRef={containerRef} />
     </div>
   )
 }

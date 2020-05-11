@@ -29,7 +29,6 @@ export const WithOutAdminRoutes = ({ isAuth }) => {
       <Switch>
         <Route path='/admin/dashboard' exact component={AdminDashboard} />
         <Route path='/admin/products' exact component={ProductsForAdmin} />
-        <Route path='/admin/products/add' exact component={ProductCreator} />
         <Route path='/admin/categories' exact component={CategoriesForAdmin} />
         <Redirect to='/admin/dashboard' />
       </Switch>

@@ -33,7 +33,6 @@ const Catalog = ({ productsLength, setCurrentCategory }) => {
     >
       <Grid
         container
-        spacing={2}
       >
         <Hidden smDown>
           <Grid item md={3} lg={2}>
@@ -49,7 +48,7 @@ const Catalog = ({ productsLength, setCurrentCategory }) => {
                 className="products-counter"
                 variant="h5"
               >
-                Товары ({!productsLength ? "..." : productsLength})
+                Категории товаров
               </Typography>
               <Divider variant="middle" />
               <Box className="buttons-wrapper">

@@ -11,7 +11,7 @@ router.post(
   ///api/auth/register
   '/register',
   [
-    check('email', 'email incorrect').isEmail(),
+    check('email', 'email incorrect').isEmail().normalizeEmail(),
     check('password', 'password incorrect').isLength({ min:6 })
   ],
   async (req, res) => {
@@ -33,13 +33,13 @@ router.post(
       }
 
       const hashedPassword = await bcrypt.hash(password, 12)
-      const user = new User({ email, password: hashedPassword })
+      const user = new User({ email, password: hashedPassword, accessLevel: 0 })
       await user.save()
 
       res.status(201).json({message: "Запрос на создание пользователя отправлен", status: true})
 
     } catch (e) {
-      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
+      res.status(500).json({ message: e.message, status: false })
     }
   }
 )
@@ -59,14 +59,12 @@ router.post(
           message: (errors.errors.length === 1 ? errors.errors[0].msg : "Данные некорректные")
         })
       }
-
       const { email, password } = req.body
       const user = await User.findOne({ email })
-
       if (!user) {
         return res.status(400).json({ message: "Такой пользователь не найден", status: false})
       }
-
+      
       const isMatch = await bcrypt.compare(password, user.password)
 
       if (!isMatch) {
@@ -74,12 +72,12 @@ router.post(
       }
 
       const token = jwt.sign(
-        { userId: user.id, userEmail: user.email},
+        { userId: user.id, userEmail: user.email, accessLevel: user.accessLevel},
         config.get('jwtKey'),
         { expiresIn: '1h'}
       )
       
-      res.status(200).json({ token, userId: user.id, status: true })
+      res.status(200).json({ token, userId: user.id, status: true, accessLevel: user.accessLevel })
     
     } catch (e) {
       console.log(e.message)

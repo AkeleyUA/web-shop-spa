@@ -1,13 +1,18 @@
 .cards-list-wrapper {
-  overflow: hidden;
-  padding: 12px 0 0 6px;
+  padding: 12px 6px;
+  margin: 0 0 0 12px;
   .cards-list {
-    overflow: scroll;
-    height: calc(100% - 90px - 70px);
+    height: 100%;
     min-height: 50vh;
     .card {
-      background: #f8f8f8;
-      margin: 8px;
+      padding: 15px;
+      min-width: 260px;
+      max-width: 320px;
+      transition: all .1s cubic-bezier(0.6, 0.04, 0.98, 0.335);
+      &:hover {
+        transform: scale(1.05);
+        transition: all .1s cubic-bezier(0.6, 0.04, 0.98, 0.335);
+      }
 
       .card-content-text {
         overflow: hidden;
@@ -17,13 +22,17 @@
     }
 
     .card-img {
-      height: 240px;
+      height: 160px;
       background-size: cover;
     }
     .MuiCardActions-root {
       justify-content: space-between;
-      align-items: flex-end;
       padding: 16px;
     }
   }
+}
+
+.scroll-container {
+  height: 100vh;
+  overflow: auto;
 }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   AppBar,
   Typography,
@@ -29,7 +29,7 @@ const BottomNavBar = ({ productsLength, changeCurrentPage, currentPage }) => {
       elevation={1}
     >
       <Toolbar
-      className="bottom-bar"
+        className="bottom-bar"
       >
         <Hidden xsDown>
           <Box
@@ -50,6 +50,7 @@ const BottomNavBar = ({ productsLength, changeCurrentPage, currentPage }) => {
         {productsLength < 18
           ? null
           : <Pagination
+            size="small"
             className="bottom-pagination"
             count={Math.ceil(productsLength / 18)}
             shape="rounded"

@@ -2,6 +2,7 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 import { SET_FILTER_VALUE } from './adction'
 import { getProductsForClientSuccessAction, getProductsForClientFailreAction } from '../../pages/Home.page/action'
 import { setCurrentCategoryAction } from '../Categories.Client/action'
+import { getProductsSuccessAction, getProductsFailureAction } from '../Products.Admin/action'
 
 const fetchFilteredProducts = (filterValue) => {
   return fetch('/api/products/get-filtered-products', {
@@ -19,8 +20,10 @@ function* getFilteredProductsWorker(action) {
     const data = yield call(fetchFilteredProducts, action.payload)
     if(data.status) {
       yield put(getProductsForClientSuccessAction(data.products, data.productsLength))
+      yield put(getProductsSuccessAction(data.products))
     } else {
       yield put(getProductsForClientFailreAction(data.message))
+      yield put(getProductsFailureAction(data.message))
     }
   } catch (e) {
     yield put(getProductsForClientFailreAction('Произошла неизвестная ошибка'))

@@ -1,0 +1,8 @@
+.avatar-icon {
+  cursor: pointer;
+  transition: all .2s;
+  &:hover {
+    background-color: #ef6c00;
+    transition: all .2s;
+  }
+}

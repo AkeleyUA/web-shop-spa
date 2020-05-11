@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {getCategoryRequestAction, deleteCategoryRequestAction, showCategoryOnWebSiteRequestAction} from './action'
-import CategoryCreator from '../CategoryCreator/CategoryCreator'
 
 import {
   TableContainer,
@@ -16,25 +15,10 @@ import {
   Checkbox,
   Icon,
   Paper,
-  Breadcrumbs
 } from '@material-ui/core'
-import { NavLink } from 'react-router-dom'
 
 import './Categories.Admin.scss'
 import { useSnackbar } from 'notistack'
-
-
-const BreadcrumbsCreator = [
-  {
-    name: 'Панель управления',
-    path: '/admin'
-  },
-  {
-    name: 'Категории',
-    path: '/admin/categories',
-    active: true
-  },
-]
 
 const CategoriesForAdmin = ({
   categories,
@@ -79,11 +63,6 @@ const CategoriesForAdmin = ({
 
   return (
     <div className="categories">
-      <Breadcrumbs separator="›" aria-label="breadcrumb">
-        {BreadcrumbsCreator.map(item => (
-          <NavLink key={item.name} to={item.path} className={item.active ? 'active-link link' : 'link' }>{item.name}</NavLink>
-        ))}
-      </Breadcrumbs>
       <TableContainer className="table-container" component={Paper}>
         <Table stickyHeader size="small" aria-label="a categories table">
           <TableHead className="table-headers">
@@ -132,7 +111,6 @@ const CategoriesForAdmin = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <CategoryCreator />
     </div>
   )
 }

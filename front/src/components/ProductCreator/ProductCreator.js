@@ -19,7 +19,7 @@ const ProductCreator = ({
   getCategoryRequest,
   categoriesLoading,
 }) => {
-  const {enqueueSnackbar} = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar()
   const [form, setForm] = useState(
     {
       name: '',
@@ -41,7 +41,7 @@ const ProductCreator = ({
 
   const getCategories = useCallback(() => {
     getCategoryRequest()
-  },[getCategoryRequest])
+  }, [getCategoryRequest])
 
   useEffect(() => {
     getCategories()
@@ -68,82 +68,86 @@ const ProductCreator = ({
   }, [message])
 
   return (
-    <div className="product-creator">
-      <Paper className="form-wrapper">
-        <FormControl
-          className="add-product-form"
-          margin="dense"
-          required
+    <Paper className="form-wrapper">
+      <FormControl
+        className="add-product-form"
+        margin="dense"
+        required
+        size="small"
+        fullWidth
+      >
+        <FormHelperText>Добавление товара</FormHelperText>
+        <Select
+          className="categories-select"
+          value={form.category}
+          onChange={changeInputHandler}
+          name="category"
+          displayEmpty
+          variant="outlined"
           size="small"
+          disabled={categoriesLoading}
+          fullWidth
         >
-          <FormHelperText>Добавление товара</FormHelperText>
-          <Select
-            className="categories-select"
-            value={form.category}
-            onChange={changeInputHandler}
-            name="category"
-            displayEmpty
-            variant="outlined"
-            size="small"
-            disabled={categoriesLoading}
-          >
-            <MenuItem value="" disabled>
-              Выберите категорию
+          <MenuItem value="" disabled>
+            Выберите категорию
             </MenuItem>
-            {categories.map(item => {
-              return (<MenuItem key={item.name} value={item.name}>{item.name}</MenuItem>)
-            })}
-          </Select>
-          <TextField
-            id="name"
-            label="Название"
-            variant="outlined"
-            name="name"
-            size="small"
-            onChange={changeInputHandler}
-            value={form.name}
-          />
-          <TextField
-            id="amount"
-            label="Колличество"
-            variant="outlined"
-            name="amount"
-            size="small"
-            onChange={changeInputHandler}
-            value={form.amount}
-          />
-          <TextField
-            id="price"
-            label="Цена"
-            variant="outlined"
-            name="price"
-            size="small"
-            onChange={changeInputHandler}
-            value={form.price}
-          />
-          <TextField
-            id="description"
-            label="Описание"
-            variant="outlined"
-            name="description"
-            size="small"
-            onChange={changeInputHandler}
-            value={form.description}
-          />
-          <TextField
-            id="img"
-            label="Изображение (url)"
-            variant="outlined"
-            name="img"
-            size="small"
-            onChange={changeInputHandler}
-            value={form.img}
-          />
-          <Button type="submit" variant="outlined" disabled={loading} onClick={addProductHandler}>Добавить</Button>
-        </FormControl>
-        <NavLink className="btn" to="/admin/products">Список продуктов</NavLink>
-      </Paper>
-    </div>
+          {categories.map(item => {
+            return (<MenuItem key={item.name} value={item.name}>{item.name}</MenuItem>)
+          })}
+        </Select>
+        <TextField
+          fullWidth
+          id="name"
+          label="Название"
+          variant="outlined"
+          name="name"
+          size="small"
+          onChange={changeInputHandler}
+          value={form.name}
+        />
+        <TextField
+          fullWidth
+          id="amount"
+          label="Колличество"
+          variant="outlined"
+          name="amount"
+          size="small"
+          onChange={changeInputHandler}
+          value={form.amount}
+        />
+        <TextField
+          id="price"
+          label="Цена"
+          variant="outlined"
+          name="price"
+          size="small"
+          onChange={changeInputHandler}
+          value={form.price}
+          fullWidth
+        />
+        <TextField
+          id="description"
+          label="Описание"
+          variant="outlined"
+          name="description"
+          size="small"
+          onChange={changeInputHandler}
+          value={form.description}
+          fullWidth
+        />
+        <TextField
+          id="img"
+          label="Изображение (url)"
+          variant="outlined"
+          name="img"
+          size="small"
+          onChange={changeInputHandler}
+          value={form.img}
+          fullWidth
+        />
+        <Button className="add-product-btn" variant="contained" color="primary" disabled={loading} onClick={addProductHandler}>Добавить</Button>
+      </FormControl>
+    </Paper>
   )
 }
 
