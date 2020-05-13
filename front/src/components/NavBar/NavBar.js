@@ -15,7 +15,8 @@ import {
   FormControl,
   Divider,
   Link,
-  Grid
+  Grid,
+  Fab
 } from '@material-ui/core';
 
 import './NavBar.scss'
@@ -156,7 +157,7 @@ const NavBar = ({ setFilterValue, message, clearMessage, cart }) => {
           <Box className="phones-wrapper">
             <Divider orientation="vertical" flexItem />
             <Button
-              variant="outlined"
+              variant="contained"
               color="primary"
               startIcon={<Icon>phone</Icon>}
             >
@@ -164,7 +165,7 @@ const NavBar = ({ setFilterValue, message, clearMessage, cart }) => {
             </Button>
             <Divider orientation="vertical" flexItem />
             <Button
-              variant="outlined"
+              variant="contained"
               color="secondary"
               startIcon={<Icon>phone</Icon>}
             >
@@ -178,6 +179,7 @@ const NavBar = ({ setFilterValue, message, clearMessage, cart }) => {
         >
           <TextField
             fullWidth
+            size="small"
             variant="outlined"
             label="Поиск"
             onChange={inputFilterHandler}
@@ -192,12 +194,14 @@ const NavBar = ({ setFilterValue, message, clearMessage, cart }) => {
                 <InputAdornment position="end">
                   {focus
                     ? <IconButton
+                      size="small"
                       color="primary"
                       onClick={searchHandler}
                       onBlur={() => setFocus(false)}
                     ><Icon>search</Icon></IconButton>
                     : (value && <IconButton
                       color="default"
+                      size="small"
                       onClick={clearHandler}
                     > <Icon>clear</Icon></IconButton>)
                   }
@@ -207,6 +211,7 @@ const NavBar = ({ setFilterValue, message, clearMessage, cart }) => {
           />
         </FormControl>
         <IconButton
+          color={cart.length > 0 ? 'primary' : 'default'}
           aria-label="cart"
           onClick={CartHandleOpen}
         >

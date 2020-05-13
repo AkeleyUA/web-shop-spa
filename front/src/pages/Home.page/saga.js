@@ -12,7 +12,7 @@ const fetchProductsForClient = ({category, limit, page}) => {
 }
 
 const fetchCategoriesForClient = () => {
-  return fetch('api/categories/get-for-client').then(res => res.json())
+  return fetch('/api/categories/get-for-client').then(res => res.json())
 }
 
 function* getProductsForClientWorker (action) {

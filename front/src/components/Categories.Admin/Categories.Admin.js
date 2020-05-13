@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {getCategoryRequestAction, deleteCategoryRequestAction, showCategoryOnWebSiteRequestAction} from './action'
+import { getCategoriesRequestAction, deleteCategoryRequestAction, showCategoryOnWebSiteRequestAction } from './action'
 
 import {
   TableContainer,
@@ -22,29 +22,20 @@ import { useSnackbar } from 'notistack'
 
 const CategoriesForAdmin = ({
   categories,
-  getCategoryRequest,
+  getCategoriesRequest,
   deleteCategoryRequest,
   showCategoryOnWebSiteRequest,
   oneCategoryLoading,
   loading,
   message,
 }) => {
-  
-  const {enqueueSnackbar} = useSnackbar()
-
-  const getCategory = useCallback(
-    () => {
-      getCategoryRequest()
-    },
-    [categories],
-  )
-
+  const { enqueueSnackbar } = useSnackbar()
   const showCategoryOnWebSiteHendler = (id, checked) => {
     showCategoryOnWebSiteRequest(id, checked)
   }
 
   useEffect(() => {
-    getCategory()
+    getCategoriesRequest()
   }, [])
 
   useEffect(() => {
@@ -86,22 +77,22 @@ const CategoriesForAdmin = ({
                       '123' === row._id
                         ? <Preloader />
                         : <Checkbox
-                        color="primary"
-                        name={row._id}
-                        checked={row.show || false}
-                        onChange={(event) => {
-                          showCategoryOnWebSiteHendler(row._id, event.target.checked)
-                        }}
-                        disabled={loading || oneCategoryLoading}
-                      />
+                          color="primary"
+                          name={row._id}
+                          checked={row.show || false}
+                          onChange={(event) => {
+                            showCategoryOnWebSiteHendler(row._id, event.target.checked)
+                          }}
+                          disabled={loading || oneCategoryLoading}
+                        />
                     )}
                   </TableCell>
                   <TableCell align="center">
                     <IconButton
-                    className="centered-btn"
-                    onClick={() => {deleteCategoryRequest(row._id)}}
-                    disabled={loading || oneCategoryLoading}
-                  >
+                      className="centered-btn"
+                      onClick={() => { deleteCategoryRequest(row._id) }}
+                      disabled={loading || oneCategoryLoading}
+                    >
                       <Icon>delete_outline</Icon>
                     </IconButton>
                   </TableCell>
@@ -126,7 +117,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getCategoryRequest: bindActionCreators(getCategoryRequestAction, dispatch),
+    getCategoriesRequest: bindActionCreators(getCategoriesRequestAction, dispatch),
     deleteCategoryRequest: bindActionCreators(deleteCategoryRequestAction, dispatch),
     showCategoryOnWebSiteRequest: bindActionCreators(showCategoryOnWebSiteRequestAction, dispatch),
   }

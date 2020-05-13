@@ -2,24 +2,28 @@ import {
   takeLatest,
   put,
   call,
+  fork
 } from 'redux-saga/effects';
 import {
   GET_PRODUCTS_REQUEST,
   getProductsSuccessAction,
   getProductsFailureAction,
-  
   SHOW_ON_WEB_SITE_REQUEST,
   showOnWebSiteSuccessAction,
   showOnWebSiteFailureAction,
-  
   DEL_PRODUCT_REQUEST,
   deleteProductSuccessAction,
   deleteProductFailureAction
 } from './action';
 
-const fetchProducts = () => {
-  return fetch('/api/products/get-products', {
-    method: 'GET',
+const fetchProducts = ({limit, page}) => {
+  return fetch('/api/products/get-products-for-admin', {
+    method: 'POST',
+    body: JSON.stringify({limit, page}),
+    headers: {
+      'Content-type': 'application/json'
+    }
+
   }).then(response => response.json())
 }
 
@@ -43,10 +47,10 @@ const fetchDelProduct = (id) => {
   }).then(response => response.json())
 }
 
-function* getProductsWorker() {
+function* getProductsWorker(action) {
   try {
-    const data = yield call(fetchProducts)
-    yield put(getProductsSuccessAction(data))
+    const data = yield call(fetchProducts, action.payload)
+    yield put(getProductsSuccessAction(data.products, data.productsLength))
   } catch (e) {
     yield put(getProductsFailureAction('Неизвестная ошибка'))
   }

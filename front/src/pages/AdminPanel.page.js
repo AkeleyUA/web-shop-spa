@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import AdminPanelHeader from "../components/AdminPanelHeader/AdminPanelHeader";
 
-const AdminPanelPage = ({ location }) => {
+const AdminPanelPage = () => {
   return (
     <Grid
       container
@@ -17,10 +17,10 @@ const AdminPanelPage = ({ location }) => {
     >
       <Grid item lg={2} />
       <Grid item lg={10}>
-        <AdminPanelHeader location={location} />
+        <AdminPanelHeader/>
       </Grid>
       <Grid item lg={2} className="admin-drawer">
-        <AdminSettingsList />
+        <AdminSettingsList/>
       </Grid>
       <Grid item lg={10}>
         <Box style={{ margin: 20, padding: 20 }} >

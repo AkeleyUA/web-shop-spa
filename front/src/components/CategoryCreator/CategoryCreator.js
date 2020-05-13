@@ -46,7 +46,7 @@ const CategoryCreator = ({
         <FormHelperText>Добавление категории</FormHelperText>
         <TextField
           fullWidth
-          id="name"
+          id="categgory-name"
           label="Название"
           variant="outlined"
           name="name"

@@ -1,0 +1,30 @@
+.product-editor-form-wrapper {
+  margin: 30px;
+  .product-editor-form {
+    min-height: 500px;
+    justify-content: space-around;
+  }
+}
+.product-editor-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .card {
+    padding: 15px;
+    min-width: 260px;
+    max-width: 320px;
+    .card-content-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .card-img {
+    height: 160px;
+    background-size: cover;
+  }
+  .MuiCardActions-root {
+    justify-content: space-between;
+    padding: 16px;
+  }
+}

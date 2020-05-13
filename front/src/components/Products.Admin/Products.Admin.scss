@@ -1,8 +1,16 @@
 .products-list {
-  padding: 35px;
+  padding: 15px;
+  .table-container {
+    height: 100%;
+    height: 400px;
+  }
   .preloader {
-    width: 100%;
+    height: 400px;
+  }
+  .admin-table-pagintaion {
     display: flex;
+    margin-top: 20px;
     justify-content: center;
+    align-items: center;
   }
 }

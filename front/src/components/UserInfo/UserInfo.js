@@ -45,8 +45,7 @@ const UserInfo = ({ logout, accessLevel, userId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [dialog, setDialog] = useState(false)
 
-  
-  const findLvel = levels.find(item => item.level === accessLevel || 0)
+  const findLevel = levels.find(item => item.level === accessLevel) || 0
 
   const handleOpenMenu = event => {
     setAnchorEl(event.currentTarget)
@@ -75,7 +74,7 @@ const UserInfo = ({ logout, accessLevel, userId }) => {
         onClick={handleOpenMenu}
         className="avatar-icon"
       >
-        {findLvel.icon }
+        {findLevel.icon}
       </Avatar>
       <Menu
         id="simple-menu"
@@ -96,7 +95,7 @@ const UserInfo = ({ logout, accessLevel, userId }) => {
       >
         <MenuItem disabled>
           <Typography variant="subtitle1" color="primary">
-            Уровень: {findLvel.label}
+            Уровень: {findLevel.label}
           </Typography>
         </MenuItem>
         <MenuItem onClick={handleOpenDialog}>Инфо</MenuItem>

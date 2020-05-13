@@ -119,7 +119,7 @@ const ShoppingCart = ({ cart, cartHandleClose, delFromSoppingCart }) => {
                 <Typography gutterBottom variant="h5" component="h2">
                   {item.name}
                 </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
+                <Typography className="text-overfill" variant="body2" color="textSecondary" component="p">
                   {item.description}
                   {item.description}
                   {item.description}

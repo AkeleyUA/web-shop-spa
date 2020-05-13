@@ -35,7 +35,6 @@ const productCreator = (arr) => {
               image={item.img}
               title={item.name}
             />
-
             <CardContent className="card-content">
               <Typography className="card-content-text" gutterBottom variant="subtitle1">
                 {item.name}
@@ -48,9 +47,7 @@ const productCreator = (arr) => {
           <CardActions
             disableSpacing={true}
           >
-
             <Typography variant="h4" color="primary">{item.price} &#8372;</Typography>
-
             <PriceToggleButton
               product={item}
             />
@@ -68,8 +65,8 @@ const ProductsForClient = ({ products, loadingProducts }) => {
       <Grid
         container
         direction="row"
-        justify="space-between"
-        className="cards-list">
+        className="cards-list"
+      >
         {loadingProducts ? <Preloader /> : productCreator(products)}
       </Grid>
     </Paper>

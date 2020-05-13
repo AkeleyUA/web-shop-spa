@@ -5,14 +5,19 @@ const Product = require('../models/Product')
 const router = Router()
 
 
-router.get(
-  '/get-products',
+router.post(
+  '/get-products-for-admin',
   async (req, res) => {
+    const { limit, page } = req.body
+    const skip = page * 18
+
     try {
-      const data = await Product.find()
-      res.json(data)
+      const products = await Product.find().limit(limit).skip(skip)
+      const productsLength = (await Product.find()).length
+      res.json({ products, status: true, productsLength })
     } catch (e) {
-      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+      console.log(e.message)
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
     }
   }
 )
@@ -66,7 +71,7 @@ router.post(
   '/get-products-for-clients',
   async (req, res) => {
     const { category, limit, page } = req.body
-    const skip = page*18
+    const skip = page * 18
 
     try {
       const products = await Product.find({ category, show: true }).limit(limit).skip(skip)
@@ -159,16 +164,36 @@ router.post(
   }
 )
 
-// for( i = 0; i < 50; i++) {
+router.post(
+  '/edit',
+  async (req, res) => {
+    const { id } = req.body
+    try {
+      const product = await Product.findById(id)
+      if (!product) {
+        return res.json({ status: false, message: 'Продукт не найден, повторите попытку' })
+      }
+      setTimeout(() => {
+        res.json({ status: true, product })
+      }, 1000)
+    } catch (e) {
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
+    }
+  }
+)
+
+
+
+// for (i = 11; i < 21; i++) {
 //   const product = new Product({
 //     name: `Продукт ${i}, небольшое описание P-${1}`,
 //     category: 'Популярно',
 //     amount: i,
 //     img: 'https://u01.appmifile.com/images/2017/04/01/8cd9f177-84ee-4e7e-ad39-9e6750903b0a.png',
 //     description: `Продукт ${i}, полное описание полное описание полное описание полное описание полное описание`,
-//     price: i*5 + 1.99,
+//     price: i * 5 + 1.99,
 //     show: true,
-//     test: true,
+//     sale: 0
 //   })
 //   try {
 //     product.save()

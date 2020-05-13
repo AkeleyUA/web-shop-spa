@@ -1,7 +1,7 @@
 export const ADD_PRODUCT_REQUEST = 'ADD_PRODUCT_REQUEST'
 export const ADD_PRODUCT_SUCCESS = 'ADD_PRODUCT_SUCCESS'
 export const ADD_PRODUCT_FAILURE = 'ADD_PRODUCT_FAILURE'
-export const CLEAR_FORM = 'CLEAR_FORM'
+export const CLEAR_MESSAGE = 'CLEAR_FORM'
 
 export const addProductRequestAction = form => {
   return {
@@ -24,9 +24,8 @@ export const addProductFailureAction = message => {
   }
 }
 
-export const formCleanerAction = status => {
+export const clearMessageAction = () => {
   return {
-    type: CLEAR_FORM,
-    payload: status
+    type: CLEAR_MESSAGE
   }
 }

@@ -10,6 +10,7 @@ import { filterState } from '../components/NavBar/reducer'
 import { shoppingCartState } from '../components/ToggleButton/reducer'
 import { paginationState } from '../components/BottomNavBar/reducer'
 import { stepsState } from '../components/OrderSteps/reducer'
+import { editState } from '../components/ProductEditor/reducer'
 
 
 export const rootReducer = combineReducers({
@@ -24,4 +25,5 @@ export const rootReducer = combineReducers({
   shoppingCartState,
   paginationState,
   stepsState,
+  editState,
 })

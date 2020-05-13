@@ -4,9 +4,9 @@ import { CircularProgress, Paper } from '@material-ui/core'
 
 import './Preloader.scss'
 
-const Preloader = () => {
+const Preloader = ({ className }) => {
   return (
-    <div className="preloader-wrapper">
+    <div className={className ? `preloader-wrapper ${className}` : "preloader-wrapper" }>
       <CircularProgress />
     </div>
   )

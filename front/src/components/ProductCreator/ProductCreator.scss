@@ -7,6 +7,9 @@
   height: calc(100% + 200px);
   padding: 0 35px 35px 35px;
   margin-bottom: 30px;
+  .product-add-helper {
+    align-self: start;
+  }
   .add-product-form {
     height: 100%;
     width: 100%;

@@ -1,10 +1,9 @@
-import { ADD_PRODUCT_FAILURE, ADD_PRODUCT_REQUEST, ADD_PRODUCT_SUCCESS, CLEAR_FORM } from "./action"
+import { ADD_PRODUCT_FAILURE, ADD_PRODUCT_REQUEST, ADD_PRODUCT_SUCCESS, CLEAR_MESSAGE } from "./action"
 
 
 const initialState = {
   loading: false,
   message: null,
-  success: false
 }
 
 export const productCreatorState = (state = initialState, action) => {
@@ -12,16 +11,14 @@ export const productCreatorState = (state = initialState, action) => {
     case ADD_PRODUCT_REQUEST: {
       return {
         ...state,
-        loading: true,
-        message: null
+        loading: true
       }
     }
     case ADD_PRODUCT_SUCCESS: {
       return {
         ...state,
         loading: false,
-        message: action.payload,
-        success: true,
+        message: action.payload
       }
     }
     case ADD_PRODUCT_FAILURE: {
@@ -31,13 +28,12 @@ export const productCreatorState = (state = initialState, action) => {
         message: action.payload
       }
     }
-    case CLEAR_FORM: {
+    case CLEAR_MESSAGE: {
       return {
         ...state,
-        success: action.status
+        message: null
       }
     }
-    default:
-      return { ...state }
+    default: return state
   }
 }

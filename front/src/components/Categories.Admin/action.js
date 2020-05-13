@@ -8,18 +8,18 @@ export const SHOW_CATEGORY_ON_WEB_SITE_REQUEST = 'SHOW_CATEGORY_ON_WEB_SITE_REQU
 export const SHOW_CATEGORY_ON_WEB_SITE_SUCCESS = 'SHOW_CATEGORY_ON_WEB_SITE_SUCCESS';
 export const SHOW_CATEGORY_ON_WEB_SITE_FAILURE = 'SHOW_CATEGORY_ON_WEB_SITE_FAILURE';
 
-export const getCategoryRequestAction = () => {
+export const getCategoriesRequestAction = () => {
   return {
     type: GET_CATEGORIES_REQUEST
   }
 }
-export const getCategorySuccessAction = categories => {
+export const getCategoriesSuccessAction = categories => {
   return {
     type: GET_CATEGORIES_SUCCESS,
     payload: categories
   }
 }
-export const getCategoryFailureAction = message => {
+export const getCategoriesFailureAction = message => {
   return {
     type: GET_CATEGORIES_FAILURE,
     payload: message

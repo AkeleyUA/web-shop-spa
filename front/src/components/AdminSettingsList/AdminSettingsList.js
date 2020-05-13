@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useRouteMatch, useLocation } from 'react-router-dom'
+import { Link, matchPath, NavLink, useLocation } from 'react-router-dom'
 
 import {
   Button,
@@ -10,7 +10,6 @@ import {
   Icon,
   List,
   Drawer,
-  Grid,
   Typography
 } from "@material-ui/core";
 
@@ -20,17 +19,26 @@ export const settingsList = [
   {
     name: 'Панель управления',
     path: '/admin/dashboard',
-    icon: 'widgets'
+    icon: 'widgets',
+    nav: true,
   },
   {
     name: 'Список товаров',
     path: '/admin/products',
-    icon: 'view_list'
+    icon: 'view_list',
+    nav: true,
   },
   {
     name: 'Список категорий',
     path: '/admin/categories',
-    icon: 'category'
+    icon: 'category',
+    nav: true,
+  },
+  {
+    name: 'Редактор продуктов',
+    path: '/admin/product/:id',
+    icon: 'edit',
+    nav: false,
   }
 ]
 
@@ -47,36 +55,10 @@ const classes = {
   }
 }
 
-const CustomButton = ({ to, label, activeOnlyWhenExact, icon }) => {
-  const math = useRouteMatch({
-    path: to,
-    exact: activeOnlyWhenExact
-  })
-
-  return (
-    <Link to={to} className="admin-drawer-link">
-      <ListItem
-        component={Button}
-        variant="contained"
-        classes={classes.listItem}
-        selected={math ? math.isExact : false}
-      >
-        <ListItemIcon
-          classes={classes.listIcon}
-        >
-          <Icon>{icon}</Icon>
-        </ListItemIcon>
-        <ListItemText>
-          <Typography variant="caption">
-            {label}
-          </Typography>
-        </ListItemText>
-      </ListItem>
-    </Link>
-  )
-}
-
 export const AdminSettingsList = () => {
+  const location = useLocation()
+  const findName = settingsList.find(item => matchPath(location.pathname, item.path))
+
   return (
     <Drawer
       open
@@ -108,35 +90,47 @@ export const AdminSettingsList = () => {
           classes={classes.divider}
         />
         {settingsList.map((item) => {
-          return (
-            <CustomButton
-              key={item.name}
-              to={item.path}
-              label={item.name}
-              activeOnlyWhenExact
-              icon={item.icon} />
-          )
+          if (item.nav) {
+            return (
+              <ListItem
+                className={findName && findName.path === item.path ? "drawer-btn-selected drawer-btn" : "drawer-btn"}
+                key={item.path}
+                component={NavLink}
+                to={item.path}
+                variant="contained"
+                classes={classes.listItem}
+              >
+                <ListItemIcon
+                  classes={classes.listIcon}
+                >
+                  <Icon fontSize="small">{item.icon}</Icon>
+                </ListItemIcon>
+                <ListItemText>
+                  <Typography variant="caption">
+                    {item.name}
+                  </Typography>
+                </ListItemText>
+              </ListItem>
+            )
+          }
         })}
       </List>
-      <Link to='/developer' className="to-developer admin-drawer-link">
-        <ListItem
-          component={Button}
-          variant="contained"
-          classes={classes.listItem}
-          selected
+      <ListItem
+        component={NavLink}
+        variant="contained"
+        to='/developer'
+        className="to-developer drawer-btn-selected drawer-btn">
+        <ListItemIcon
+          classes={classes.listIcon}
         >
-          <ListItemIcon
-            classes={classes.listIcon}
-          >
-            <Icon>code</Icon>
-          </ListItemIcon>
-          <ListItemText>
-            <Typography variant="caption">
-              Разработчик
-              </Typography>
-          </ListItemText>
-        </ListItem>
-      </Link >
+          <Icon fontSize="small">code</Icon>
+        </ListItemIcon>
+        <ListItemText>
+          <Typography variant="caption">
+            Разработчик
+          </Typography>
+        </ListItemText>
+      </ListItem>
     </Drawer>
   )
 }

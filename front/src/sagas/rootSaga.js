@@ -7,6 +7,7 @@ import addCategoryWatcher from '../components/CategoryCreator/saga';
 import forClientWatcher from '../pages/Home.page/saga'
 import filterWatcher from '../components/NavBar/saga';
 import shoppingCartWatcher from '../components/ToggleButton/saga'
+import editProductWatcher from '../components/ProductEditor/saga';
 
 
 export function* rootSaga() {
@@ -18,6 +19,7 @@ export function* rootSaga() {
     addCategoryWatcher(),
     forClientWatcher(),
     filterWatcher(),
-    shoppingCartWatcher()
+    shoppingCartWatcher(),
+    editProductWatcher(),
   ]);
 }

@@ -5,8 +5,8 @@ import { TextField, Button, Select, MenuItem, FormHelperText, FormControl, Paper
 
 import './ProductCreator.scss'
 import { bindActionCreators } from 'redux'
-import { addProductRequestAction, addProductFailureAction, formCleanerAction } from './action'
-import { getCategoryRequestAction } from '../Categories.Admin/action'
+import { addProductRequestAction, addProductFailureAction, clearMessageAction } from './action'
+import { getCategoriesRequestAction } from '../Categories.Admin/action'
 import { useSnackbar } from 'notistack'
 
 const ProductCreator = ({
@@ -14,10 +14,9 @@ const ProductCreator = ({
   loading,
   addProductRequest,
   categories,
-  formCleaner,
-  success,
-  getCategoryRequest,
+  getCategoriesRequest,
   categoriesLoading,
+  clearMessage
 }) => {
   const { enqueueSnackbar } = useSnackbar()
   const [form, setForm] = useState(
@@ -39,17 +38,12 @@ const ProductCreator = ({
     addProductRequest(form)
   }
 
-  const getCategories = useCallback(() => {
-    getCategoryRequest()
-  }, [getCategoryRequest])
-
   useEffect(() => {
-    getCategories()
+    getCategoriesRequest()
   }, [])
 
   useEffect(() => {
-    formCleaner(false)
-    return () => {
+    if (message === 'Новый товар добавлен') {
       setForm({
         name: '',
         category: '',
@@ -59,11 +53,12 @@ const ProductCreator = ({
         price: '',
       })
     }
-  }, [success])
+  }, [])
 
   useEffect(() => {
     if (message) {
       enqueueSnackbar(message)
+      clearMessage()
     }
   }, [message])
 
@@ -76,7 +71,9 @@ const ProductCreator = ({
         size="small"
         fullWidth
       >
-        <FormHelperText>Добавление товара</FormHelperText>
+        <FormHelperText
+          className="product-add-helper"
+        >Добавление товара</FormHelperText>
         <Select
           className="categories-select"
           value={form.category}
@@ -155,7 +152,6 @@ const mapStateToProps = state => {
   return {
     loading: state.productCreatorState.loading,
     err: state.productCreatorState.err,
-    success: state.productCreatorState.success,
     categories: state.categoriesState.categories,
     categoriesLoading: state.categoriesState.loading,
     message: state.productCreatorState.message
@@ -166,8 +162,8 @@ const mapDispatchToProps = dispatch => {
   return {
     addProductRequest: bindActionCreators(addProductRequestAction, dispatch),
     addProductFailure: bindActionCreators(addProductFailureAction, dispatch),
-    formCleaner: bindActionCreators(formCleanerAction, dispatch),
-    getCategoryRequest: bindActionCreators(getCategoryRequestAction, dispatch),
+    getCategoriesRequest: bindActionCreators(getCategoriesRequestAction, dispatch),
+    clearMessage: bindActionCreators(clearMessageAction, dispatch)
   }
 }
 

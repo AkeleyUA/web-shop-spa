@@ -23,7 +23,7 @@ const initialState = {
   form: {},
   loading: false,
   token: checkToken(),
-  isAuth: !!token,
+  isAuth: !!checkToken(),
   message: null
 }
 

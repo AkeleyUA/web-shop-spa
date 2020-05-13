@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -7,6 +7,7 @@ import {
   getProductsRequestAction,
   showOnWebSiteRequestAction,
   deleteProductRequestAction,
+  changePageAction,
 } from './action'
 
 import {
@@ -19,8 +20,10 @@ import {
   TableCell,
   Button,
   Checkbox,
-  Paper
+  Paper,
+  IconButton
 } from '@material-ui/core'
+import { Pagination } from '@material-ui/lab'
 import { useSnackbar } from 'notistack'
 import Preloader from '../Preloader/Preloader'
 import ProductFilter from '../ProductsFilter/ProductsFilter'
@@ -34,26 +37,33 @@ const ProductsForAdmin = ({
   showOnWebSiteRequest,
   oneProductLoading,
   deleteProductRequest,
-  message
+  message,
+  productsLength,
+  currentPage,
+  changePage
 }) => {
-  const { enqueueSnackbar } = useSnackbar();
-
-  const getProducts = useCallback(() => {
-    getProductsRequest()
-  }, [getProductsRequest])
+  const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
-    getProducts()
-  }, [])
+    getProductsRequest(18, currentPage - 1)
+  }, [currentPage])
 
   useEffect(() => {
     if (message) {
-      enqueueSnackbar(typeof message === "string" ? message : 'Неизвестная ошибка')
+      enqueueSnackbar(message)
     }
   }, [message])
 
   const checkboxChangeHendler = (event) => {
     showOnWebSiteRequest(event.target.name, event.target.checked)
+  }
+
+  const deleteHandler = (id) => {
+    deleteProductRequest(id)
+  }
+
+  const changePageHandler = (event, newValue) => {
+    changePage(newValue)
   }
 
   const TableCreator = () => {
@@ -66,8 +76,8 @@ const ProductsForAdmin = ({
               <TableCell >Имя товара</TableCell>
               <TableCell >Количество</TableCell>
               <TableCell >Цена</TableCell>
-              <TableCell >Описание</TableCell>
               <TableCell align="center">Отображать на сайте</TableCell>
+              <TableCell align="center">Редактировать</TableCell>
               <TableCell align="center">Удалить</TableCell>
             </TableRow>
           </TableHead>
@@ -81,17 +91,28 @@ const ProductsForAdmin = ({
                   <TableCell >{row.name}</TableCell>
                   <TableCell >{row.amount}</TableCell>
                   <TableCell >{row.price}</TableCell>
-                  <TableCell >{row.description}</TableCell>
                   <TableCell align="center">
-                    <Checkbox disabled={oneProductLoading === row.id} color="primary" name={row._id} checked={row.show} onChange={checkboxChangeHendler} />
+                    <Checkbox disabled={oneProductLoading === row._id} color="primary" name={row._id} checked={row.show} onChange={checkboxChangeHendler} />
                   </TableCell>
                   <TableCell align="center">
-                    <Button
-                      onClick={() => { deleteProductRequest(row._id) }}
-                      disabled={oneProductLoading === row.id}
+                    <IconButton
+                      component={Link}
+                      to={{
+                        pathname: `/admin/product/${row._id}`,
+                        state: { id: row._id }
+                      }}
+                      disabled={oneProductLoading === row._id}
                     >
-                      <Icon>clear</Icon>
-                    </Button>
+                      <Icon>edit</Icon>
+                    </IconButton>
+                  </TableCell>
+                  <TableCell align="center">
+                    <IconButton
+                      onClick={() => { deleteHandler(row._id) }}
+                      disabled={oneProductLoading === row._id}
+                    >
+                      <Icon>delete_outline</Icon>
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               )
@@ -105,7 +126,16 @@ const ProductsForAdmin = ({
   return (
     <Paper className="products-list">
       <ProductFilter />
-      {loading ? <Preloader /> : <TableCreator />}
+      {loading ? <Preloader className="preloader" /> : <TableCreator />}
+      {productsLength > 18
+        ? <Pagination
+          className="admin-table-pagintaion"
+          value={currentPage}
+          count={Math.ceil(productsLength / 18)}
+          color="secondary"
+          onChange={changePageHandler}
+        />
+        : null}
     </Paper>
   )
 }
@@ -115,7 +145,9 @@ const mapStateToProps = state => {
     loading: state.productsState.loading,
     products: state.productsState.products,
     message: state.productsState.message,
-    oneProductLoading: state.productsState.oneProductLoading
+    oneProductLoading: state.productsState.oneProductLoading,
+    productsLength: state.productsState.productsLength,
+    currentPage: state.productsState.currentPage,
   }
 }
 
@@ -124,6 +156,7 @@ const mapDispatchToProps = dispatch => {
     getProductsRequest: bindActionCreators(getProductsRequestAction, dispatch),
     showOnWebSiteRequest: bindActionCreators(showOnWebSiteRequestAction, dispatch),
     deleteProductRequest: bindActionCreators(deleteProductRequestAction, dispatch),
+    changePage: bindActionCreators(changePageAction, dispatch)
   }
 }
 

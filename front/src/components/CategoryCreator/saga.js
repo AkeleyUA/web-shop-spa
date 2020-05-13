@@ -4,7 +4,7 @@ import {
   call,
 } from 'redux-saga/effects';
 import { addCategorySuccessAction, addCategoryFailureAction, ADD_CATEGORY_REQUEST } from './action';
-import { getCategorySuccessAction } from '../Categories.Admin/action';
+import { getCategoriesSuccessAction } from '../Categories.Admin/action';
 
 const fetchAddNewCategory = (name) => {
   return fetch('/api/categories/add', {
@@ -20,7 +20,7 @@ function* addCategoryWorker(action) {
   try {
     const data = yield call(fetchAddNewCategory, action.payload)
     if (data.status) {
-      yield put(getCategorySuccessAction(data.categories))
+      yield put(getCategoriesSuccessAction(data.categories))
       yield put(addCategorySuccessAction(data.message))
     } else {
       yield put(addCategoryFailureAction(data.message))
