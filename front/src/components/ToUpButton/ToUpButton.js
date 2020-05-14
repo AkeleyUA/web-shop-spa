@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Fab, Icon, Zoom } from '@material-ui/core'
 import './ToUpButton.scss'
 
 
-export const ToUpButton = ({ show, containerRef }) => {
+const ToUpButton = ({ show, containerRef }) => {
 
   const handleScrollToTop = () => {
     containerRef.current.scroll({ top: 0, behavior: 'smooth' })
@@ -27,3 +27,5 @@ export const ToUpButton = ({ show, containerRef }) => {
     </div>
   )
 }
+
+export default ToUpButton

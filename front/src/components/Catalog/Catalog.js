@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import {
   Button,
@@ -8,9 +8,7 @@ import {
   Hidden,
   Drawer,
   Divider,
-  Paper
 } from '@material-ui/core'
-import { Pagination } from '@material-ui/lab'
 
 import CategoriesForClient from '../Categories.Client/Categories.Client'
 import ProductsForClient from '../Products.Client/Products.Client'
@@ -91,8 +89,8 @@ const Catalog = ({ productsLength, setCurrentCategory }) => {
 
 const mapStateToProps = state => {
   return {
-    productsLength: state.forClientState.productsLength,
-    message: state.forClientState.message
+    productsLength: state.clientProductsState.productsLength,
+    message: state.clientProductsState.message
   }
 }
 

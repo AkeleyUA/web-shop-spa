@@ -1,13 +1,14 @@
-import React, { useEffect, useCallback, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import {
-  getProductsRequestAction,
+  getProductsForAdminRequestAction,
   showOnWebSiteRequestAction,
   deleteProductRequestAction,
-  changePageAction,
+  searchProductForAdminRequestAction,
+  changePageAction
 } from './action'
 
 import {
@@ -18,7 +19,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Button,
   Checkbox,
   Paper,
   IconButton
@@ -30,29 +30,38 @@ import ProductFilter from '../ProductsFilter/ProductsFilter'
 
 import './Products.Admin.scss'
 
+const limit = 16
+
 const ProductsForAdmin = ({
   loading,
   products,
-  getProductsRequest,
+  getProductsForAdminRequest,
   showOnWebSiteRequest,
   oneProductLoading,
   deleteProductRequest,
   message,
   productsLength,
-  currentPage,
-  changePage
+  search,
+  searchProductForAdminRequest,
+  changePage,
+  currentPage
 }) => {
   const { enqueueSnackbar } = useSnackbar()
+  
 
   useEffect(() => {
-    getProductsRequest(18, currentPage - 1)
-  }, [currentPage])
+    if (search) {
+      searchProductForAdminRequest(search, limit, currentPage - 1)
+    } else {
+      getProductsForAdminRequest(limit, currentPage - 1)
+    }
+  }, [currentPage, search, searchProductForAdminRequest, getProductsForAdminRequest])
 
   useEffect(() => {
     if (message) {
       enqueueSnackbar(message)
     }
-  }, [message])
+  }, [message, enqueueSnackbar])
 
   const checkboxChangeHendler = (event) => {
     showOnWebSiteRequest(event.target.name, event.target.checked)
@@ -127,11 +136,11 @@ const ProductsForAdmin = ({
     <Paper className="products-list">
       <ProductFilter />
       {loading ? <Preloader className="preloader" /> : <TableCreator />}
-      {productsLength > 18
+      {productsLength > 16
         ? <Pagination
           className="admin-table-pagintaion"
-          value={currentPage}
-          count={Math.ceil(productsLength / 18)}
+          page={currentPage}
+          count={Math.ceil(productsLength / 16)}
           color="secondary"
           onChange={changePageHandler}
         />
@@ -142,20 +151,22 @@ const ProductsForAdmin = ({
 
 const mapStateToProps = state => {
   return {
-    loading: state.productsState.loading,
-    products: state.productsState.products,
-    message: state.productsState.message,
-    oneProductLoading: state.productsState.oneProductLoading,
-    productsLength: state.productsState.productsLength,
-    currentPage: state.productsState.currentPage,
+    loading: state.adminProductsState.loading,
+    products: state.adminProductsState.products,
+    message: state.adminProductsState.message,
+    oneProductLoading: state.adminProductsState.oneProductLoading,
+    productsLength: state.adminProductsState.productsLength,
+    search: state.adminProductsState.search,
+    currentPage: state.adminProductsState.currentPage,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getProductsRequest: bindActionCreators(getProductsRequestAction, dispatch),
+    getProductsForAdminRequest: bindActionCreators(getProductsForAdminRequestAction, dispatch),
     showOnWebSiteRequest: bindActionCreators(showOnWebSiteRequestAction, dispatch),
     deleteProductRequest: bindActionCreators(deleteProductRequestAction, dispatch),
+    searchProductForAdminRequest: bindActionCreators(searchProductForAdminRequestAction, dispatch),
     changePage: bindActionCreators(changePageAction, dispatch)
   }
 }

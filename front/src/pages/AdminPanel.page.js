@@ -4,8 +4,7 @@ import { AdminSettingsList } from "../components/AdminSettingsList/AdminSettings
 import { AdminRoutes } from '../routes/routes'
 import {
   Grid,
-  Box,
-  Paper
+  Box
 } from "@material-ui/core";
 import AdminPanelHeader from "../components/AdminPanelHeader/AdminPanelHeader";
 

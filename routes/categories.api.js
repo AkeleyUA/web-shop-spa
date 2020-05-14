@@ -50,7 +50,7 @@ router.get(
 )
 
 router.get(
-  '/get-for-client',
+  '/get/client',
   async (req, res) => {
     try {
       const categories = await Category.find({show: true})

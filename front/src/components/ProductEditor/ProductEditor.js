@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { connect } from 'react-redux'
 import {
   Paper,
@@ -21,11 +21,11 @@ import {
 import { Rating } from '@material-ui/lab'
 import { bindActionCreators } from 'redux'
 import { getProductForEditRequestAction, clearMessageAction } from './action'
-import { getCategoriesForClientRequestAction } from '../../pages/Home.page/action'
 import { useSnackbar } from 'notistack'
 import Preloader from '../Preloader/Preloader'
 
 import './ProductEditor.scss'
+import { getCategoriesRequestAction } from '../Categories.Admin/action'
 
 
 const labels = [
@@ -79,10 +79,17 @@ const ProductEditor = ({
     description: '',
     sale: ''
   })
+
+  const getCategories = useCallback(
+    () => {
+      getCategoriesRequest()
+    },
+    [getCategoriesRequest],
+  )
   useEffect(() => {
     getProductForEditorRequest(location.state.id)
-    getCategoriesRequest()
-  }, [])
+    getCategories()
+  }, [getCategories, getProductForEditorRequest, location.state.id])
 
   useEffect(() => {
     if (product.name) {
@@ -103,7 +110,7 @@ const ProductEditor = ({
       enqueueSnackbar(message)
       clearMessage()
     }
-  }, [message])
+  }, [message, enqueueSnackbar, clearMessage])
 
   const productKeys = Object.keys(product).filter(key => {
     switch (key) {
@@ -204,6 +211,7 @@ const ProductEditor = ({
                   width="100%"
                   height="100%"
                   src={form.img}
+                  alt={`${form.name}-img`}
                 />
               </CardMedia>
               <CardContent className="card-content">
@@ -245,7 +253,7 @@ const mapStateToPRops = state => {
     product: state.editState.product,
     message: state.editState.message,
     loading: state.editState.loading,
-    categories: state.forClientState.categories
+    categories: state.adminCategoriesState.categories
   }
 }
 
@@ -253,7 +261,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getProductForEditorRequest: bindActionCreators(getProductForEditRequestAction, dispatch),
     clearMessage: bindActionCreators(clearMessageAction, dispatch),
-    getCategoriesRequest: bindActionCreators(getCategoriesForClientRequestAction, dispatch),
+    getCategoriesRequest: bindActionCreators(getCategoriesRequestAction, dispatch),
   }
 }
 

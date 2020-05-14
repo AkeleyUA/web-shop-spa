@@ -1,5 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useState, useEffect, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { TextField, Button, Select, MenuItem, FormHelperText, FormControl, Paper } from '@material-ui/core'
 
@@ -38,9 +37,16 @@ const ProductCreator = ({
     addProductRequest(form)
   }
 
+  const getCategories = useCallback(
+    () => {
+      getCategoriesRequest()
+    },
+    [getCategoriesRequest],
+  )
+
   useEffect(() => {
-    getCategoriesRequest()
-  }, [])
+    getCategories()
+  }, [getCategories])
 
   useEffect(() => {
     if (message === 'Новый товар добавлен') {
@@ -53,14 +59,14 @@ const ProductCreator = ({
         price: '',
       })
     }
-  }, [])
+  }, [message])
 
   useEffect(() => {
     if (message) {
       enqueueSnackbar(message)
       clearMessage()
     }
-  }, [message])
+  }, [message, clearMessage, enqueueSnackbar])
 
   return (
     <Paper className="form-wrapper">
@@ -152,8 +158,8 @@ const mapStateToProps = state => {
   return {
     loading: state.productCreatorState.loading,
     err: state.productCreatorState.err,
-    categories: state.categoriesState.categories,
-    categoriesLoading: state.categoriesState.loading,
+    categories: state.adminCategoriesState.categories,
+    categoriesLoading: state.adminCategoriesState.loading,
     message: state.productCreatorState.message
   }
 }

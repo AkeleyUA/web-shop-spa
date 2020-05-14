@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
   AppBar,
   Typography,
@@ -13,10 +13,9 @@ import { connect } from 'react-redux'
 
 import './BottomNavBar.scss'
 import { bindActionCreators } from 'redux';
-import { changeCurrentPageAction } from './action';
+import { changeCurrentPageAction } from '../Products.Client/action';
 
 const BottomNavBar = ({ productsLength, changeCurrentPage, currentPage }) => {
-  console.log(currentPage)
   const paginationHandler = (event, newValue) => {
     changeCurrentPage(newValue)
   }
@@ -47,14 +46,14 @@ const BottomNavBar = ({ productsLength, changeCurrentPage, currentPage }) => {
             </Link>
           </Box>
         </Hidden>
-        {productsLength < 18
+        {productsLength < 16
           ? null
           : <Pagination
             size="small"
             className="bottom-pagination"
-            count={Math.ceil(productsLength / 18)}
-            shape="rounded"
+            count={Math.ceil(productsLength / 16)}
             color="secondary"
+            page={currentPage}
             onChange={paginationHandler}
           />
         }
@@ -68,8 +67,8 @@ const BottomNavBar = ({ productsLength, changeCurrentPage, currentPage }) => {
 
 const mapStateToProps = state => {
   return {
-    productsLength: state.forClientState.productsLength,
-    currentPage: state.paginationState.currentPage
+    productsLength: state.clientProductsState.productsLength,
+    currentPage: state.clientProductsState.currentPage
   }
 }
 

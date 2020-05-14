@@ -1,10 +1,9 @@
 import React from 'react'
-import Paper from '@material-ui/core/Paper'
-
-import './ShoppingCart.scss'
+import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
 import {
-  CardActionArea,
   Card,
   CardActions,
   CardContent,
@@ -15,31 +14,15 @@ import {
   Typography,
   Hidden,
   Button,
-  Link,
   List,
-  Box,
   AppBar,
   Toolbar
 } from '@material-ui/core'
-import { bindActionCreators } from 'redux'
+
 import { delFromShoppingCartAction } from '../ToggleButton/action'
 import { useSnackbar } from 'notistack'
-import { NavLink } from 'react-router-dom'
 
-const columns = [
-  {
-    id: 'name',
-    label: "Название",
-  },
-  {
-    id: 'price',
-    label: "Цена",
-  },
-  {
-    id: 'delete',
-    label: "Удалить",
-  },
-]
+import './ShoppingCart.scss'
 
 const ShoppingCart = ({ cart, cartHandleClose, delFromSoppingCart }) => {
   const { enqueueSnackbar } = useSnackbar()

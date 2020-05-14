@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { TextField, Typography, Button, Icon, InputAdornment, Popover, Paper, Modal } from '@material-ui/core'
-import { NavLink } from 'react-router-dom'
+import { TextField, Typography, Button, Icon, InputAdornment, Popover } from '@material-ui/core'
 
 import { bindActionCreators } from 'redux'
 import { setStepAction } from '../OrderSteps/action'
@@ -10,8 +9,6 @@ import './OrderConfirmation.scss'
 
 const OrderConfirmation = ({ setStep }) => {
   const [anchorEl, setAnchorEl] = useState(null)
-  const [success, setSuccess] = useState(false)
-  const [falure, setFalure] = useState(false)
   const [value, setValue] = useState('')
 
   const handlePopoverOpen = (event) => {
@@ -28,10 +25,8 @@ const OrderConfirmation = ({ setStep }) => {
 
   const lastStepHandler = () => {
     if (value === '1234') {
-      setSuccess(true)
       setStep(3)
     } else {
-      setFalure(true)
       setStep(4)
     }
   }

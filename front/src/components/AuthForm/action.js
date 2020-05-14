@@ -5,6 +5,7 @@ export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAILURE = 'LOGIN_FAILURE'
 export const LOGOUT = 'LOGOUT'
+export const CLEAR_MESSAGE = 'CLEAR_MESSAGE'
 
 export const registrationRequestAction = (form) => {
   return {
@@ -48,10 +49,15 @@ export const loginFailureAction = (massage) => {
   }
 }
 
-
 export const logoutAction = userId => {
   return {
     type: LOGOUT,
     payload: userId
+  }
+}
+
+export const clearMessageAction = () => {
+  return {
+    type: CLEAR_MESSAGE
   }
 }

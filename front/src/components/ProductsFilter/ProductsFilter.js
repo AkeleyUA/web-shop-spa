@@ -1,36 +1,51 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
 import {
   TextField,
-  Typography,
-  Button,
-  Grid,
-  MenuItem
+  InputAdornment,
+  Icon,
+  IconButton
 } from '@material-ui/core'
-import { Autocomplete } from '@material-ui/lab'
-import { createFilterOptions } from '@material-ui/lab/Autocomplete'
-import { connect } from 'react-redux'
+
+import { changeSearchValueAction } from './action'
+import { changeCurrentPageAction } from '../Products.Client/action'
+import { setCurrentCategoryAction } from '../Categories.Client/action'
 
 import './ProductsFilter.scss'
-import { bindActionCreators } from 'redux'
-import { setFilterValueAction } from '../NavBar/adction'
 
-const ProductsFilter = ({ products, setFilterValue }) => {
-  const autocompleteRef = React.createRef()
+
+
+const ProductsFilter = ({ changeSearchValue, changeCurrentPage, searchValue, setCurrentCategory }) => {
   const [value, setValue] = useState('')
-  const filterOptions = createFilterOptions({
-    matchFrom: 'start',
-    stringify: option => option.name,
-  })
 
-  const changeHandler = (event, newValue) => {
-    setValue(newValue)
+  useEffect(() => {
+    if (!searchValue){
+      setValue('')
+    }
+  }, [searchValue])
+
+  const changeHandler = (event) => {
+    setValue(event.currentTarget.value)
   }
 
-  const filterHandler = (event, newValue) => {
-    if(newValue === null) {
-      setFilterValue(' ')
-    } else {
-      setFilterValue(newValue.name || newValue)
+  const clearHandler = () => {
+    setValue('')
+    changeSearchValue(null)
+    changeCurrentPage(1)
+    setCurrentCategory('Все')
+  }
+
+  const searchHandler = () => {
+    changeCurrentPage(1)
+    setCurrentCategory('')
+    changeSearchValue(value)
+  }
+
+  const keyHandler = event => {
+    if (event.key === 'Enter') {
+      searchHandler()
     }
   }
 
@@ -38,28 +53,37 @@ const ProductsFilter = ({ products, setFilterValue }) => {
     <div
       className="product-list-filter"
     >
-      <Autocomplete
+      <TextField
         fullWidth
-        size='small'
-        id="products"
-        options={products.sort(item => item.name)}
-        getOptionLabel={(option) => option.name || option}
-        onChange={filterHandler}
-        freeSolo
-        blurOnSelect
-        clearOnEscape
-        renderInput={(params) =>
-          <TextField {...params}
-            label="Введите имя товара"
-            variant="outlined"
-          />
-        }
-        renderOption={(item) => (
-          <Typography variant="body1">{item.name}&nbsp;<Typography variant="caption">{item.category}</Typography></Typography>
-          
-        )}
-        onInputChange={changeHandler}
-        filterOptions={filterOptions}
+        size="small"
+        variant="outlined"
+        label="Поиск"
+        value={value}
+        onKeyPress={keyHandler}
+        InputProps={{
+          onChange: changeHandler,
+          endAdornment: (
+            <InputAdornment position="end">
+              {value
+                ? <IconButton
+                  color="default"
+                  size="small"
+                  onClick={clearHandler}
+                >
+                  <Icon>clear</Icon>
+                </IconButton>
+                : null
+              }
+              <IconButton
+                size="small"
+                color="primary"
+                onClick={searchHandler}
+              >
+                <Icon>search</Icon>
+              </IconButton>
+            </InputAdornment>
+          )
+        }}
       />
     </div>
   )
@@ -67,13 +91,15 @@ const ProductsFilter = ({ products, setFilterValue }) => {
 
 const mapStateToProps = state => {
   return {
-    products: state.productsState.products
+    searchValue: state.searchState.searchValue
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    setFilterValue: bindActionCreators(setFilterValueAction, dispatch)
+    changeSearchValue: bindActionCreators(changeSearchValueAction, dispatch),
+    changeCurrentPage: bindActionCreators(changeCurrentPageAction, dispatch),
+    setCurrentCategory: bindActionCreators(setCurrentCategoryAction, dispatch)
   }
 }
 

@@ -6,10 +6,10 @@ const router = Router()
 
 
 router.post(
-  '/get-products-for-admin',
+  '/get/admin',
   async (req, res) => {
     const { limit, page } = req.body
-    const skip = page * 18
+    const skip = page * 16
 
     try {
       const products = await Product.find().limit(limit).skip(skip)
@@ -23,11 +23,11 @@ router.post(
 )
 
 router.post(
-  '/get-filtered-products',
-  check('filterValue', 'filterValue isEmpty').isLength({ min: 1 }),
+  '/search/client',
+  check('value', 'filterValue isEmpty').isLength({ min: 1 }),
   async (req, res) => {
-    const { filterValue } = req.body
-
+    const { value, limit, page } = req.body
+    const skip = page * 16
     try {
       const errors = validationResult(req)
 
@@ -37,14 +37,44 @@ router.post(
           message: "Введите имя товара"
         })
       }
-      const data = await Product.find()
-      const newData = data.filter(item => item.name.toLowerCase().match(filterValue.toLowerCase()))
-      if (newData.length > 0) {
-        return res.json({ products: newData, status: true, productsLength: newData.length })
+      const data = await Product.find({ name: { $regex: `.*${value}.*` } }, { show: true }).limit(limit).skip(skip)
+      const productsLength = (await Product.find({ name: { $regex: `.*${value}.*` } })).length
+      if (data.length > 0) {
+        return res.json({ products: data, status: true, productsLength })
       } else {
         return res.json({ message: 'Товар не найден' })
       }
     } catch (e) {
+      console.log(e.message)
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
+    }
+  }
+)
+
+router.post(
+  '/search/admin',
+  check('value', 'filterValue isEmpty').isLength({ min: 1 }),
+  async (req, res) => {
+    const { value, limit, page } = req.body
+    const skip = page * 16
+    try {
+      const errors = validationResult(req)
+
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array(),
+          message: "Введите имя товара"
+        })
+      }
+      const data = await Product.find({ name: { $regex: `.*${value}.*` } }).limit(limit).skip(skip)
+      const productsLength = (await Product.find({ name: { $regex: `.*${value}.*` } })).length
+      if (data.length > 0) {
+        return res.json({ products: data, status: true, productsLength })
+      } else {
+        return res.json({ message: 'Товар не найден' })
+      }
+    } catch (e) {
+      console.log(e.message)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу" })
     }
   }
@@ -68,10 +98,10 @@ router.post(
 )
 
 router.post(
-  '/get-products-for-clients',
+  '/get/client',
   async (req, res) => {
     const { category, limit, page } = req.body
-    const skip = page * 18
+    const skip = page * 16
 
     try {
       const products = await Product.find({ category, show: true }).limit(limit).skip(skip)
@@ -184,10 +214,10 @@ router.post(
 
 
 
-// for (i = 11; i < 21; i++) {
+// for (i = 0; i < 50; i++) {
 //   const product = new Product({
-//     name: `Продукт ${i}, небольшое описание P-${1}`,
-//     category: 'Популярно',
+//     name: `Продукт ${i}, test_secription_${i}`,
+//     category: 'Категория 4',
 //     amount: i,
 //     img: 'https://u01.appmifile.com/images/2017/04/01/8cd9f177-84ee-4e7e-ad39-9e6750903b0a.png',
 //     description: `Продукт ${i}, полное описание полное описание полное описание полное описание полное описание`,

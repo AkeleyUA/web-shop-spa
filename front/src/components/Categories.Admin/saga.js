@@ -4,15 +4,15 @@ import {
   call,
 } from 'redux-saga/effects';
 import {
- GET_CATEGORIES_REQUEST,
- getCategoriesSuccessAction,
- getCategoriesFailureAction,
- DEL_CATEGORY_REQUEST,
- deleteCategoryFailureAction,
- SHOW_CATEGORY_ON_WEB_SITE_REQUEST,
- showCategoryOnWebSiteFailureAction,
- showCategoryOnWebSiteSuccessAction,
- deleteCategorySuccessAction
+  GET_CATEGORIES_FOR_ADMIN_REQUEST,
+  getCategoriesSuccessAction,
+  getCategoriesFailureAction,
+  DEL_CATEGORY_REQUEST,
+  deleteCategoryFailureAction,
+  SHOW_CATEGORY_ON_WEB_SITE_REQUEST,
+  showCategoryOnWebSiteFailureAction,
+  showCategoryOnWebSiteSuccessAction,
+  deleteCategorySuccessAction
 } from './action';
 
 const fetchCategories = () => {
@@ -24,7 +24,7 @@ const fetchCategories = () => {
 const fetchDeleteCategory = (id) => {
   return fetch('/api/categories/del', {
     method: 'POST',
-    body: JSON.stringify({id}),
+    body: JSON.stringify({ id }),
     headers: {
       'Content-type': 'application/json'
     }
@@ -35,14 +35,14 @@ const fetchDeleteCategory = (id) => {
 const fetchShowCategoryOnWebSite = (payload) => {
   return fetch('/api/categories/show', {
     method: 'POST',
-    body: JSON.stringify({...payload}),
+    body: JSON.stringify({ ...payload }),
     headers: {
       'Content-type': 'application/json'
     }
   }).then(response => response.json())
 }
 
-function* getCategoriesWorker () {
+function* getCategoriesWorker() {
   try {
     const data = yield call(fetchCategories)
     yield put(getCategoriesSuccessAction(data))
@@ -52,35 +52,35 @@ function* getCategoriesWorker () {
 }
 
 function* delCategoryWorker(action) {
+  const id = action.payload
   try {
     const data = yield call(fetchDeleteCategory, action.payload)
     if (data.status) {
-      yield put(getCategoriesSuccessAction(data.categories))
-      yield put(deleteCategorySuccessAction(data.message))
+      yield put(deleteCategorySuccessAction(data.message, id))
     } else {
       yield put(deleteCategoryFailureAction(data.message))
     }
   } catch (e) {
     yield put(deleteCategoryFailureAction('Неизвестная ошибка'))
   }
- }
+}
 
- function* showCategoryOnWebSiteWorker(action) {
-   try {
+function* showCategoryOnWebSiteWorker(action) {
+  const id = action.payload.id
+  try {
     const data = yield call(fetchShowCategoryOnWebSite, action.payload)
     if (data.status) {
-      yield put(getCategoriesSuccessAction(data.categories))
-      yield put(showCategoryOnWebSiteSuccessAction(data.message))
+      yield put(showCategoryOnWebSiteSuccessAction(data.message, id))
     } else {
       yield put(showCategoryOnWebSiteFailureAction(data.message))
     }
-   } catch (e) {
+  } catch (e) {
     yield put(showCategoryOnWebSiteFailureAction('Неизвестная ошибка'))
-   }
- }
+  }
+}
 
 function* categoriesWatcher() {
-  yield takeLatest(GET_CATEGORIES_REQUEST, getCategoriesWorker)
+  yield takeLatest(GET_CATEGORIES_FOR_ADMIN_REQUEST, getCategoriesWorker)
   yield takeLatest(DEL_CATEGORY_REQUEST, delCategoryWorker)
   yield takeLatest(SHOW_CATEGORY_ON_WEB_SITE_REQUEST, showCategoryOnWebSiteWorker)
 }

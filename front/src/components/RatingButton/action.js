@@ -1,1 +1,0 @@
-export const RATE_A_PRODUCT = 'RATE_A_PRODUCT'

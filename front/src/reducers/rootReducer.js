@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux'
 import { authState } from '../components/AuthForm/reducer'
-import { productsState } from '../components/Products.Admin/reducer'
+import { clientProductsState } from '../components/Products.Client/reducer'
+import { adminProductsState } from '../components/Products.Admin/reducer'
 import { productCreatorState } from '../components/ProductCreator/reducer'
-import { categoriesState } from '../components/Categories.Admin/reducer'
+import { adminCategoriesState } from '../components/Categories.Admin/reducer'
 import { categoryCreatorState } from '../components/CategoryCreator/reducer'
-import { currentCategoryState } from '../components/Categories.Client/reducer'
-import { forClientState } from '../pages/Home.page/reducer'
-import { filterState } from '../components/NavBar/reducer'
+import { clientCategoriesState } from '../components/Categories.Client/reducer'
+import { searchState } from '../components/ProductsFilter/reducer'
 import { shoppingCartState } from '../components/ToggleButton/reducer'
 import { paginationState } from '../components/BottomNavBar/reducer'
 import { stepsState } from '../components/OrderSteps/reducer'
@@ -14,14 +14,14 @@ import { editState } from '../components/ProductEditor/reducer'
 
 
 export const rootReducer = combineReducers({
+  clientProductsState,
   authState,
-  productsState,
+  adminProductsState,
   productCreatorState,
-  categoriesState,
+  adminCategoriesState,
   categoryCreatorState,
-  forClientState,
-  currentCategoryState,
-  filterState,
+  clientCategoriesState,
+  searchState,
   shoppingCartState,
   paginationState,
   stepsState,

@@ -1,6 +1,10 @@
-export const GET_PRODUCTS_REQUEST = 'GET_PRODUCTS_REQUEST'
-export const GET_PRODUCTS_SUCCESS = 'GET_PRODUCTS_SUCCESS'
-export const GET_PRODUCTS_FAILURE = 'GET_PRODUCTS_FAILURE'
+export const GET_PRODUCTS_FOR_ADMIN_REQUEST = 'GET_PRODUCTS_FOR_ADMIN_REQUEST'
+export const GET_PRODUCTS_FOR_ADMIN_SUCCESS = 'GET_PRODUCTS_FOR_ADMIN_SUCCESS'
+export const GET_PRODUCTS_FOR_ADMIN_FAILURE = 'GET_PRODUCTS_FOR_ADMIN_FAILURE'
+export const CHANGE_CURRENT_PAGE = 'CHANGE_CURRENT_PAGE'
+export const SEARCH_PRODUCT_FOR_ADMIN_REQUEST = 'SEARCH_PRODUCT_FOR_ADMIN_REQUEST'
+export const SEARCH_PRODUCT_FOR_ADMIN_SUCCESS = 'SEARCH_PRODUCT_FOR_ADMIN_SUCCESS'
+export const SEARCH_PRODUCT_FOR_ADMIN_FAILURE = 'SEARCH_PRODUCT_FOR_ADMIN_FAILURE'
 export const DEL_PRODUCT_REQUEST = 'DEL_PRODUCT_REQUEST'
 export const DEL_PRODUCT_SUCCESS = 'DEL_PRODUCT_SUCCESS'
 export const DEL_PRODUCT_FAILURE = 'DEL_PRODUCT_FAILURE'
@@ -8,10 +12,11 @@ export const SHOW_ON_WEB_SITE_REQUEST = 'SHOW_ON_WEB_SITE_REQUEST'
 export const SHOW_ON_WEB_SITE_SUCCESS = 'SHOW_ON_WEB_SITE_SUCCESS'
 export const SHOW_ON_WEB_SITE_FAILURE = 'SHOW_ON_WEB_SITE_FAILURE'
 export const CHANGE_PAGE = 'CHANGE_PAGE'
+export const CLEAR_MESSAGE = 'CLEAR_MESSAGE'
 
-export const getProductsRequestAction = (limit, page) => {
+export const getProductsForAdminRequestAction = (limit, page) => {
   return {
-    type: GET_PRODUCTS_REQUEST,
+    type: GET_PRODUCTS_FOR_ADMIN_REQUEST,
     payload: {
       limit,
       page
@@ -19,9 +24,9 @@ export const getProductsRequestAction = (limit, page) => {
   }
 }
 
-export const getProductsSuccessAction = (products, productsLength) => {
+export const getProductsForAdminSuccessAction = (products, productsLength) => {
   return {
-    type: GET_PRODUCTS_SUCCESS,
+    type: GET_PRODUCTS_FOR_ADMIN_SUCCESS,
     payload: {
       products,
       productsLength
@@ -29,10 +34,34 @@ export const getProductsSuccessAction = (products, productsLength) => {
   }
 }
 
-export const getProductsFailureAction = message => {
+export const getProductsForAdminFailureAction = message => {
   return {
-    type: GET_PRODUCTS_FAILURE,
+    type: GET_PRODUCTS_FOR_ADMIN_FAILURE,
     payload: message
+  }
+}
+
+export const searchProductForAdminRequestAction = value => {
+  return {
+    type: SEARCH_PRODUCT_FOR_ADMIN_REQUEST,
+    payload: value
+  }
+}
+
+export const searchProductForAdminSuccessAction = (products, productsLength) => {
+  return {
+    type: SEARCH_PRODUCT_FOR_ADMIN_SUCCESS,
+    payload: {
+      products,
+      productsLength
+    }
+  }
+}
+
+export const searchProductForAdminFailureAction = value => {
+  return {
+    type: SEARCH_PRODUCT_FOR_ADMIN_FAILURE,
+    payload: value
   }
 }
 
@@ -46,10 +75,13 @@ export const showOnWebSiteRequestAction = (id, checked) => {
   }
 }
 
-export const showOnWebSiteSuccessAction = message => {
+export const showOnWebSiteSuccessAction = (message, id) => {
   return {
     type: SHOW_ON_WEB_SITE_SUCCESS,
-    payload: message
+    payload: {
+      message,
+      id 
+    }
   }
 }
 
@@ -67,10 +99,13 @@ export const deleteProductRequestAction = id => {
   }
 }
 
-export const deleteProductSuccessAction = message => {
+export const deleteProductSuccessAction = (message, id) => {
   return {
     type: DEL_PRODUCT_SUCCESS,
-    payload: message
+    payload: {
+      message,
+      id
+    }
   }
 }
 
@@ -83,7 +118,13 @@ export const deleteProductFailureAction = message => {
 
 export const changePageAction = page => {
   return {
-    type: CHANGE_PAGE,
+    type: CHANGE_CURRENT_PAGE,
     payload: page
+  }
+}
+
+export const clearMessage = () => {
+  return {
+    type: CLEAR_MESSAGE
   }
 }

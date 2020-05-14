@@ -1,6 +1,6 @@
 import React from 'react'
 import UserInfo from '../UserInfo/UserInfo';
-import { Typography, AppBar, Toolbar, Icon } from '@material-ui/core'
+import { Typography, AppBar, Toolbar } from '@material-ui/core'
 import { settingsList } from '../AdminSettingsList/AdminSettingsList'
 import { connect } from 'react-redux';
 import { matchPath, useLocation } from 'react-router-dom';

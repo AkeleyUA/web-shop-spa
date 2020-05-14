@@ -1,6 +1,7 @@
 export const ADD_CATEGORY_REQUEST = 'ADD_CATEGORY_REQUEST'
 export const ADD_CATEGORY_SUCCESS = 'ADD_CATEGORY_SUCCESS'
 export const ADD_CATEGORY_FAILURE = 'ADD_CATEGORY_FAILURE'
+export const CLEAR_MESSAGE = 'CLEAR_MESSAGE'
 
 export const addCategoryRequestAction = (name) => {
   return {
@@ -20,5 +21,11 @@ export const addCategoryFailureAction = (message) => {
   return {
     type: ADD_CATEGORY_FAILURE,
     payload: message
+  }
+}
+
+export const clearMessage = () => {
+  return {
+    type: CLEAR_MESSAGE
   }
 }

@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { registrationRequestAction, loginRequestAction } from './action'
+import { registrationRequestAction, loginRequestAction, clearMessageAction } from './action'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import {
   TextField,
-  Box,
   Button,
   Icon,
   Typography,
-  IconButton,
   Paper,
   Fade,
   Popper,
@@ -22,7 +20,7 @@ import { useSnackbar } from 'notistack'
 import './AuthForm.scss'
 
 
-const AuthForm = ({ registrationRequest, loginRequest, loading, message }) => {
+const AuthForm = ({ registrationRequest, loginRequest, loading, message, clearMessage }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState()
@@ -60,8 +58,9 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message }) => {
   useEffect(() => {
     if (message) {
       enqueueSnackbar(message)
+      clearMessage()
     }
-  }, [message, enqueueSnackbar])
+  }, [message, clearMessage, enqueueSnackbar])
 
   return (
     <div className="auth-page">
@@ -116,7 +115,7 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message }) => {
                 disabled={loading}
               >
                 <Typography variant="button">Войти</Typography>
-            </Button>
+              </Button>
               <Button
                 color="primary"
                 startIcon={<Icon>add_box</Icon>}
@@ -125,7 +124,7 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message }) => {
                 disabled={loading}
               >
                 <Typography variant="button">Регистрация</Typography>
-            </Button>
+              </Button>
               <Button onClick={popperHandler} className="login-helper" color="primary">
                 <Icon>help_outline</Icon>
               </Button>
@@ -140,7 +139,8 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message }) => {
 const mapDispathToProps = (dispatch) => {
   return {
     registrationRequest: bindActionCreators(registrationRequestAction, dispatch),
-    loginRequest: bindActionCreators(loginRequestAction, dispatch)
+    loginRequest: bindActionCreators(loginRequestAction, dispatch),
+    clearMessage: bindActionCreators(clearMessageAction, dispatch)
   }
 }
 

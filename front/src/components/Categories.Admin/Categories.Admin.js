@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { getCategoriesRequestAction, deleteCategoryRequestAction, showCategoryOnWebSiteRequestAction } from './action'
+import { getCategoriesRequestAction, deleteCategoryRequestAction, showCategoryOnWebSiteRequestAction, clearMessageAction } from './action'
 
 import {
   TableContainer,
@@ -28,21 +28,30 @@ const CategoriesForAdmin = ({
   oneCategoryLoading,
   loading,
   message,
+  clearMessage
 }) => {
   const { enqueueSnackbar } = useSnackbar()
   const showCategoryOnWebSiteHendler = (id, checked) => {
     showCategoryOnWebSiteRequest(id, checked)
   }
 
+  const getCategories = useCallback(
+    () => {
+      getCategoriesRequest()
+    },
+    [getCategoriesRequest],
+  )
+
   useEffect(() => {
-    getCategoriesRequest()
-  }, [])
+    getCategories()
+  }, [getCategories])
 
   useEffect(() => {
     if (message) {
       enqueueSnackbar(message)
+      clearMessage()
     }
-  }, [message])
+  }, [message, enqueueSnackbar, clearMessage])
 
   const Preloader = () => {
     return (
@@ -108,9 +117,9 @@ const CategoriesForAdmin = ({
 
 const mapStateToProps = state => {
   return {
-    message: state.categoriesState.message,
-    categories: state.categoriesState.categories,
-    loading: state.categoriesState.loading,
+    message: state.adminCategoriesState.message,
+    categories: state.adminCategoriesState.categories,
+    loading: state.adminCategoriesState.loading,
     oneCategoryLoading: state.categoryCreatorState.loading
   }
 }
@@ -120,6 +129,7 @@ const mapDispatchToProps = dispatch => {
     getCategoriesRequest: bindActionCreators(getCategoriesRequestAction, dispatch),
     deleteCategoryRequest: bindActionCreators(deleteCategoryRequestAction, dispatch),
     showCategoryOnWebSiteRequest: bindActionCreators(showCategoryOnWebSiteRequestAction, dispatch),
+    clearMessage: bindActionCreators(clearMessageAction, dispatch)
   }
 }
 

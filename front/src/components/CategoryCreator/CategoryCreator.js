@@ -2,12 +2,11 @@ import React, { useState, useCallback, useEffect } from 'react'
 
 
 import './CategoryCreator.scss'
-import { TextField, Paper, Button, FormControl, FormHelperText, Modal } from '@material-ui/core'
+import { TextField, Paper, Button, FormHelperText } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addCategoryRequestAction } from './action'
 import { useSnackbar } from 'notistack'
-import { clearMessageAction } from '../../pages/Home.page/action'
 
 const CategoryCreator = ({
   message,
@@ -36,7 +35,6 @@ const CategoryCreator = ({
   useEffect(() => {
     if (message) {
       enqueueSnackbar(message)
-      clearMessage()
     }
   }, [message, enqueueSnackbar])
 
@@ -71,8 +69,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addCategoryRequest: bindActionCreators(addCategoryRequestAction, dispatch),
-    clearMessage: bindActionCreators(clearMessageAction, dispatch)
+    addCategoryRequest: bindActionCreators(addCategoryRequestAction, dispatch)
   }
 }
 

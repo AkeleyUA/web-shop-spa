@@ -1,4 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import {
   Paper,
   Card,
@@ -10,21 +12,20 @@ import {
   Grid
 } from '@material-ui/core'
 
-
-import './Products.Client.scss'
-import { connect } from 'react-redux'
-import { getProductsForClientRequestAction } from '../../pages/Home.page/action'
-import { bindActionCreators } from 'redux'
+import { useSnackbar } from 'notistack'
+import { getProductsForClientRequestAction, searchProductForClientRequestAction } from './action'
 import Preloader from '../Preloader/Preloader'
 import PriceToggleButton from '../ToggleButton/ToggleButton'
 import { RatingButton } from '../RatingButton/RatingButton'
 
+import './Products.Client.scss'
 
+const limit = 16
 
 const productCreator = (arr) => {
   return arr.map(item => {
     return (
-      <Grid key={item._id} item xs={!2} sm={6} md={4} lg={3}>
+      <Grid key={item._id} item xs={12} sm={6} md={4} lg={3}>
         <Card
           className="card"
           variant="outlined"
@@ -59,7 +60,35 @@ const productCreator = (arr) => {
 }
 
 
-const ProductsForClient = ({ products, loadingProducts }) => {
+const ProductsForClient = ({
+  products,
+  loading,
+  message,
+  getProductsForClientRequest,
+  currentPage,
+  searchProductForClientRequest,
+  search,
+  currentCategory
+}) => {
+
+  const { enqueueSnackbar } = useSnackbar()
+
+  useEffect(() => {
+    if (search) {
+      searchProductForClientRequest(search, limit, currentPage - 1)
+    }
+  }, [currentPage, search, searchProductForClientRequest])
+
+  useEffect(() => {
+    getProductsForClientRequest(currentCategory, limit, currentPage - 1)
+  }, [currentCategory, currentPage, getProductsForClientRequest])
+
+  useEffect(() => {
+    if (message) {
+      enqueueSnackbar(message)
+    }
+  }, [message, enqueueSnackbar])
+
   return (
     <Paper className="cards-list-wrapper" elevation={1}>
       <Grid
@@ -67,7 +96,7 @@ const ProductsForClient = ({ products, loadingProducts }) => {
         direction="row"
         className="cards-list"
       >
-        {loadingProducts ? <Preloader /> : productCreator(products)}
+        {loading ? <Preloader /> : productCreator(products)}
       </Grid>
     </Paper>
   )
@@ -75,14 +104,19 @@ const ProductsForClient = ({ products, loadingProducts }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getProductsForClientRequest: bindActionCreators(getProductsForClientRequestAction, dispatch)
+    getProductsForClientRequest: bindActionCreators(getProductsForClientRequestAction, dispatch),
+    searchProductForClientRequest: bindActionCreators(searchProductForClientRequestAction, dispatch)
   }
 }
 
 const mapStateToProps = state => {
   return {
-    products: state.forClientState.products,
-    loadingProducts: state.forClientState.loadingProducts
+    products: state.clientProductsState.products,
+    loading: state.clientProductsState.loading,
+    message: state.clientProductsState.message,
+    currentPage: state.clientProductsState.currentPage,
+    search: state.clientProductsState.search,
+    currentCategory: state.clientCategoriesState.currentCategory
   }
 }
 

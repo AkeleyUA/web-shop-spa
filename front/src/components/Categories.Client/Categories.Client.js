@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
+
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
 import {
   Icon,
   List,
@@ -7,14 +11,57 @@ import {
   Typography
 } from '@material-ui/core'
 
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { setCurrentCategoryAction } from './action'
+import { setCurrentCategoryAction, getCategoriesForClientRequestAction, clearMessageAction } from './action'
+import { useSnackbar } from 'notistack'
+import Preloader from '../Preloader/Preloader'
+import { changeCurrentPageAction } from '../BottomNavBar/action'
 
 import './Categories.Client.scss'
-import Preloader from '../Preloader/Preloader'
+import { changeSearchValueAction } from '../ProductsFilter/action'
 
-const CategoriesForClient = ({ categories, setCurrentCategory, loadingCategories, currentCategory }) => {
+const CategoriesForClient = ({
+  categories,
+  setCurrentCategory,
+  loading,
+  message,
+  changeSearchValue,
+  changeCurrentPage,
+  currentCategory,
+  getCategoriesForClientRequest,
+  currentPage,
+  searchValue,
+  clearMessage
+}) => {
+  const { enqueueSnackbar } = useSnackbar()
+
+  const getCategories = useCallback(
+    () => {
+      getCategoriesForClientRequest()
+    },
+    [getCategoriesForClientRequest],
+  )
+
+  useEffect(() => {
+    getCategories()
+  }, [getCategories])
+
+  useEffect(() => {
+    if (message) {
+      enqueueSnackbar(message)
+      clearMessage()
+    }
+  }, [message, enqueueSnackbar, clearMessage])
+
+  const categoryChengeHandler = event => {
+    if (searchValue) {
+      changeSearchValue(null)
+    }
+    if (currentPage !== 1) {
+      changeCurrentPage(1)
+    }
+    setCurrentCategory(event.currentTarget.name)
+  }
+
   const listCreator = (arr) => {
     return arr.map((item) => (
       <ListItem key={item.name}>
@@ -25,7 +72,8 @@ const CategoriesForClient = ({ categories, setCurrentCategory, loadingCategories
             fullWidth: (currentCategory === item.name ? 'full-width-btn active' : 'full-width-btn')
           }}
           variant='text'
-          onClick={() => setCurrentCategory(item.name)}
+          name={item.name}
+          onClick={categoryChengeHandler}
           color={currentCategory === item.name ? 'secondary' : 'default'}
           endIcon={currentCategory === item.name ? <Icon>beenhere</Icon> : null}
         >
@@ -37,7 +85,7 @@ const CategoriesForClient = ({ categories, setCurrentCategory, loadingCategories
 
   return (
     <List className="categories-list" disablePadding>
-      {loadingCategories ? <Preloader /> : listCreator(categories)}
+      {loading ? <Preloader /> : listCreator(categories)}
     </List>
   )
 }
@@ -45,15 +93,22 @@ const CategoriesForClient = ({ categories, setCurrentCategory, loadingCategories
 
 const mapStateToProps = state => {
   return {
-    categories: state.forClientState.categories,
-    loadingCategories: state.forClientState.loadingCategories,
-    currentCategory: state.currentCategoryState.currentCategory
+    categories: state.clientCategoriesState.categories,
+    loading: state.clientCategoriesState.loading,
+    currentCategory: state.clientCategoriesState.currentCategory,
+    message: state.clientCategoriesState.message,
+    searchValue: state.searchState.searchValue,
+    currentPage: state.clientProductsState.currentPage
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    setCurrentCategory: bindActionCreators(setCurrentCategoryAction, dispatch)
+    getCategoriesForClientRequest: bindActionCreators(getCategoriesForClientRequestAction, dispatch),
+    setCurrentCategory: bindActionCreators(setCurrentCategoryAction, dispatch),
+    changeCurrentPage: bindActionCreators(changeCurrentPageAction, dispatch),
+    changeSearchValue: bindActionCreators(changeSearchValueAction, dispatch),
+    clearMessage: bindActionCreators(clearMessageAction, dispatch)
   }
 }
 

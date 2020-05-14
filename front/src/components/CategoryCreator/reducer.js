@@ -1,4 +1,4 @@
-import { ADD_CATEGORY_REQUEST, ADD_CATEGORY_SUCCESS, ADD_CATEGORY_FAILURE } from "./action"
+import { ADD_CATEGORY_REQUEST, ADD_CATEGORY_SUCCESS, ADD_CATEGORY_FAILURE, CLEAR_MESSAGE } from "./action"
 
 
 const initialState = {
@@ -33,7 +33,12 @@ export const categoryCreatorState = (state = initialState, action) => {
         success: false
       }
     }
-    default:
-      return { ...state }
+    case CLEAR_MESSAGE: {
+      return {
+        ...state,
+        message: null
+      }
+    }
+    default: return state
   }
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Icon, Box, Fab, IconButton } from '@material-ui/core';
+import { Icon, IconButton } from '@material-ui/core';
 
 import { useSnackbar } from 'notistack'
 import { connect } from 'react-redux';
@@ -18,7 +18,7 @@ const PriceToggleButton = ({ children, product, addToCart, delFromCart, cart }) 
     } else {
       setSelected(false)
     }
-  }, [cart])
+  }, [cart, product._id])
 
   const handler = () => {
     let findProduct = cart.find(item => item._id === product._id)

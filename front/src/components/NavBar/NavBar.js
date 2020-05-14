@@ -1,12 +1,9 @@
-import React, { useState, useEffect, createRef, forwardRef } from 'react'
+import React, { useState } from 'react'
 import {
   AppBar,
   Typography,
   Toolbar,
   Box,
-  TextField,
-  Icon,
-  InputAdornment,
   Button,
   IconButton,
   Badge,
@@ -15,8 +12,7 @@ import {
   FormControl,
   Divider,
   Link,
-  Grid,
-  Fab
+  Icon
 } from '@material-ui/core';
 
 import './NavBar.scss'
@@ -24,31 +20,20 @@ import ShoppingCart from '../ShoppingCart/ShoppingCart';
 import CategoriesForClient from '../Categories.Client/Categories.Client';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { setFilterValueAction } from './adction';
-import { useSnackbar } from 'notistack'
-import { clearMessageAction } from '../../pages/Home.page/action';
+import { changeCurrentPageAction } from '../BottomNavBar/action';
+import ProductsFilter from '../ProductsFilter/ProductsFilter';
 
 
-const NavBar = ({ setFilterValue, message, clearMessage, cart }) => {
-  const { enqueueSnackbar } = useSnackbar()
-  const [focus, setFocus] = useState(false)
+const NavBar = ({cart}) => {
   const [cartOpen, setCartOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [value, setValue] = useState('')
 
   const cartHandleClose = () => {
     setCartOpen(false)
   }
-  const CartHandleOpen = () => {
+  const cartHandleOpen = () => {
     setCartOpen(true)
   }
-
-  useEffect(() => {
-    if (message) {
-      enqueueSnackbar(message)
-      clearMessage()
-    }
-  }, [message, enqueueSnackbar])
 
   const handleMenuOpen = event => {
     setMenuOpen(true)
@@ -57,29 +42,6 @@ const NavBar = ({ setFilterValue, message, clearMessage, cart }) => {
   const handleMenuClose = () => {
     setMenuOpen(false)
   }
-
-  const inputFilterHandler = (event) => {
-    setValue(event.target.value)
-  }
-
-  const searchHandler = () => {
-    setFilterValue(value)
-    setFocus(false)
-  }
-
-  const clearHandler = () => {
-    setValue('')
-  }
-
-  const keyHandler = event => {
-    if (event.key === 'Enter') {
-      searchHandler()
-      inputRef.current.blur()
-    }
-  }
-
-
-  const inputRef = createRef()
 
   return (
     <AppBar position="sticky" style={{ zIndex: 1201 }} className="nav-bar" color="inherit" component="nav">
@@ -177,43 +139,12 @@ const NavBar = ({ setFilterValue, message, clearMessage, cart }) => {
         <FormControl
           className="search-wrapper"
         >
-          <TextField
-            fullWidth
-            size="small"
-            variant="outlined"
-            label="Поиск"
-            onChange={inputFilterHandler}
-            value={value}
-            onKeyPress={keyHandler}
-            inputProps={{
-              ref: inputRef,
-              onFocus: () => setFocus(true)
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  {focus
-                    ? <IconButton
-                      size="small"
-                      color="primary"
-                      onClick={searchHandler}
-                      onBlur={() => setFocus(false)}
-                    ><Icon>search</Icon></IconButton>
-                    : (value && <IconButton
-                      color="default"
-                      size="small"
-                      onClick={clearHandler}
-                    > <Icon>clear</Icon></IconButton>)
-                  }
-                </InputAdornment>
-              )
-            }}
-          />
+          <ProductsFilter />
         </FormControl>
         <IconButton
           color={cart.length > 0 ? 'primary' : 'default'}
           aria-label="cart"
-          onClick={CartHandleOpen}
+          onClick={cartHandleOpen}
         >
           <Badge badgeContent={cart.length} color="secondary">
             <Icon>shopping_cart</Icon>
@@ -260,15 +191,14 @@ const NavBar = ({ setFilterValue, message, clearMessage, cart }) => {
 
 const mapStateToProps = state => {
   return {
-    message: state.forClientState.message,
-    cart: state.shoppingCartState.cart
+    cart: state.shoppingCartState.cart,
+    currentPage: state.paginationState.currentPage,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    setFilterValue: bindActionCreators(setFilterValueAction, dispatch),
-    clearMessage: bindActionCreators(clearMessageAction, dispatch)
+    changeCurrentPage: bindActionCreators(changeCurrentPageAction, dispatch)
   }
 }
 

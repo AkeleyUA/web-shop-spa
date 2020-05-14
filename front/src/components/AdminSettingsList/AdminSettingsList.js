@@ -2,7 +2,6 @@ import React from 'react'
 import { Link, matchPath, NavLink, useLocation } from 'react-router-dom'
 
 import {
-  Button,
   ListItem,
   Divider,
   ListItemText,
@@ -89,30 +88,28 @@ export const AdminSettingsList = () => {
           light
           classes={classes.divider}
         />
-        {settingsList.map((item) => {
-          if (item.nav) {
-            return (
-              <ListItem
-                className={findName && findName.path === item.path ? "drawer-btn-selected drawer-btn" : "drawer-btn"}
-                key={item.path}
-                component={NavLink}
-                to={item.path}
-                variant="contained"
-                classes={classes.listItem}
+        {settingsList.filter(item => item.nav).map((item) => {
+          return (
+            <ListItem
+              className={findName && findName.path === item.path ? "drawer-btn-selected drawer-btn" : "drawer-btn"}
+              key={item.path}
+              component={NavLink}
+              to={item.path}
+              variant="contained"
+              classes={classes.listItem}
+            >
+              <ListItemIcon
+                classes={classes.listIcon}
               >
-                <ListItemIcon
-                  classes={classes.listIcon}
-                >
-                  <Icon fontSize="small">{item.icon}</Icon>
-                </ListItemIcon>
-                <ListItemText>
-                  <Typography variant="caption">
-                    {item.name}
-                  </Typography>
-                </ListItemText>
-              </ListItem>
-            )
-          }
+                <Icon fontSize="small">{item.icon}</Icon>
+              </ListItemIcon>
+              <ListItemText>
+                <Typography variant="caption">
+                  {item.name}
+                </Typography>
+              </ListItemText>
+            </ListItem>
+          )
         })}
       </List>
       <ListItem

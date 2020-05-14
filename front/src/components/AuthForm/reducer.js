@@ -5,7 +5,8 @@ import {
   REGISTRATION_FAILURE,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  LOGIN_FAILURE
+  LOGIN_FAILURE,
+  CLEAR_MESSAGE
 } from "./action"
 import jwt from 'jsonwebtoken'
 
@@ -99,6 +100,12 @@ export const authState = (state = initialState, action) => {
           email: '',
           password: '',
         },
+        message: null
+      }
+    }
+    case CLEAR_MESSAGE: {
+      return {
+        ...state,
         message: null
       }
     }
