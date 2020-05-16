@@ -195,7 +195,7 @@ const AccessChangePanel = ({
                                 <Icon>enhanced_encryption</Icon>
                               }
                             >
-                              Предоставить доступ
+                              Изменить уровень
                             </Button>
                           </span>
                         </Tooltip>

@@ -33,7 +33,7 @@ router.post(
       }
 
       const hashedPassword = await bcrypt.hash(password, 12)
-      const user = new User({ email, password: hashedPassword, accessLevel: 1 })
+      const user = new User({ email, password: hashedPassword, accessLevel: 1, сonfirm: false })
       await user.save()
 
       res.status(201).json({message: "Запрос на создание пользователя отправлен", status: true})
@@ -70,6 +70,10 @@ router.post(
       if (!isMatch) {
         return res.status(400).json({message: "Пароль не совпадает", status: false})
       }
+
+      if (!user.сonfirm) {
+        return res.status(400).json({message: 'Запрос на создание пользователя ещё не подтверждён, используйте тестовую запись'})
+      } 
 
       const token = jwt.sign(
         { userId: user.id, userEmail: user.email, accessLevel: user.accessLevel},

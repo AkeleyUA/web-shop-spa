@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 
 import { useSnackbar } from 'notistack'
-import { getProductsForClientRequestAction, searchProductForClientRequestAction } from './action'
+import { getProductsForClientRequestAction, searchProductForClientRequestAction, getPopularProductsRequestAction } from './action'
 import Preloader from '../Preloader/Preloader'
 import PriceToggleButton from '../ToggleButton/ToggleButton'
 import { RatingButton } from '../RatingButton/RatingButton'
@@ -48,7 +48,15 @@ const productCreator = (arr) => {
           <CardActions
             disableSpacing={true}
           >
-            <Typography variant="h4" color="primary">{item.price} &#8372;</Typography>
+            {item.sale > 0
+              ? <div className="price">
+                <Typography className="onld-price" variant="caption">{item.price} &#8372;</Typography>
+                <Typography variant="h4" color="secondary">{Math.round(item.price - (item.price * (item.sale / 100))).toFixed(2)} &#8372;</Typography>
+              </div>
+              : <div className="price">
+                <Typography variant="h4" color="primary">{item.price} &#8372;</Typography>
+              </div>
+            }
             <PriceToggleButton
               product={item}
             />
@@ -68,7 +76,9 @@ const ProductsForClient = ({
   currentPage,
   searchProductForClientRequest,
   search,
-  currentCategory
+  currentCategory,
+  isPopular,
+  getPopularProductsRequest
 }) => {
 
   const { enqueueSnackbar } = useSnackbar()
@@ -76,12 +86,12 @@ const ProductsForClient = ({
   useEffect(() => {
     if (search) {
       searchProductForClientRequest(search, limit, currentPage - 1)
+    } else if (isPopular) {
+      getPopularProductsRequest()
+    } else {
+      getProductsForClientRequest(currentCategory, limit, currentPage - 1)
     }
-  }, [currentPage, search, searchProductForClientRequest])
-
-  useEffect(() => {
-    getProductsForClientRequest(currentCategory, limit, currentPage - 1)
-  }, [currentCategory, currentPage, getProductsForClientRequest])
+  }, [currentPage, isPopular, search, searchProductForClientRequest, currentCategory, getProductsForClientRequest, getPopularProductsRequest])
 
   useEffect(() => {
     if (message) {
@@ -105,7 +115,8 @@ const ProductsForClient = ({
 const mapDispatchToProps = dispatch => {
   return {
     getProductsForClientRequest: bindActionCreators(getProductsForClientRequestAction, dispatch),
-    searchProductForClientRequest: bindActionCreators(searchProductForClientRequestAction, dispatch)
+    searchProductForClientRequest: bindActionCreators(searchProductForClientRequestAction, dispatch),
+    getPopularProductsRequest: bindActionCreators(getPopularProductsRequestAction, dispatch)
   }
 }
 
@@ -116,7 +127,8 @@ const mapStateToProps = state => {
     message: state.clientProductsState.message,
     currentPage: state.clientProductsState.currentPage,
     search: state.clientProductsState.search,
-    currentCategory: state.clientCategoriesState.currentCategory
+    currentCategory: state.clientCategoriesState.currentCategory,
+    isPopular: state.clientProductsState.isPopular
   }
 }
 

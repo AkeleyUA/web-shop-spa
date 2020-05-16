@@ -14,14 +14,21 @@ import { changeCurrentPageAction } from '../Products.Client/action'
 import { setCurrentCategoryAction } from '../Categories.Client/action'
 
 import './ProductsFilter.scss'
+import { changePageAction } from '../Products.Admin/action'
 
 
 
-const ProductsFilter = ({ changeSearchValue, changeCurrentPage, searchValue, setCurrentCategory }) => {
+const ProductsFilter = ({
+  changeSearchValue,
+  changeCurrentPage,
+  changeCurrentPageAdmin,
+  searchValue,
+  setCurrentCategory
+}) => {
   const [value, setValue] = useState('')
 
   useEffect(() => {
-    if (!searchValue){
+    if (!searchValue) {
       setValue('')
     }
   }, [searchValue])
@@ -34,12 +41,12 @@ const ProductsFilter = ({ changeSearchValue, changeCurrentPage, searchValue, set
     setValue('')
     changeSearchValue(null)
     changeCurrentPage(1)
+    changeCurrentPageAdmin(1)
     setCurrentCategory('Все')
   }
 
   const searchHandler = () => {
-    changeCurrentPage(1)
-    setCurrentCategory('')
+    changeCurrentPageAdmin(1)
     changeSearchValue(value)
   }
 
@@ -99,7 +106,8 @@ const mapDispatchToProps = dispatch => {
   return {
     changeSearchValue: bindActionCreators(changeSearchValueAction, dispatch),
     changeCurrentPage: bindActionCreators(changeCurrentPageAction, dispatch),
-    setCurrentCategory: bindActionCreators(setCurrentCategoryAction, dispatch)
+    setCurrentCategory: bindActionCreators(setCurrentCategoryAction, dispatch),
+    changeCurrentPageAdmin: bindActionCreators(changePageAction, dispatch)
   }
 }
 

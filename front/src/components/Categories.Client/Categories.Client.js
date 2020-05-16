@@ -29,7 +29,6 @@ const CategoriesForClient = ({
   changeCurrentPage,
   currentCategory,
   getCategoriesForClientRequest,
-  currentPage,
   searchValue,
   clearMessage
 }) => {

@@ -35,8 +35,9 @@ const CategoryCreator = ({
   useEffect(() => {
     if (message) {
       enqueueSnackbar(message)
+      clearMessage()
     }
-  }, [message, enqueueSnackbar])
+  }, [message, enqueueSnackbar, clearMessage])
 
   return (
     <div className="category-creator-wrapper">

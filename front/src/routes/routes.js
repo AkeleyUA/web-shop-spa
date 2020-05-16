@@ -11,6 +11,7 @@ import OrderPage from '../pages/Order.page'
 import { connect } from 'react-redux'
 import ProductEditor from '../components/ProductEditor/ProductEditor'
 import AccessChangePanel from '../components/AccessChangePanel/AccessChangePanel'
+import RegistrationRequestPanel from '../components/RegistrationRequestPanel/RegistrationRequestPanel'
 
 const WithOutConnectRoutes = ({ isAuth }) => {
   return (
@@ -33,6 +34,7 @@ export const WithOutConnectAdminRoutes = ({ isAuth }) => {
         <Route path='/admin/product/:id' exact component={ProductEditor} />
         <Route path='/admin/categories' exact component={CategoriesForAdmin} />
         <Route path='/admin/access' exact component={AccessChangePanel} />
+        <Route path="/admin/confirm" exact component={RegistrationRequestPanel} />
         <Redirect to='/admin/dashboard' />
       </Switch>
     )

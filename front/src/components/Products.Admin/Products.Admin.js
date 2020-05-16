@@ -8,7 +8,8 @@ import {
   showOnWebSiteRequestAction,
   deleteProductRequestAction,
   searchProductForAdminRequestAction,
-  changePageAction
+  changePageAction,
+  showOnPopularRequestAction
 } from './action'
 
 import {
@@ -37,6 +38,7 @@ const ProductsForAdmin = ({
   products,
   getProductsForAdminRequest,
   showOnWebSiteRequest,
+  showOnPopularRequest,
   oneProductLoading,
   deleteProductRequest,
   message,
@@ -68,6 +70,10 @@ const ProductsForAdmin = ({
     showOnWebSiteRequest(event.target.name, event.target.checked)
   }
 
+  const checkboxChangePopularHendler = (event) => {
+    showOnPopularRequest(event.target.name, event.target.checked)
+  }
+
   const deleteHandler = (id) => {
     deleteProductRequest(id)
   }
@@ -82,12 +88,14 @@ const ProductsForAdmin = ({
         <Table stickyHeader size="small" aria-label="a products table">
           <TableHead className="table-headers">
             <TableRow>
-              <TableCell>id</TableCell>
               <TableCell >Имя товара</TableCell>
-              <TableCell >Количество</TableCell>
-              <TableCell >Цена</TableCell>
-              <TableCell align="center">Отображать на сайте</TableCell>
-              <TableCell align="center">Редактировать</TableCell>
+              <TableCell>Категория</TableCell>
+              <TableCell align="center">Количество</TableCell>
+              <TableCell align="center">Цена</TableCell>
+              <TableCell align="center">Скидка</TableCell>
+              {accessLevel > 1 && <TableCell align="center">Отображать на сайте</TableCell>}
+              {accessLevel > 1 && <TableCell align="center">Отображать в популярном</TableCell>}
+              {accessLevel === 1 && <TableCell align="center">Редактировать</TableCell>}
               {accessLevel > 1 && <TableCell align="center">Удалить</TableCell>}
             </TableRow>
           </TableHead>
@@ -95,27 +103,46 @@ const ProductsForAdmin = ({
             {products.map(row => {
               return (
                 <TableRow key={row._id}>
-                  <TableCell component="th" scope="row">
-                    {row._id}
-                  </TableCell>
                   <TableCell >{row.name}</TableCell>
-                  <TableCell >{row.amount}</TableCell>
-                  <TableCell >{row.price}</TableCell>
-                  <TableCell align="center">
-                    <Checkbox disabled={oneProductLoading === row._id} color="primary" name={row._id} checked={row.show} onChange={checkboxChangeHendler} />
-                  </TableCell>
-                  <TableCell align="center">
-                    <IconButton
-                      component={Link}
-                      to={{
-                        pathname: `/admin/product/${row._id}`,
-                        state: { id: row._id }
-                      }}
-                      disabled={oneProductLoading === row._id}
-                    >
-                      <Icon>edit</Icon>
-                    </IconButton>
-                  </TableCell>
+                  <TableCell>{row.category}</TableCell>
+                  <TableCell align="center">{row.amount}</TableCell>
+                  <TableCell align="center">{row.price}</TableCell>
+                  <TableCell align="center">{row.sale}</TableCell>
+                  {accessLevel > 1 &&
+                    <TableCell align="center">
+                      <Checkbox
+                        disabled={oneProductLoading === row._id}
+                        color="primary"
+                        name={row._id}
+                        checked={row.show}
+                        onChange={checkboxChangeHendler} />
+                    </TableCell>
+                  }
+                  {accessLevel > 1 &&
+                    <TableCell align="center">
+                      <Checkbox
+                        disabled={oneProductLoading === row._id}
+                        color="primary"
+                        name={row._id}
+                        checked={row.popular}
+                        onChange={checkboxChangePopularHendler}
+                      />
+                    </TableCell>
+                  }
+                  {accessLevel === 1 &&
+                    <TableCell align="center">
+                      <IconButton
+                        component={Link}
+                        to={{
+                          pathname: `/admin/product/${row._id}`,
+                          state: { id: row._id }
+                        }}
+                        disabled={oneProductLoading === row._id}
+                      >
+                        <Icon>edit</Icon>
+                      </IconButton>
+                    </TableCell>
+                  }
                   {accessLevel > 1 &&
                     <TableCell align="center">
                       <IconButton
@@ -169,6 +196,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getProductsForAdminRequest: bindActionCreators(getProductsForAdminRequestAction, dispatch),
     showOnWebSiteRequest: bindActionCreators(showOnWebSiteRequestAction, dispatch),
+    showOnPopularRequest: bindActionCreators(showOnPopularRequestAction, dispatch),
     deleteProductRequest: bindActionCreators(deleteProductRequestAction, dispatch),
     searchProductForAdminRequest: bindActionCreators(searchProductForAdminRequestAction, dispatch),
     changePage: bindActionCreators(changePageAction, dispatch)

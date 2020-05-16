@@ -11,6 +11,9 @@ export const DEL_PRODUCT_FAILURE = 'DEL_PRODUCT_FAILURE'
 export const SHOW_ON_WEB_SITE_REQUEST = 'SHOW_ON_WEB_SITE_REQUEST'
 export const SHOW_ON_WEB_SITE_SUCCESS = 'SHOW_ON_WEB_SITE_SUCCESS'
 export const SHOW_ON_WEB_SITE_FAILURE = 'SHOW_ON_WEB_SITE_FAILURE'
+export const SHOW_ON_POPULAR_REQUEST = 'SHOW_ON_POPULAR_REQUEST'
+export const SHOW_ON_POPULAR_SUCCESS = 'SHOW_ON_POPULAR_SUCCESS'
+export const SHOW_ON_POPULAR_FAILURE = 'SHOW_ON_POPULAR_FAILURE'
 export const CHANGE_PAGE = 'CHANGE_PAGE'
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE'
 
@@ -80,7 +83,7 @@ export const showOnWebSiteSuccessAction = (message, id) => {
     type: SHOW_ON_WEB_SITE_SUCCESS,
     payload: {
       message,
-      id 
+      id
     }
   }
 }
@@ -120,6 +123,30 @@ export const changePageAction = page => {
   return {
     type: CHANGE_CURRENT_PAGE,
     payload: page
+  }
+}
+
+export const showOnPopularRequestAction = (id, checked) => {
+  return {
+    type: SHOW_ON_POPULAR_REQUEST,
+    payload: {
+      id,
+      checked
+    }
+  }
+}
+
+export const showOnPopularSuccessAction = (id, message) => {
+  return {
+    type: SHOW_ON_POPULAR_SUCCESS,
+    payload: { id, message }
+  }
+}
+
+export const showOnPopularFailureAction = message => {
+  return {
+    type: SHOW_ON_POPULAR_FAILURE,
+    payload: message
   }
 }
 

@@ -19,6 +19,7 @@ import {
 
 import './Categories.Admin.scss'
 import { useSnackbar } from 'notistack'
+import CategoryCreator from '../CategoryCreator/CategoryCreator'
 
 const CategoriesForAdmin = ({
   categories,
@@ -111,6 +112,7 @@ const CategoriesForAdmin = ({
           </TableBody>
         </Table>
       </TableContainer>
+      <CategoryCreator />
     </div>
   )
 }

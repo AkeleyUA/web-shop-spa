@@ -31,9 +31,16 @@
       padding: 16px;
     }
   }
+  .price {
+    height: 60px;
+  }
 }
 
 .scroll-container {
   height: 100vh;
   overflow: auto;
+}
+
+.onld-price {
+  text-decoration: line-through;
 }

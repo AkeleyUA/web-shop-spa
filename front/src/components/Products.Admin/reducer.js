@@ -12,7 +12,10 @@ import {
   SEARCH_PRODUCT_FOR_ADMIN_REQUEST,
   SEARCH_PRODUCT_FOR_ADMIN_SUCCESS,
   SEARCH_PRODUCT_FOR_ADMIN_FAILURE,
-  CLEAR_MESSAGE
+  CLEAR_MESSAGE,
+  SHOW_ON_POPULAR_REQUEST,
+  SHOW_ON_POPULAR_SUCCESS,
+  SHOW_ON_POPULAR_FAILURE
 } from "./action"
 import { CHANGE_SEARCH_VALUE } from "../ProductsFilter/action"
 
@@ -139,6 +142,32 @@ export const adminProductsState = (state = initialState, action) => {
       return {
         ...state,
         message: null
+      }
+    }
+    case SHOW_ON_POPULAR_REQUEST: {
+      return {
+        ...state,
+        oneProductLoading: action.payload.id
+      }
+    }
+    case SHOW_ON_POPULAR_SUCCESS: {
+      return {
+        ...state,
+        oneProductLoading: '',
+        products: state.products.map(product => {
+          if (product._id === action.payload.id) {
+            return { ...product, popular: !product.popular }
+          }
+          return product
+        }),
+        message: action.payload.message
+      }
+    }
+    case SHOW_ON_POPULAR_FAILURE: {
+      return {
+        ...state,
+        oneProductLoading: '',
+        message: action.payload
       }
     }
     default: return state

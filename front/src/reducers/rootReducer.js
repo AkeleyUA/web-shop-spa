@@ -11,6 +11,7 @@ import { shoppingCartState } from '../components/ToggleButton/reducer'
 import { stepsState } from '../components/OrderSteps/reducer'
 import { editState } from '../components/ProductEditor/reducer'
 import { accessState } from '../components/AccessChangePanel/reducer'
+import { registrationRequestState } from '../components/RegistrationRequestPanel/reducer'
 
 
 export const rootReducer = combineReducers({
@@ -25,5 +26,6 @@ export const rootReducer = combineReducers({
   shoppingCartState,
   stepsState,
   editState,
-  accessState
+  accessState,
+  registrationRequestState
 })

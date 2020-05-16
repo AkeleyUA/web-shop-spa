@@ -17,12 +17,13 @@ import './Catalog.scss'
 import { bindActionCreators } from 'redux'
 import { setCurrentCategoryAction } from '../Categories.Client/action'
 import BottomNavBar from '../BottomNavBar/BottomNavBar'
+import { getPopularProductsRequestAction } from '../Products.Client/action'
 
 
-const Catalog = ({ productsLength, setCurrentCategory }) => {
+const Catalog = ({ getPopularProductsRequest, setCurrentCategory }) => {
 
   const popularHandler = () => {
-    setCurrentCategory('Популярно')
+    getPopularProductsRequest()
   }
 
   return (
@@ -95,7 +96,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentCategory: bindActionCreators(setCurrentCategoryAction, dispatch)
+  setCurrentCategory: bindActionCreators(setCurrentCategoryAction, dispatch),
+  getPopularProductsRequest: bindActionCreators(getPopularProductsRequestAction, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Catalog)

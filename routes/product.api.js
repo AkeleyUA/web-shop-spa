@@ -37,7 +37,7 @@ router.post(
           message: "Введите имя товара"
         })
       }
-      const data = await Product.find({ name: { $regex: `.*${value}.*` } }, { show: true }).limit(limit).skip(skip)
+      const data = await Product.find({ name: { $regex: `.*${value}.*` }, show: true }).limit(limit).skip(skip)
       const productsLength = (await Product.find({ name: { $regex: `.*${value}.*` } })).length
       if (data.length > 0) {
         return res.json({ products: data, status: true, productsLength })
@@ -66,8 +66,8 @@ router.post(
           message: "Введите имя товара"
         })
       }
-      const data = await Product.find({ name: { $regex: `.*${value}.*` } }).limit(limit).skip(skip)
-      const productsLength = (await Product.find({ name: { $regex: `.*${value}.*` } })).length
+      const data = await Product.find({ name: { $regex: `${value}`, $options: 'ig' } }).limit(limit).skip(skip)
+      const productsLength = (await Product.find({ name: { $regex: `${value}`, $options: 'ig' } })).length
       if (data.length > 0) {
         return res.json({ products: data, status: true, productsLength })
       } else {
@@ -106,6 +106,22 @@ router.post(
     try {
       const products = await Product.find({ category, show: true }).limit(limit).skip(skip)
       const productsLength = (await Product.find({ category, show: true })).length
+      res.json({ products, status: true, productsLength })
+    } catch (e) {
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
+    }
+  }
+)
+
+router.post(
+  '/get/popular',
+  async (req, res) => {
+    const { limit, page } = req.body
+    const skip = page * 16
+
+    try {
+      const products = await Product.find({ popular: true }).limit(limit).skip(skip)
+      const productsLength = (await Product.find({ popular: true })).length
       res.json({ products, status: true, productsLength })
     } catch (e) {
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
@@ -194,6 +210,23 @@ router.post(
   }
 )
 
+
+router.post(
+  '/show/popular',
+  async (req, res) => {
+    const { id, checked } = req.body
+    try {
+      await Product.findByIdAndUpdate(
+        { _id: id },
+        { $set: { "popular": checked } }
+      )
+      res.json({ message: "Данные обновлены", status: true })
+    } catch (e) {
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
+    }
+  }
+)
+
 router.post(
   '/edit',
   async (req, res) => {
@@ -217,13 +250,14 @@ router.post(
 // for (i = 0; i < 50; i++) {
 //   const product = new Product({
 //     name: `Продукт ${i}, test_secription_${i}`,
-//     category: 'Категория 4',
+//     category: 'Все',
 //     amount: i,
-//     img: 'https://u01.appmifile.com/images/2017/04/01/8cd9f177-84ee-4e7e-ad39-9e6750903b0a.png',
+//     img: 'https://pbs.twimg.com/profile_images/925576484122779648/ucVTUoPg_400x400.jpg',
 //     description: `Продукт ${i}, полное описание полное описание полное описание полное описание полное описание`,
 //     price: i * 5 + 1.99,
-//     show: true,
-//     sale: 0
+//     show: false,
+//     sale: 0,
+//     popular: false
 //   })
 //   try {
 //     product.save()

@@ -6,9 +6,13 @@ import {
   SEARCH_PRODUCT_FOR_CLIENT_REQUEST,
   SEARCH_PRODUCT_FOR_CLIENT_SUCCESS,
   SEARCH_PRODUCT_FOR_CLIENT_FAILURE,
-  CLEAR_MESSAGE
+  CLEAR_MESSAGE,
+  GET_POPULAR_PRODUCTS_REQUEST,
+  GET_POPULAR_PRODUCTS_SUCCESS,
+  GET_POPULAR_PRODUCTS_FAILURE
 } from "./action"
 import { CHANGE_SEARCH_VALUE } from "../ProductsFilter/action"
+import { SET_CURRENT_CATEGORY } from "../Categories.Client/action"
 
 
 const initialState = {
@@ -17,7 +21,9 @@ const initialState = {
   message: null,
   productsLength: 0,
   currentPage: 1,
-  search: null
+  search: null,
+  isPopular: false,
+  isBestPrice: false
 }
 
 export const clientProductsState = (state = initialState, action) => {
@@ -28,7 +34,10 @@ export const clientProductsState = (state = initialState, action) => {
         loading: true,
         products: [],
         message: null,
-        productsLength: 0
+        productsLength: 0,
+        isPopular: false,
+        isBestPrice: false,
+        search: null
       }
     }
     case GET_PRODUCTS_FOR_CLIENT_SUCCESS: {
@@ -62,7 +71,9 @@ export const clientProductsState = (state = initialState, action) => {
         loading: true,
         message: null,
         productsLength: 0,
-        search: action.payload
+        search: action.payload,
+        isPopular: false,
+        isBestPrice: false
       }
     }
     case SEARCH_PRODUCT_FOR_CLIENT_SUCCESS: {
@@ -70,7 +81,7 @@ export const clientProductsState = (state = initialState, action) => {
         ...state,
         products: action.payload.products,
         productsLength: action.payload.productsLength,
-        loading: false,
+        loading: false
       }
     }
     case SEARCH_PRODUCT_FOR_CLIENT_FAILURE: {
@@ -86,10 +97,46 @@ export const clientProductsState = (state = initialState, action) => {
         search: action.payload
       }
     }
+    case GET_POPULAR_PRODUCTS_REQUEST: {
+      return {
+        ...state,
+        loading: true,
+        message: null,
+        products: [],
+        productsLength: 0,
+        isPopular: true,
+        isBestPrice: false,
+        search: null,
+      }
+    }
+    case GET_POPULAR_PRODUCTS_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        products: action.payload.products,
+        productsLength: action.payload.productsLength
+      }
+    }
+    case GET_POPULAR_PRODUCTS_FAILURE: {
+      return {
+        ...state,
+        loading: false,
+        message: action.payload
+      }
+    }
     case CLEAR_MESSAGE: {
       return {
         ...state,
         message: null
+      }
+    }
+    case SET_CURRENT_CATEGORY: {
+      return {
+        ...state,
+        isPopular: null,
+        isBestPrice: null,
+        search: null,
+        currentPage: 1
       }
     }
     default: return state

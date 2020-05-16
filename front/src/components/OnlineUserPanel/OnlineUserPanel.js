@@ -1,38 +1,55 @@
 import React from 'react'
 import { Paper, Grid, Typography } from '@material-ui/core'
 
+import './OnlineUserPanel.scss'
+
+const config = [
+  {
+    label: 'Покупателей: ',
+    key: 'anonymous',
+    lvl: 1
+  },
+  {
+    label: 'Контент-менеджеров: ',
+    key: 'contentManager',
+    lvl: 2
+  },
+  {
+    label: 'Модераторов: ',
+    key: 'moderator',
+    lvl: 3
+  },
+  {
+    label: 'Администраторов: ',
+    key: 'admin',
+    lvl: 4
+  }
+]
+
 const OnlineUserPanel = ({ data, accessLevel }) => {
   return (
-    <Grid container spacing={4} component={Paper}>
-      <Grid item lg={12}><Typography variant="caption">Пользователей на сайте</Typography></Grid>
-      <Grid item lg={2}>
-        <Typography align="center" variant="body1">Покупателей:&nbsp;</Typography>
-        <Typography align="center" variant="h6" color="primary">{data.anonymous ? data.anonymous.length : 0}</Typography>
-      </Grid>
-      {accessLevel >= 2 &&
-        <Grid item lg={2}>
-          <Typography align="center" variant="body1">Контент-менеджеров:&nbsp;</Typography>
-          <Typography align="center" variant="h6" color="primary">{data.contentManager ? data.contentManager.length : 0}</Typography>
-        </Grid>
-      }
-      {accessLevel >= 3 &&
-        <Grid item lg={2}>
-          <Typography align="center" variant="body1">Модераторов:&nbsp;</Typography>
-          <Typography align="center" variant="h6" color="primary">{data.moderator ? data.moderator.length : 0}</Typography>
-        </Grid>
-      }
-      {accessLevel >= 10 &&
-        <>
-          <Grid item lg={2}>
-            <Typography align="center" variant="body1">Супервизоров:&nbsp;</Typography>
-            <Typography align="center" variant="h6" color="primary">{data.supervisor ? data.supervisor.length : 0}</Typography>
+    <Grid container component={Paper} className="online-users-panel">
+      {config
+        .filter(item => item.lvl <= accessLevel)
+        .map(item => (
+          <Grid item lg={3}>
+            <Paper className="online-group-card">
+              <Typography
+                align="center"
+                variant="body1"
+              >
+                {item.label}
+              </Typography>
+              <Typography
+                align="center"
+                variant="h6"
+                color="primary"
+              >
+                {data[item.key] ? data[item.key].length : 0}
+              </Typography>
+            </Paper>
           </Grid>
-          <Grid item lg={2}>
-            <Typography align="center" variant="body1">Администраторов:&nbsp;</Typography>
-            <Typography align="center" variant="h6" color="primary">{data.admin ? data.admin.length : 0}</Typography>
-          </Grid>
-        </>
-      }
+        ))}
     </Grid>
   )
 }

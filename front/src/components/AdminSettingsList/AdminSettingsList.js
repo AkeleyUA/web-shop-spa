@@ -45,6 +45,12 @@ export const settingsList = [
     path: '/admin/access',
     icon: 'lock',
     lvl: [10, 100],
+  },
+  {
+    name: 'Запросы на регистрацию',
+    path: '/admin/confirm',
+    icon: 'verified_user',
+    lvl: [10, 100]
   }
 ]
 
