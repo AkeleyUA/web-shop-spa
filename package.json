@@ -10,7 +10,7 @@
     "front:install": "npm install --prefix front",
     "front:build": "npm run build --prefix front",
     "dev": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run front\"",
-    "heroku-postbuild": "npm run front:build"
+    "heroku-postbuild": "cd front && npm install && npm run front:build"
   },
   "repository": {
     "type": "git",
