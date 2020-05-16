@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { AdminSettingsList } from "../components/AdminSettingsList/AdminSettingsList"
+import AdminSettingsList from "../components/AdminSettingsList/AdminSettingsList"
 import { AdminRoutes } from '../routes/routes'
 import {
   Grid,
   Box
 } from "@material-ui/core";
 import AdminPanelHeader from "../components/AdminPanelHeader/AdminPanelHeader";
+import { socket } from '../App'
 
-const AdminPanelPage = () => {
+const AdminPanelPage = ({ accessLevel }) => {
+  useEffect(() => {
+    socket.emit('login', { accessLevel })
+    return () => {
+      socket.emit('logout', { accessLevel })
+    }
+  }, [])
   return (
     <Grid
       container
@@ -16,10 +23,10 @@ const AdminPanelPage = () => {
     >
       <Grid item lg={2} />
       <Grid item lg={10}>
-        <AdminPanelHeader/>
+        <AdminPanelHeader />
       </Grid>
       <Grid item lg={2} className="admin-drawer">
-        <AdminSettingsList/>
+        <AdminSettingsList />
       </Grid>
       <Grid item lg={10}>
         <Box style={{ margin: 20, padding: 20 }} >
@@ -33,6 +40,7 @@ const AdminPanelPage = () => {
 const mapStateToProps = state => {
   return {
     userId: state.authState.token.userId,
+    accessLevel: state.authState.token.accessLevel
   }
 }
 

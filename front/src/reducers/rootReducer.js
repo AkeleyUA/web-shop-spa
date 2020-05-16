@@ -8,9 +8,9 @@ import { categoryCreatorState } from '../components/CategoryCreator/reducer'
 import { clientCategoriesState } from '../components/Categories.Client/reducer'
 import { searchState } from '../components/ProductsFilter/reducer'
 import { shoppingCartState } from '../components/ToggleButton/reducer'
-import { paginationState } from '../components/BottomNavBar/reducer'
 import { stepsState } from '../components/OrderSteps/reducer'
 import { editState } from '../components/ProductEditor/reducer'
+import { accessState } from '../components/AccessChangePanel/reducer'
 
 
 export const rootReducer = combineReducers({
@@ -23,7 +23,7 @@ export const rootReducer = combineReducers({
   clientCategoriesState,
   searchState,
   shoppingCartState,
-  paginationState,
   stepsState,
   editState,
+  accessState
 })

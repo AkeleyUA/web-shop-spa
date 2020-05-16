@@ -19,8 +19,6 @@ import './NavBar.scss'
 import ShoppingCart from '../ShoppingCart/ShoppingCart';
 import CategoriesForClient from '../Categories.Client/Categories.Client';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { changeCurrentPageAction } from '../BottomNavBar/action';
 import ProductsFilter from '../ProductsFilter/ProductsFilter';
 
 
@@ -191,14 +189,12 @@ const NavBar = ({cart}) => {
 
 const mapStateToProps = state => {
   return {
-    cart: state.shoppingCartState.cart,
-    currentPage: state.paginationState.currentPage,
+    cart: state.shoppingCartState.cart
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    changeCurrentPage: bindActionCreators(changeCurrentPageAction, dispatch)
   }
 }
 

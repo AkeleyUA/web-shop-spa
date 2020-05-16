@@ -9,6 +9,7 @@ import {
   CLEAR_MESSAGE
 } from "./action"
 import jwt from 'jsonwebtoken'
+import { socket } from '../../App'
 
 const token = (sessionStorage.getItem('token') ? sessionStorage.getItem('token') : false)
 

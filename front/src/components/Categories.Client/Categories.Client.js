@@ -14,10 +14,11 @@ import {
 import { setCurrentCategoryAction, getCategoriesForClientRequestAction, clearMessageAction } from './action'
 import { useSnackbar } from 'notistack'
 import Preloader from '../Preloader/Preloader'
-import { changeCurrentPageAction } from '../BottomNavBar/action'
+import { changeCurrentPageAction } from '../Products.Client/action'
+import { changeSearchValueAction } from '../ProductsFilter/action'
 
 import './Categories.Client.scss'
-import { changeSearchValueAction } from '../ProductsFilter/action'
+
 
 const CategoriesForClient = ({
   categories,
@@ -56,10 +57,8 @@ const CategoriesForClient = ({
     if (searchValue) {
       changeSearchValue(null)
     }
-    if (currentPage !== 1) {
-      changeCurrentPage(1)
-    }
     setCurrentCategory(event.currentTarget.name)
+    changeCurrentPage(1)
   }
 
   const listCreator = (arr) => {

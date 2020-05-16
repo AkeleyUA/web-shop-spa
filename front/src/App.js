@@ -11,6 +11,10 @@ import {
 } from '@material-ui/core';
 import { ruRU } from '@material-ui/core/locale'
 import { SnackbarProvider } from 'notistack'
+import io from 'socket.io-client'
+
+
+export const socket = io(process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001')
 
 let theme = createMuiTheme({
   palette: {

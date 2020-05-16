@@ -14,32 +14,9 @@ import { NavLink } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { logoutAction } from '../AuthForm/action'
 import { connect } from 'react-redux'
+import { levels } from '../AccessChangePanel/AccessChangePanel'
 
 import './UserInfo.scss'
-
-const levels = [
-  {
-    level: 0,
-    icon: 'CM',
-    label: 'Контент-менеджер'
-  },
-  {
-    level: 1,
-    icon: 'M',
-    label: 'Модератор'
-  },
-  {
-    level: 1,
-    icon: 'S',
-    label: 'Супервизор'
-  },
-  {
-    level: 100,
-    icon: 'A',
-    label: 'Администратор'
-  },
-
-]
 
 const UserInfo = ({ logout, accessLevel, userId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -77,6 +54,7 @@ const UserInfo = ({ logout, accessLevel, userId }) => {
         {findLevel.icon}
       </Avatar>
       <Menu
+        variant="menu"
         id="simple-menu"
         anchorEl={anchorEl}
         keepMounted
@@ -93,8 +71,8 @@ const UserInfo = ({ logout, accessLevel, userId }) => {
           horizontal: 'right',
         }}
       >
-        <MenuItem disabled>
-          <Typography variant="subtitle1" color="primary">
+        <MenuItem disabled className="level-info-item">
+          <Typography variant="caption" color="primary">
             Уровень: {findLevel.label}
           </Typography>
         </MenuItem>

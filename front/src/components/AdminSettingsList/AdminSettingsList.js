@@ -13,31 +13,38 @@ import {
 } from "@material-ui/core";
 
 import './AdminSettingsList.scss'
+import { connect } from 'react-redux';
 
 export const settingsList = [
   {
     name: 'Панель управления',
     path: '/admin/dashboard',
     icon: 'widgets',
-    nav: true,
+    lvl: 0,
   },
   {
     name: 'Список товаров',
     path: '/admin/products',
     icon: 'view_list',
-    nav: true,
+    lvl: 0,
   },
   {
     name: 'Список категорий',
     path: '/admin/categories',
     icon: 'category',
-    nav: true,
+    lvl: 0,
   },
   {
     name: 'Редактор продуктов',
     path: '/admin/product/:id',
     icon: 'edit',
-    nav: false,
+    lvl: 101,
+  },
+  {
+    name: 'Права доступа',
+    path: '/admin/access',
+    icon: 'lock',
+    lvl: 10,
   }
 ]
 
@@ -54,7 +61,7 @@ const classes = {
   }
 }
 
-export const AdminSettingsList = () => {
+const AdminSettingsList = ({ accessLevel }) => {
   const location = useLocation()
   const findName = settingsList.find(item => matchPath(location.pathname, item.path))
 
@@ -88,7 +95,7 @@ export const AdminSettingsList = () => {
           light
           classes={classes.divider}
         />
-        {settingsList.filter(item => item.nav).map((item) => {
+        {settingsList.filter(item => item.lvl < accessLevel).map((item) => {
           return (
             <ListItem
               className={findName && findName.path === item.path ? "drawer-btn-selected drawer-btn" : "drawer-btn"}
@@ -131,3 +138,11 @@ export const AdminSettingsList = () => {
     </Drawer>
   )
 }
+
+const mapStateToProps = state => {
+  return {
+    accessLevel: state.authState.token.accessLevel
+  }
+}
+
+export default connect(mapStateToProps, null)(AdminSettingsList)

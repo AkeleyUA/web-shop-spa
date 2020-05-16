@@ -1,8 +1,12 @@
 .avatar-icon {
+  background-color: #0e4686!important;
   cursor: pointer;
   transition: all .2s;
   &:hover {
-    background-color: #ef6c00;
+    background-color: #ef6c00!important;
     transition: all .2s;
   }
+}
+.level-info-item {
+  opacity: 1!important;
 }

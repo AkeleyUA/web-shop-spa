@@ -8,6 +8,7 @@ import addCategoryWatcher from '../components/CategoryCreator/saga';
 import categoriesClientWatcher from '../components/Categories.Client/saga';
 import shoppingCartWatcher from '../components/ToggleButton/saga'
 import editProductWatcher from '../components/ProductEditor/saga';
+import forAccessPanelWatcher from '../components/AccessChangePanel/saga'
 
 
 export function* rootSaga() {
@@ -21,5 +22,6 @@ export function* rootSaga() {
     categoriesClientWatcher(),
     shoppingCartWatcher(),
     editProductWatcher(),
-  ]);
+    forAccessPanelWatcher(),
+  ])
 }

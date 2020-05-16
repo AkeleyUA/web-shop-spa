@@ -7,11 +7,12 @@ import AdminPanelPage from '../pages/AdminPanel.page'
 import CategoriesForAdmin from '../components/Categories.Admin/Categories.Admin'
 import ProductsForAdmin from '../components/Products.Admin/Products.Admin'
 import AdminDashboard from '../components/AdminDashboard/AdminDashboard'
-import OrderPage from '../pages/Order.page/Order.page'
+import OrderPage from '../pages/Order.page'
 import { connect } from 'react-redux'
 import ProductEditor from '../components/ProductEditor/ProductEditor'
+import AccessChangePanel from '../components/AccessChangePanel/AccessChangePanel'
 
-const WithOutRoutes = ({ isAuth }) => {
+const WithOutConnectRoutes = ({ isAuth }) => {
   return (
     <Switch>
       <Route path='/admin' component={isAuth ? AdminPanelPage : AuthPage}/>
@@ -23,7 +24,7 @@ const WithOutRoutes = ({ isAuth }) => {
   )
 }
 
-export const WithOutAdminRoutes = ({ isAuth }) => {
+export const WithOutConnectAdminRoutes = ({ isAuth }) => {
   if (isAuth) {
     return (
       <Switch>
@@ -31,6 +32,7 @@ export const WithOutAdminRoutes = ({ isAuth }) => {
         <Route path='/admin/products' exact component={ProductsForAdmin} />
         <Route path='/admin/product/:id' exact component={ProductEditor} />
         <Route path='/admin/categories' exact component={CategoriesForAdmin} />
+        <Route path='/admin/access' exact component={AccessChangePanel} />
         <Redirect to='/admin/dashboard' />
       </Switch>
     )
@@ -49,5 +51,5 @@ const mapStateToProps = state => {
   }
 }
 
-export const Routes = connect(mapStateToProps)(WithOutRoutes)
-export const AdminRoutes = connect(mapStateToProps)(WithOutAdminRoutes)
+export const Routes = connect(mapStateToProps)(WithOutConnectRoutes)
+export const AdminRoutes = connect(mapStateToProps)(WithOutConnectAdminRoutes)
