@@ -21,7 +21,6 @@ import {
   MenuItem,
   Tooltip,
   Dialog,
-  Slide,
   DialogTitle,
   DialogContent,
   DialogContentText,
@@ -33,6 +32,9 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Preloader from '../Preloader/Preloader'
 import { useSnackbar } from 'notistack'
+import { Transition } from '../Transition'
+
+import './AccessChangePanel.scss'
 
 export const levels = [
   {
@@ -51,6 +53,11 @@ export const levels = [
     label: 'Супервизор'
   },
   {
+    level: 10,
+    icon: 'A',
+    label: 'Администратор'
+  },
+  {
     level: 100,
     icon: 'A',
     label: 'Администратор'
@@ -58,9 +65,14 @@ export const levels = [
 
 ]
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+const classes = {
+  1: 'avatar-blue',
+  2: 'avatar-green',
+  3: 'avatar-red',
+  10: 'avatar-orange'
+}
+
+
 
 const AccessChangePanel = ({
   getUsersForAdminReques,
@@ -70,7 +82,8 @@ const AccessChangePanel = ({
   clearMessage,
   oneUserLoading,
   changeLevelRequest,
-  deleteUserRequest
+  deleteUserRequest,
+  accessLevel
 }) => {
   const { enqueueSnackbar } = useSnackbar()
   const [openEditDialog, setOpenEditDialog] = useState(false)
@@ -109,7 +122,7 @@ const AccessChangePanel = ({
 
   const closeEditDialogHandler = () => {
     setOpenEditDialog(false)
-    setCheckedUser({email: '', accessLevel: 1})
+    setCheckedUser({ email: '', accessLevel: 1 })
   }
 
   const openDeleteDialogHandler = user => {
@@ -122,6 +135,7 @@ const AccessChangePanel = ({
     setDeleteUser({
       email: ''
     })
+    setInputValue('')
   }
 
   const changeInputHandler = event => {
@@ -142,10 +156,10 @@ const AccessChangePanel = ({
     return <Preloader />
   }
   return (
-    <div>
+    <div className="access-change-panel">
       <Grid container spacing={4} component={Paper}>
         <Grid item lg={12}>
-          {levels.map(level => (
+          {levels.filter(item => item.level !== 100).map(level => (
             <ExpansionPanel key={level.level}>
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -158,33 +172,46 @@ const AccessChangePanel = ({
                 <List style={{ width: '100%' }}>
                   {users.filter(user => user.accessLevel === level.level).map(user => (
                     <ListItem key={user._id} component={Paper}>
-                      <ListItemAvatar><Avatar>{level.icon}</Avatar></ListItemAvatar>
+                      <ListItemAvatar>
+                        <Avatar
+                          src='/'
+                          alt={`avatar-${level.icon}`}
+                          className={classes[level.level]}
+                        >
+                          {level.icon}
+                        </Avatar>
+                      </ListItemAvatar>
                       <ListItemText>
                         <Typography variant="body1">{user.email}</Typography>
                       </ListItemText>
                       <ListItemSecondaryAction>
                         <Tooltip title="Изменить уровень доступа">
                           <span>
-                            <IconButton
+                            <Button
                               onClick={() => openEditDialogHandler(user)}
                               color="primary"
                               disabled={user.accessLevel === 100 || user._id === oneUserLoading}
+                              startIcon={
+                                <Icon>enhanced_encryption</Icon>
+                              }
                             >
-                              <Icon>edit</Icon>
-                            </IconButton>
+                              Предоставить доступ
+                            </Button>
                           </span>
                         </Tooltip>
-                        <Tooltip title="Удалить">
-                          <span>
-                            <IconButton
-                              onClick={() => openDeleteDialogHandler(user)}
-                              color="secondary"
-                              disabled={user.accessLevel === 100 || user._id === oneUserLoading}
-                            >
-                              <Icon>delete_outline</Icon>
-                            </IconButton>
-                          </span>
-                        </Tooltip>
+                        {accessLevel > 10 &&
+                          <Tooltip title="Удалить">
+                            <span>
+                              <IconButton
+                                onClick={() => openDeleteDialogHandler(user)}
+                                color="secondary"
+                                disabled={user.accessLevel === 100 || user._id === oneUserLoading}
+                              >
+                                <Icon>delete_outline</Icon>
+                              </IconButton>
+                            </span>
+                          </Tooltip>
+                        }
                       </ListItemSecondaryAction>
                     </ListItem>
                   ))}
@@ -250,6 +277,7 @@ const AccessChangePanel = ({
           <TextField
             error={inputValue !== deleteUser.email}
             fullWidth
+            value={inputValue}
             onChange={changeInputHandler}
             placeholder="Введите email"
           />
@@ -268,7 +296,8 @@ const mapStateToProps = state => {
     users: state.accessState.users,
     loading: state.accessState.loading,
     message: state.accessState.message,
-    oneUserLoading: state.accessState.oneUserLoading
+    oneUserLoading: state.accessState.oneUserLoading,
+    accessLevel: state.authState.token.accessLevel
   }
 }
 

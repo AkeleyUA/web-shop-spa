@@ -22,19 +22,17 @@ const AdminDashboard = ({ accessLevel }) => {
 
   socket.emit('get stats')
 
-  if (accessLevel === 3 || accessLevel > 10) {
-    return <OnlineUserPanel data={data} accessLevel={accessLevel}/>
-  }
-  return (
-    <Grid container className="admin-dashboard">
-      <Grid item lg={12}>
-        <CategoryCreator />
-      </Grid>
-      <Grid item lg={12}>
-        <ProductCreator />
-      </Grid>
-    </Grid>
-  )
+  return <OnlineUserPanel data={data} accessLevel={accessLevel}/>
+  // return (
+  //   <Grid container className="admin-dashboard">
+  //     <Grid item lg={12}>
+  //       <CategoryCreator />
+  //     </Grid>
+  //     <Grid item lg={12}>
+  //       <ProductCreator />
+  //     </Grid>
+  //   </Grid>
+  // )
 }
 
 const mapStateToProps = state => {

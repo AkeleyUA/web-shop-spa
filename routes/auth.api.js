@@ -33,7 +33,7 @@ router.post(
       }
 
       const hashedPassword = await bcrypt.hash(password, 12)
-      const user = new User({ email, password: hashedPassword, accessLevel: 0 })
+      const user = new User({ email, password: hashedPassword, accessLevel: 1 })
       await user.save()
 
       res.status(201).json({message: "Запрос на создание пользователя отправлен", status: true})

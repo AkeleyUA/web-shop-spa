@@ -18,7 +18,16 @@ import { levels } from '../AccessChangePanel/AccessChangePanel'
 
 import './UserInfo.scss'
 
-const UserInfo = ({ logout, accessLevel, userId }) => {
+
+const classes = {
+  1: 'avatar-blue',
+  2: 'avatar-green',
+  3: 'avatar-red',
+  10: 'avatar-orange',
+  100: 'avatar-orange',
+}
+
+const UserInfo = ({ logout, accessLevel }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [dialog, setDialog] = useState(false)
 
@@ -45,11 +54,11 @@ const UserInfo = ({ logout, accessLevel, userId }) => {
   }
 
   return (
-    <div>
+    <div className="user-info">
       <Avatar
         alt="user"
         onClick={handleOpenMenu}
-        className="avatar-icon"
+        className={`avatar-info ${classes[accessLevel]}`}
       >
         {findLevel.icon}
       </Avatar>

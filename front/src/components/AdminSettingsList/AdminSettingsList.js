@@ -20,31 +20,31 @@ export const settingsList = [
     name: 'Панель управления',
     path: '/admin/dashboard',
     icon: 'widgets',
-    lvl: 0,
+    lvl: [0],
   },
   {
     name: 'Список товаров',
     path: '/admin/products',
     icon: 'view_list',
-    lvl: 0,
+    lvl: [1, 2, 10, 100],
   },
   {
     name: 'Список категорий',
     path: '/admin/categories',
     icon: 'category',
-    lvl: 0,
+    lvl: [2, 10, 100],
   },
   {
     name: 'Редактор продуктов',
     path: '/admin/product/:id',
     icon: 'edit',
-    lvl: 101,
+    lvl: [101],
   },
   {
     name: 'Права доступа',
     path: '/admin/access',
     icon: 'lock',
-    lvl: 10,
+    lvl: [10, 100],
   }
 ]
 
@@ -95,29 +95,31 @@ const AdminSettingsList = ({ accessLevel }) => {
           light
           classes={classes.divider}
         />
-        {settingsList.filter(item => item.lvl < accessLevel).map((item) => {
-          return (
-            <ListItem
-              className={findName && findName.path === item.path ? "drawer-btn-selected drawer-btn" : "drawer-btn"}
-              key={item.path}
-              component={NavLink}
-              to={item.path}
-              variant="contained"
-              classes={classes.listItem}
-            >
-              <ListItemIcon
-                classes={classes.listIcon}
+        {settingsList
+          .filter(item => (item.lvl.filter(level => (level === 0 || level === accessLevel)).length > 0))
+          .map((item) => {
+            return (
+              <ListItem
+                className={findName && findName.path === item.path ? "drawer-btn-selected drawer-btn" : "drawer-btn"}
+                key={item.path}
+                component={NavLink}
+                to={item.path}
+                variant="contained"
+                classes={classes.listItem}
               >
-                <Icon fontSize="small">{item.icon}</Icon>
-              </ListItemIcon>
-              <ListItemText>
-                <Typography variant="caption">
-                  {item.name}
-                </Typography>
-              </ListItemText>
-            </ListItem>
-          )
-        })}
+                <ListItemIcon
+                  classes={classes.listIcon}
+                >
+                  <Icon fontSize="small">{item.icon}</Icon>
+                </ListItemIcon>
+                <ListItemText>
+                  <Typography variant="caption">
+                    {item.name}
+                  </Typography>
+                </ListItemText>
+              </ListItem>
+            )
+          })}
       </List>
       <ListItem
         component={NavLink}

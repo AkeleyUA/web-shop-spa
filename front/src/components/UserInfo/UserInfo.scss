@@ -1,10 +1,32 @@
-.avatar-icon {
-  background-color: #0e4686!important;
-  cursor: pointer;
-  transition: all .2s;
-  &:hover {
-    background-color: #ef6c00!important;
-    transition: all .2s;
+.user-info {
+  .avatar-blue {
+    background-color: #0e4686;
+    &:hover {
+      background-color: darken($color: #0e4686, $amount: 20);
+    }
+  }
+  .avatar-green {
+    background-color: #18500f;
+    &:hover {
+      background-color: darken($color: #18500f, $amount: 20);
+    }
+  }
+  .avatar-red {
+    background-color: #7a0404;
+    &:hover {
+      background-color: darken($color: #7a0404, $amount: 20);
+    }
+  }
+  .avatar-orange {
+    background-color: #ef6c00;
+    
+    &:hover {
+      background-color: darken($color: #ef6c00, $amount: 20);
+    }
+  }
+  .avatar-info {
+    cursor: pointer;
+    transition: all .3s;
   }
 }
 .level-info-item {

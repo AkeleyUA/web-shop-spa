@@ -44,10 +44,11 @@ const ProductsForAdmin = ({
   search,
   searchProductForAdminRequest,
   changePage,
-  currentPage
+  currentPage,
+  accessLevel
 }) => {
   const { enqueueSnackbar } = useSnackbar()
-  
+
 
   useEffect(() => {
     if (search) {
@@ -87,7 +88,7 @@ const ProductsForAdmin = ({
               <TableCell >Цена</TableCell>
               <TableCell align="center">Отображать на сайте</TableCell>
               <TableCell align="center">Редактировать</TableCell>
-              <TableCell align="center">Удалить</TableCell>
+              {accessLevel > 1 && <TableCell align="center">Удалить</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -115,14 +116,16 @@ const ProductsForAdmin = ({
                       <Icon>edit</Icon>
                     </IconButton>
                   </TableCell>
-                  <TableCell align="center">
-                    <IconButton
-                      onClick={() => { deleteHandler(row._id) }}
-                      disabled={oneProductLoading === row._id}
-                    >
-                      <Icon>delete_outline</Icon>
-                    </IconButton>
-                  </TableCell>
+                  {accessLevel > 1 &&
+                    <TableCell align="center">
+                      <IconButton
+                        onClick={() => { deleteHandler(row._id) }}
+                        disabled={oneProductLoading === row._id}
+                      >
+                        <Icon>delete_outline</Icon>
+                      </IconButton>
+                    </TableCell>
+                  }
                 </TableRow>
               )
             })}
@@ -158,6 +161,7 @@ const mapStateToProps = state => {
     productsLength: state.adminProductsState.productsLength,
     search: state.adminProductsState.search,
     currentPage: state.adminProductsState.currentPage,
+    accessLevel: state.authState.token.accessLevel
   }
 }
 

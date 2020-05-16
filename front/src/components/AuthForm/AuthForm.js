@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react'
 import { registrationRequestAction, loginRequestAction, clearMessageAction } from './action'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-
+import { Transition } from '../Transition'
 import {
   TextField,
   Button,
   Icon,
   Typography,
   Paper,
-  Fade,
-  Popper,
+  DialogContent,
+  Dialog,
   FormControl,
   ButtonGroup,
-  Grid
+  Grid,
+  DialogTitle,
+  DialogActions,
+  ListItem,
+  ListSubheader,
+  ListItemText,
+  List
 } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 
@@ -22,8 +28,7 @@ import './AuthForm.scss'
 
 const AuthForm = ({ registrationRequest, loginRequest, loading, message, clearMessage }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [open, setOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = useState()
+  const [dialog, setDialog] = useState(false)
   const [err, setErr] = useState(
     { email: false, password: false }
   )
@@ -42,9 +47,11 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message, clearMe
     })
   }
 
-  const popperHandler = (event) => {
-    setAnchorEl(event.currentTarget)
-    setOpen(!open)
+  const handleOpenDialog = () => {
+    setDialog(true)
+  }
+  const handleCloseDialog = () => {
+    setDialog(false)
   }
 
   const registerHandler = () => {
@@ -64,15 +71,66 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message, clearMe
 
   return (
     <div className="auth-page">
-      <Popper open={open} anchorEl={anchorEl} onClick={popperHandler} placement="bottom-start" transition>
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <Paper>
-              <Typography className="popper-content" variant="body1">login: test1@mail.ru, password: 123456</Typography>
-            </Paper>
-          </Fade>
-        )}
-      </Popper>
+      <Dialog
+        open={dialog}
+        TransitionComponent={Transition}
+        keepMounted
+        open={dialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Тестовые учётные записи</DialogTitle>
+        <DialogContent>
+          <List
+            disablePadding
+            dense
+          >
+            <ListSubheader color="primary">Контент-менеджеры</ListSubheader>
+            <ListItem>
+              <ListItemText>login: cm1@mail.ru, password: 123456</ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText>login: cm2@mail.ru, password: 123456</ListItemText>
+            </ListItem>
+          </List>
+          <List
+            disablePadding
+            dense
+          >
+            <ListSubheader color="primary">Модераторы</ListSubheader>
+            <ListItem>
+              <ListItemText>login: m1@mail.ru, password: 123456</ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText>login: m2@mail.ru, password: 123456</ListItemText>
+            </ListItem>
+          </List>
+          <List
+            disablePadding
+            dense
+          >
+            <ListSubheader color="primary">Cупервизор</ListSubheader>
+            <ListItem>
+              <ListItemText>login: s1@mail.ru, password: 123456</ListItemText>
+            </ListItem>
+          </List>
+          <List
+            disablePadding
+            dense
+          >
+            <ListSubheader color="primary">Администратор</ListSubheader>
+            <ListItem>
+              <ListItemText>login: a1@mail.ru, password: 123456</ListItemText>
+            </ListItem>
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary" autoFocus>
+            Понятно
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Grid container justify='center' alignContent='center' className="container">
         <Grid item xs={12} sm={8} md={6} lg={4} component={Paper}>
           <FormControl className="auth-form-wrapper">
@@ -125,14 +183,14 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message, clearMe
               >
                 <Typography variant="button">Регистрация</Typography>
               </Button>
-              <Button onClick={popperHandler} className="login-helper" color="primary">
+              <Button onClick={handleOpenDialog} className="login-helper" color="primary">
                 <Icon>help_outline</Icon>
               </Button>
             </ButtonGroup>
           </FormControl>
         </Grid>
       </Grid>
-    </div>
+    </div >
   )
 }
 
