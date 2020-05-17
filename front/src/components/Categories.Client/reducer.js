@@ -5,7 +5,7 @@ import {
   GET_CATEGORIES_FOR_CLIENT_FAILURE,
   CLEAR_MESSAGE
 } from "./action"
-import { GET_POPULAR_PRODUCTS_REQUEST, SEARCH_PRODUCT_FOR_CLIENT_REQUEST } from "../Products.Client/action"
+import { GET_POPULAR_PRODUCTS_REQUEST, SEARCH_PRODUCT_FOR_CLIENT_REQUEST, GET_BETS_PRICE_EVENT } from "../Products.Client/action"
 
 const initialState = {
   categories: [],
@@ -59,6 +59,12 @@ export const clientCategoriesState = (state = initialState, action) => {
       }
     }
     case SEARCH_PRODUCT_FOR_CLIENT_REQUEST: {
+      return {
+        ...state,
+        currentCategory: ''
+      }
+    }
+    case GET_BETS_PRICE_EVENT: {
       return {
         ...state,
         currentCategory: ''

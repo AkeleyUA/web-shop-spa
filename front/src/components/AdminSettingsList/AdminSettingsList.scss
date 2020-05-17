@@ -20,6 +20,10 @@ $secondary: #ef6c00;
     &:hover {
       background: darken($color: $secondary, $amount: 10%);
     }
+    &:disabled {
+      color: #fff;
+      background: darken($color: $secondary, $amount: 10%);
+    }
   }
 
   .drawen-icon {

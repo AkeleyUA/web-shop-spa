@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 
 import { useSnackbar } from 'notistack'
-import { getProductsForClientRequestAction, searchProductForClientRequestAction, getPopularProductsRequestAction } from './action'
+import { getProductsForClientRequestAction, searchProductForClientRequestAction, getPopularProductsRequestAction, getBestPriceProductsRequestAction } from './action'
 import Preloader from '../Preloader/Preloader'
 import PriceToggleButton from '../ToggleButton/ToggleButton'
 import { RatingButton } from '../RatingButton/RatingButton'
@@ -51,7 +51,7 @@ const productCreator = (arr) => {
             {item.sale > 0
               ? <div className="price">
                 <Typography className="onld-price" variant="caption">{item.price} &#8372;</Typography>
-                <Typography variant="h4" color="secondary">{Math.round(item.price - (item.price * (item.sale / 100))).toFixed(2)} &#8372;</Typography>
+                <Typography variant="h4" color="secondary">{(item.price - (item.price * (item.sale / 100))).toFixed(2)} &#8372;</Typography>
               </div>
               : <div className="price">
                 <Typography variant="h4" color="primary">{item.price} &#8372;</Typography>
@@ -78,20 +78,36 @@ const ProductsForClient = ({
   search,
   currentCategory,
   isPopular,
-  getPopularProductsRequest
+  getPopularProductsRequest,
+  isBestPrice,
+  getBestPriceProductsRequest
 }) => {
 
   const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
-    if (search) {
-      searchProductForClientRequest(search, limit, currentPage - 1)
-    } else if (isPopular) {
-      getPopularProductsRequest()
-    } else {
+    if (!search && !isPopular && !isBestPrice) {
       getProductsForClientRequest(currentCategory, limit, currentPage - 1)
     }
-  }, [currentPage, isPopular, search, searchProductForClientRequest, currentCategory, getProductsForClientRequest, getPopularProductsRequest])
+  }, [currentPage, currentCategory])
+
+  useEffect(() => {
+    if (search) {
+      searchProductForClientRequest(search, limit, currentPage - 1)
+    }
+  }, [currentPage, search])
+
+  useEffect(() => {
+    if (isPopular) {
+      getPopularProductsRequest(limit, currentPage - 1)
+    }
+  }, [currentPage, isPopular])
+
+  useEffect(() => {
+    if (isBestPrice) {
+      getBestPriceProductsRequest(limit, currentPage - 1)
+    }
+  }, [isBestPrice, currentPage - 1])
 
   useEffect(() => {
     if (message) {
@@ -106,7 +122,7 @@ const ProductsForClient = ({
         direction="row"
         className="cards-list"
       >
-        {loading ? <Preloader /> : productCreator(products)}
+        {loading ? <Preloader className="producrt-preloader" /> : productCreator(products)}
       </Grid>
     </Paper>
   )
@@ -116,7 +132,8 @@ const mapDispatchToProps = dispatch => {
   return {
     getProductsForClientRequest: bindActionCreators(getProductsForClientRequestAction, dispatch),
     searchProductForClientRequest: bindActionCreators(searchProductForClientRequestAction, dispatch),
-    getPopularProductsRequest: bindActionCreators(getPopularProductsRequestAction, dispatch)
+    getPopularProductsRequest: bindActionCreators(getPopularProductsRequestAction, dispatch),
+    getBestPriceProductsRequest: bindActionCreators(getBestPriceProductsRequestAction, dispatch)
   }
 }
 
@@ -128,7 +145,8 @@ const mapStateToProps = state => {
     currentPage: state.clientProductsState.currentPage,
     search: state.clientProductsState.search,
     currentCategory: state.clientCategoriesState.currentCategory,
-    isPopular: state.clientProductsState.isPopular
+    isPopular: state.clientProductsState.isPopular,
+    isBestPrice: state.clientProductsState.isBestPrice,
   }
 }
 

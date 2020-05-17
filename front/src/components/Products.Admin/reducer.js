@@ -147,7 +147,8 @@ export const adminProductsState = (state = initialState, action) => {
     case SHOW_ON_POPULAR_REQUEST: {
       return {
         ...state,
-        oneProductLoading: action.payload.id
+        oneProductLoading: action.payload.id,
+        message: null
       }
     }
     case SHOW_ON_POPULAR_SUCCESS: {

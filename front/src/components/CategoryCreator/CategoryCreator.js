@@ -5,7 +5,7 @@ import './CategoryCreator.scss'
 import { TextField, Paper, Button, FormHelperText } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { addCategoryRequestAction } from './action'
+import { addCategoryRequestAction, clearMessage } from './action'
 import { useSnackbar } from 'notistack'
 
 const CategoryCreator = ({
@@ -54,7 +54,15 @@ const CategoryCreator = ({
           value={category.name}
           autoComplete="off"
         />
-        <Button className="add-category-btn" variant="contained" color="primary" disabled={loading} onClick={addCatogory}>Добавить</Button>
+        <Button
+          className="add-category-btn"
+          variant="contained"
+          color="primary"
+          disabled={loading}
+          onClick={addCatogory}
+        >
+          Добавить
+          </Button>
       </Paper>
     </div>
   )
@@ -70,7 +78,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addCategoryRequest: bindActionCreators(addCategoryRequestAction, dispatch)
+    addCategoryRequest: bindActionCreators(addCategoryRequestAction, dispatch),
+    clearMessage: bindActionCreators(clearMessage, dispatch)
   }
 }
 

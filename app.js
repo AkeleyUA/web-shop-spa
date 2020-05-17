@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
     if (accessLevel === 3) {
       data.supervisor.push(socket.id)
     }
-    if (accessLevel > 10) {
+    if (accessLevel > 9) {
       data.admin.push(socket.id)
     }
     io.sockets.emit('stats', { data })
@@ -47,6 +47,9 @@ io.on('connection', (socket) => {
         data.supervisor = data.supervisor.filter(id => id !== socket.id)
       }
       case 100: {
+        data.admin = data.admin.filter(id => id !== socket.id)
+      }
+      case 10: {
         data.admin = data.admin.filter(id => id !== socket.id)
       }
     }

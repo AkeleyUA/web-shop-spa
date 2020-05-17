@@ -13,8 +13,8 @@ export const GET_BEST_PRICE_PRODUCTS_FAILURE = 'GET_BEST_PRICE_PRODUCTS_FAILURE'
 
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE'
 export const CHANGE_CURRENT_PAGE = 'CHENGE_CURRENT_PAGE'
-
-
+export const GET_POPULAR_EVENT = 'GET_POPULAR_EVENT'
+export const GET_BETS_PRICE_EVENT = 'GET_BETS_PRICE_EVENT'
 
 export const getProductsForClientRequestAction = (category, limit, page, filter) => {
   return {
@@ -82,9 +82,13 @@ export const searchProductForClientFailureAction = value => {
   }
 }
 
-export const getPopularProductsRequestAction = () => {
+export const getPopularProductsRequestAction = (limit, page) => {
   return {
-    type: GET_POPULAR_PRODUCTS_REQUEST
+    type: GET_POPULAR_PRODUCTS_REQUEST,
+    payload: {
+      limit,
+      page
+    }
   }
 }
 
@@ -97,7 +101,43 @@ export const getPopularProductsSuccessAction = (products, productsLength) => {
 
 export const getPopularProductsFailureAction = message => {
   return {
-    type: GET_POPULAR_PRODUCTS_REQUEST,
+    type: GET_POPULAR_PRODUCTS_FAILURE,
     payload: message
+  }
+}
+
+export const getBestPriceProductsRequestAction = (limit, page) => {
+  return {
+    type: GET_BEST_PRICE_PRODUCTS_REQUEST,
+    payload: {
+      limit,
+      page
+    }
+  }
+}
+export const getBestPriceProductsSuccessAction = (products, productsLength) => {
+  return {
+    type: GET_BEST_PRICE_PRODUCTS_SUCCESS,
+    payload: {
+      products, productsLength
+    }
+  }
+}
+export const getBestPriceProductsFailureAction = message => {
+  return {
+    type: GET_BEST_PRICE_PRODUCTS_FAILURE,
+    payload: message
+  }
+}
+
+export const getBestPriceEventAction = () => {
+  return {
+    type: GET_BETS_PRICE_EVENT
+  }
+}
+
+export const getPopularEventAction = () => {
+  return {
+    type: GET_POPULAR_EVENT
   }
 }

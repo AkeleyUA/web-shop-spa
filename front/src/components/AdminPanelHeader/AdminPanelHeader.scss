@@ -1,4 +1,9 @@
 .admin-panel-header {
   flex-direction: row;
   justify-content: space-between;
+  .typography-wrapper {
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+  }
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import {
   Paper,
   TextField,
@@ -16,17 +17,22 @@ import {
   CardMedia,
   Box,
   MenuItem,
-  FormHelperText
+  FormHelperText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from '@material-ui/core'
 import { Rating } from '@material-ui/lab'
 import { bindActionCreators } from 'redux'
-import { getProductForEditRequestAction, clearMessageAction } from './action'
+import { getProductForEditRequestAction, clearMessageAction, saveChangeProductRequestAction } from './action'
+import { getCategoriesRequestAction } from '../Categories.Admin/action'
 import { useSnackbar } from 'notistack'
 import Preloader from '../Preloader/Preloader'
+import { Transition } from '../Transition'
 
 import './ProductEditor.scss'
-import { getCategoriesRequestAction } from '../Categories.Admin/action'
-
 
 const labels = [
   {
@@ -67,29 +73,30 @@ const ProductEditor = ({
   clearMessage,
   loading,
   getCategoriesRequest,
-  categories
+  categories,
+  saveChangeRequest
 }) => {
   const { enqueueSnackbar } = useSnackbar()
+  const [isChange, setIsChange] = useState([])
+  const [open, setOpen] = useState(false)
   const [form, setForm] = useState({
     name: '',
-    price: '',
+    price: 0,
     img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/No_image_3x4.svg/1280px-No_image_3x4.svg.png',
-    category: 'Популярно',
-    amount: '',
+    category: '',
+    amount: 0,
     description: '',
-    sale: ''
+    sale: 0
   })
 
-  const getCategories = useCallback(
-    () => {
-      getCategoriesRequest()
-    },
-    [getCategoriesRequest],
-  )
+  const getCategories = useCallback(() => {
+    getCategoriesRequest()
+  }, [getCategoriesRequest])
+
   useEffect(() => {
     getProductForEditorRequest(location.state.id)
     getCategories()
-  }, [getCategories, getProductForEditorRequest, location.state.id])
+  }, [location.state.id])
 
   useEffect(() => {
     if (product.name) {
@@ -117,32 +124,24 @@ const ProductEditor = ({
       case '_id': return false
       case '__v': return false
       case 'show': return false
+      case 'popular': return false
       default: return true
     }
   })
 
-  const resetFormHamdler = () => {
-    setForm({
-      name: product.name,
-      price: product.price,
-      img: product.img,
-      category: product.category,
-      amount: product.amount,
-      description: product.description,
-      sale: product.sale
-    })
-  }
-
   const saveFormHandler = () => {
-
+    saveChangeRequest(form, product._id)
+    setIsChange(false)
   }
 
   const changeInputHandler = event => {
     setForm({ ...form, [event.target.name]: event.target.value })
+    setIsChange([...isChange, event.target.name])
   }
 
   const resetHandler = event => {
     setForm({ ...form, [event.currentTarget.name]: product[event.currentTarget.name] })
+    setIsChange(isChange.filter(name => name !== event.currentTarget.name))
   }
 
   const resetControler = (item) => {
@@ -152,10 +151,36 @@ const ProductEditor = ({
       )
     }
   }
+  const openDialogHandler = () => {
+    setOpen(true)
+  }
+  const closeDialogHandler = () => {
+    setOpen(false)
+  }
 
   return (
     <Grid container component={Paper}>
-      {loading && form.category === undefined
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={closeDialogHandler}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">Отменить изменения?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            После отмены введённые изменения не сохраняться
+            <Typography variant="caption">*Может они где-то и сохраняться, но точно не тут ^_^</Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button component={Link} to='/admin/products' color="primary">Подтвердить</Button>
+          <Button onClick={closeDialogHandler}>Отменить</Button>
+        </DialogActions>
+      </Dialog>
+      {loading
         ? <Preloader />
         :
         <>
@@ -178,8 +203,8 @@ const ProductEditor = ({
                       endAdornment: resetControler(item)
                     }}
                   >
-                    {categories.map((option) => (
-                      <MenuItem key={option._id} value={option.name}>
+                    {categories.filter(option => option.name !== 'Все').map((option) => (
+                      <MenuItem key={option._id} value={option.name} disabled={!option.show}>
                         {option.name}
                       </MenuItem>
                     ))}
@@ -231,7 +256,15 @@ const ProductEditor = ({
               <CardActions
                 disableSpacing={true}
               >
-                <Typography variant="h4" color="primary">{form.price} &#8372;</Typography>
+                {form.sale > 0
+                  ? <div className="price">
+                    <Typography className="onld-price" variant="caption">{Number(form.price).toFixed(2)} &#8372;</Typography>
+                    <Typography variant="h4" color="secondary">{(form.price - (form.price * (form.sale / 100))).toFixed(2)} &#8372;</Typography>
+                  </div>
+                  : <div className="price">
+                    <Typography variant="h4" color="primary">{Number(form.price).toFixed(2)} &#8372;</Typography>
+                  </div>
+                }
                 <IconButton color="primary"><Icon>shopping_cart</Icon></IconButton>
               </CardActions>
             </Card>
@@ -240,8 +273,29 @@ const ProductEditor = ({
       }
       <Grid item lg={12}>
         <Toolbar>
-          <Button onClick={resetFormHamdler}>Отменить</Button>
-          <Button onClick={saveFormHandler}>Сохранить</Button>
+          {isChange.length > 0
+            ? <Button
+              onClick={openDialogHandler}
+              style={{marginRight: 15}}
+            >
+              Отменить
+              </Button>
+            : <Button
+              component={Link}
+              to="/admin/products"
+            >
+              Назад к продуктам
+            </Button>
+          }
+
+          <Button
+            variant='contained'
+            color="primary"
+            disabled={!isChange.length > 0}
+            onClick={saveFormHandler}
+          >
+            Сохранить
+          </Button>
         </Toolbar>
       </Grid>
     </Grid>
@@ -262,6 +316,7 @@ const mapDispatchToProps = dispatch => {
     getProductForEditorRequest: bindActionCreators(getProductForEditRequestAction, dispatch),
     clearMessage: bindActionCreators(clearMessageAction, dispatch),
     getCategoriesRequest: bindActionCreators(getCategoriesRequestAction, dispatch),
+    saveChangeRequest: bindActionCreators(saveChangeProductRequestAction, dispatch)
   }
 }
 

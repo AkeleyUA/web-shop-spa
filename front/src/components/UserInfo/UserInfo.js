@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogContent
 } from '@material-ui/core'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { logoutAction } from '../AuthForm/action'
 import { connect } from 'react-redux'
@@ -100,25 +100,33 @@ const UserInfo = ({ logout, accessLevel }) => {
             <Typography variant="body2" color="primary">
               Контент-менеджер &nbsp;
               </Typography>
-              - предлагает измeнения/добавления товара или категории.
+              - добавление нового товара<br/>
+              - измeнение уже созданых продуктов
             </Typography>
           <Typography variant="subtitle2">
             <Typography variant="body2" color="primary">
               Модератор &nbsp;
               </Typography>
-              - подтверждает измeнения/добавленя товара, категории, отзыва на сайте.
+              - разрешает отображать товар/категорию на сайте<br/>
+              - удаляет товар <br/>
+              - наблюдает за контент-менеджерами, покупателями.
             </Typography>
           <Typography variant="subtitle2">
             <Typography variant="body2" color="primary">
               Супервизор &nbsp;
               </Typography>
-              - доступ к статистике пользователей админ панели, статистика продажи товаров.
+              - наблюдание за контент-менеджерами, модераторами, сепервизорами. <br />
+              * если руки дойдут, навешаю ему вкладок, есть предложения? &nbsp;
+              <a href="http://t.me/AkeleyUA" target="_blank">Напишите мне</a>
             </Typography>
           <Typography variant="subtitle2">
             <Typography variant="body2" color="primary">
               Администратор &nbsp;
               </Typography>
-              - всё выше перечисленное, подтверждает создание нового пользователя, предоставление/измeнения прав доступа.
+              - всё вышеперечисленное короме добавление товара.
+              - подверждает регистрацию пользователя и доступ к сайту.
+              - выдает права доступа.
+              - наблюдает за всеми.
             </Typography>
         </DialogContent>
         <DialogActions>

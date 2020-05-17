@@ -9,7 +9,8 @@ import {
   deleteProductRequestAction,
   searchProductForAdminRequestAction,
   changePageAction,
-  showOnPopularRequestAction
+  showOnPopularRequestAction,
+  clearMessage
 } from './action'
 
 import {
@@ -47,7 +48,8 @@ const ProductsForAdmin = ({
   searchProductForAdminRequest,
   changePage,
   currentPage,
-  accessLevel
+  accessLevel,
+  clearMessage
 }) => {
   const { enqueueSnackbar } = useSnackbar()
 
@@ -63,6 +65,7 @@ const ProductsForAdmin = ({
   useEffect(() => {
     if (message) {
       enqueueSnackbar(message)
+      clearMessage()
     }
   }, [message, enqueueSnackbar])
 
@@ -199,7 +202,8 @@ const mapDispatchToProps = dispatch => {
     showOnPopularRequest: bindActionCreators(showOnPopularRequestAction, dispatch),
     deleteProductRequest: bindActionCreators(deleteProductRequestAction, dispatch),
     searchProductForAdminRequest: bindActionCreators(searchProductForAdminRequestAction, dispatch),
-    changePage: bindActionCreators(changePageAction, dispatch)
+    changePage: bindActionCreators(changePageAction, dispatch),
+    clearMessage: bindActionCreators(clearMessage, dispatch)
   }
 }
 

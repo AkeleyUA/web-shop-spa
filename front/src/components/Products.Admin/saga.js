@@ -113,7 +113,6 @@ function* showOnWebSideWorker(action) {
 
 function* delProductWorker(action) {
   const id = action.payload
-  console.log(id)
   try {
     const data = yield call(fetchDelProduct, action.payload)
     if (data.status) {
@@ -128,6 +127,7 @@ function* showOnPopularWorker(action) {
   const { id, checked } = action.payload
   try {
     const data = yield call(fetchShowOnPopular, id, checked)
+    console.log(data)
     if (data.status) {
       yield put(showOnPopularSuccessAction(id, data.message))
     } else {

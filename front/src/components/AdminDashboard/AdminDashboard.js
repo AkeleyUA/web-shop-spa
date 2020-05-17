@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Grid, Typography } from '@material-ui/core'
 import { connect } from 'react-redux'
 import ProductCreator from '../ProductCreator/ProductCreator'
-import CategoryCreator from '../CategoryCreator/CategoryCreator'
 import { socket } from '../../App'
 import OnlineUserPanel from '../OnlineUserPanel/OnlineUserPanel'
 import RegistrationRequestPanel from '../RegistrationRequestPanel/RegistrationRequestPanel'
@@ -25,7 +24,7 @@ const AdminDashboard = ({ accessLevel }) => {
 
   return (
     <Grid container className="admin-dashboard">
-      {(accessLevel === 3 || accessLevel === 2 || accessLevel >= 10)
+      {(accessLevel === 3 || accessLevel === 2 || accessLevel > 9)
         && <>
           <Grid item lg={12}>
             <Typography variant="caption">Пользователей на сайте</Typography>

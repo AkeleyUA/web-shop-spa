@@ -8,10 +8,10 @@ import { matchPath, useLocation } from 'react-router-dom';
 import './AdminPanelHeader.scss'
 
 
-const AdminPanelHeader = () => {
+const AdminPanelHeader = ({ email }) => {
   const location = useLocation()
   const findName = settingsList.find(item => matchPath(location.pathname, item.path))
-  
+
   return (
     <AppBar
       position="sticky"
@@ -20,13 +20,21 @@ const AdminPanelHeader = () => {
       <Toolbar
         className="admin-panel-header"
       >
-        <Typography variant="body1">
-          {findName !== undefined ? findName.name : ''}
-        </Typography>
+        <div className="typography-wrapper">
+          <Typography variant="body1">
+            {findName !== undefined ? findName.name : ''}
+          </Typography>
+          <Typography variant="body1">{email}</Typography>
+        </div>
         <UserInfo />
       </Toolbar>
     </AppBar>
   )
 }
 
-export default connect()(AdminPanelHeader)
+const mapStateToProps = state => {
+  return {
+    email: state.authState.token.userEmail
+  }
+}
+export default connect(mapStateToProps, null)(AdminPanelHeader)

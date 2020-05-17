@@ -102,10 +102,14 @@ router.post(
   async (req, res) => {
     const { category, limit, page } = req.body
     const skip = page * 16
-
     try {
-      const products = await Product.find({ category, show: true }).limit(limit).skip(skip)
-      const productsLength = (await Product.find({ category, show: true })).length
+      if (category) {
+        const products = await Product.find({ category, show: true }).limit(limit).skip(skip)
+        const productsLength = (await Product.find({ category, show: true })).length
+        return res.json({ products, status: true, productsLength })
+      }
+      const products = await Product.find({ show: true }).limit(limit).skip(skip)
+      const productsLength = (await Product.find({ show: true })).length
       res.json({ products, status: true, productsLength })
     } catch (e) {
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
@@ -122,6 +126,22 @@ router.post(
     try {
       const products = await Product.find({ popular: true }).limit(limit).skip(skip)
       const productsLength = (await Product.find({ popular: true })).length
+      res.json({ products, status: true, productsLength })
+    } catch (e) {
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
+    }
+  }
+)
+
+router.post(
+  '/get/best-price',
+  async (req, res) => {
+    const { limit, page } = req.body
+    const skip = page * 16
+
+    try {
+      const products = await Product.find({ sale: { $gt: 0 } }).limit(limit).skip(skip)
+      const productsLength = (await Product.find({ sale: { $gt: 0 } })).length
       res.json({ products, status: true, productsLength })
     } catch (e) {
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
@@ -174,6 +194,60 @@ router.post(
       res.status(201).json({ message: "Новый товар добавлен", status: true })
 
     } catch (e) {
+      res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
+    }
+  }
+)
+
+router.post(
+  '/save-change',
+  [
+    check('name', 'name isEmpty').isLength({ min: 2 }),
+    check('category', 'category isEmpty').isLength({ min: 2 }),
+    check('amount', 'amount isEmpty').isNumeric(),
+    check('img', 'img isEmpty').isLength({ min: 2 }),
+    check('description', 'description isEmpty').isLength({ min: 2 }),
+    check('price', 'price isEmpty').isNumeric(),
+    check('sale', 'sale isEmpty').isNumeric()
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req)
+
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array(),
+          message: "Данные некорректные",
+          status: false
+        })
+      }
+
+      const {
+        id,
+        name,
+        category,
+        amount,
+        img,
+        description,
+        price,
+        sale
+      } = req.body
+
+      await Product.findOneAndUpdate({ _id: id }, {
+        $set: {
+          name,
+          category,
+          amount,
+          img,
+          description,
+          price,
+          sale
+        }
+      })
+      const product = await Product.findOne({ _id: id })
+      res.status(201).json({ product, message: "Данные сохранены", status: true })
+    } catch (e) {
+      console.log(e)
       res.status(500).json({ message: "Что-то пошло не так, перезагрузите страницу", status: false })
     }
   }
@@ -247,15 +321,15 @@ router.post(
 
 
 
-// for (i = 0; i < 50; i++) {
+// for (i = 1; i < 40; i++) {
 //   const product = new Product({
-//     name: `Продукт ${i}, test_secription_${i}`,
-//     category: 'Все',
+//     name: `Продукт ${i}, описание продукта ${i}`,
+//     category: 'Категория 4',
 //     amount: i,
-//     img: 'https://pbs.twimg.com/profile_images/925576484122779648/ucVTUoPg_400x400.jpg',
+//     img: 'https://img2.goodfon.com/wallpaper/nbig/f/11/material-design-color-geometriia-linii-krasnyi-goluboi-sinii.jpg',
 //     description: `Продукт ${i}, полное описание полное описание полное описание полное описание полное описание`,
 //     price: i * 5 + 1.99,
-//     show: false,
+//     show: true,
 //     sale: 0,
 //     popular: false
 //   })

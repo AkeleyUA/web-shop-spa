@@ -9,7 +9,8 @@ import {
   Icon,
   List,
   Drawer,
-  Typography
+  Typography,
+  Button
 } from "@material-ui/core";
 
 import './AdminSettingsList.scss'
@@ -128,9 +129,10 @@ const AdminSettingsList = ({ accessLevel }) => {
           })}
       </List>
       <ListItem
-        component={NavLink}
+        component={Button}
         variant="contained"
         to='/developer'
+        disabled
         className="to-developer drawer-btn-selected drawer-btn">
         <ListItemIcon
           classes={classes.listIcon}

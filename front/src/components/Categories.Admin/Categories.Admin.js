@@ -83,25 +83,21 @@ const CategoriesForAdmin = ({
                   </TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell align="center">
-                    {(
-                      '123' === row._id
-                        ? <Preloader />
-                        : <Checkbox
-                          color="primary"
-                          name={row._id}
-                          checked={row.show || false}
-                          onChange={(event) => {
-                            showCategoryOnWebSiteHendler(row._id, event.target.checked)
-                          }}
-                          disabled={loading || oneCategoryLoading}
-                        />
-                    )}
+                    <Checkbox
+                      color="primary"
+                      name={row._id}
+                      checked={row.show || false}
+                      onChange={(event) => {
+                        showCategoryOnWebSiteHendler(row._id, event.target.checked)
+                      }}
+                      disabled={loading || oneCategoryLoading || row.name === 'Все'}
+                    />
                   </TableCell>
                   <TableCell align="center">
                     <IconButton
                       className="centered-btn"
                       onClick={() => { deleteCategoryRequest(row._id) }}
-                      disabled={loading || oneCategoryLoading}
+                      disabled={loading || oneCategoryLoading || row.name === 'Все'}
                     >
                       <Icon>delete_outline</Icon>
                     </IconButton>

@@ -89,9 +89,7 @@ const RegistrationRequestPanel = ({
     deleteUserRequest(currentUser._id)
     closeDialogHandler()
   }
-
-  console.log(currentUser)
-
+  
   return (
     <Grid
       container

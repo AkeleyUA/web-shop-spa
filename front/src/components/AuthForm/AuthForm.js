@@ -19,7 +19,8 @@ import {
   ListItem,
   ListSubheader,
   ListItemText,
-  List
+  List,
+  Divider
 } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 
@@ -62,6 +63,12 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message, clearMe
     loginRequest(form)
   }
 
+  const keyPressHandler = event => {
+    if (event.key === 'Enter') {
+      loginRequest(form)
+    }
+  }
+
   useEffect(() => {
     if (message) {
       enqueueSnackbar(message)
@@ -70,59 +77,76 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message, clearMe
   }, [message, clearMessage, enqueueSnackbar])
 
   return (
-    <div className="auth-page">
+    <div
+      className="auth-page"
+      onKeyPress={keyPressHandler}
+    >
       <Dialog
         open={dialog}
         TransitionComponent={Transition}
         keepMounted
-        open={dialog}
         onClose={handleCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">Тестовые учётные записи</DialogTitle>
         <DialogContent>
-          <List
-            disablePadding
-            dense
-          >
-            <ListSubheader color="primary">Контент-менеджеры</ListSubheader>
+          <List>
+            <Divider />
             <ListItem>
-              <ListItemText>login: cm1@mail.ru, password: 123456</ListItemText>
+              <ListItemText
+                secondary={
+                  <>
+                    <Typography>login: cm1@mail.ru, password: 123456</Typography>
+                    <Typography>login: cm2@mail.ru, password: 123456</Typography>
+                  </>
+                }
+              >
+                <Typography variant="caption" color="primary">Контент-менеджеры</Typography>
+              </ListItemText>
             </ListItem>
+            <Divider />
             <ListItem>
-              <ListItemText>login: cm2@mail.ru, password: 123456</ListItemText>
+              <ListItemText
+                secondary={
+                  <>
+                    <Typography>login: m1@mail.ru, password: 123456</Typography>
+                    <Typography>login: m2@mail.ru, password: 123456</Typography>
+                  </>
+                }
+              >
+                <Typography variant="caption" color="primary">Модератор</Typography>
+              </ListItemText>
             </ListItem>
-          </List>
-          <List
-            disablePadding
-            dense
-          >
-            <ListSubheader color="primary">Модераторы</ListSubheader>
+            <Divider />
             <ListItem>
-              <ListItemText>login: m1@mail.ru, password: 123456</ListItemText>
+              <ListItemText
+                secondary={
+                  <>
+                    <Typography>login: s1@mail.ru, password: 123456</Typography>
+                  </>
+                }
+              >
+                <Typography variant="caption" color="primary">Супервизор</Typography>
+              </ListItemText>
             </ListItem>
+            <Divider />
             <ListItem>
-              <ListItemText>login: m2@mail.ru, password: 123456</ListItemText>
+              <ListItemText
+                secondary={
+                  <>
+                    <Typography>login: a1@mail.ru, password: 123456</Typography>
+                  </>
+                }
+              >
+                <Typography variant="caption" color="primary">Администратор</Typography>
+              </ListItemText>
             </ListItem>
-          </List>
-          <List
-            disablePadding
-            dense
-          >
-            <ListSubheader color="primary">Cупервизор</ListSubheader>
+            <Divider />
             <ListItem>
-              <ListItemText>login: s1@mail.ru, password: 123456</ListItemText>
+              <ListItemText><Typography variant="caption" color="secondary">Можете создать свою, если хотите ^_^</Typography></ListItemText>
             </ListItem>
-          </List>
-          <List
-            disablePadding
-            dense
-          >
-            <ListSubheader color="primary">Администратор</ListSubheader>
-            <ListItem>
-              <ListItemText>login: a1@mail.ru, password: 123456</ListItemText>
-            </ListItem>
+            <Divider />
           </List>
         </DialogContent>
         <DialogActions>
@@ -183,7 +207,12 @@ const AuthForm = ({ registrationRequest, loginRequest, loading, message, clearMe
               >
                 <Typography variant="button">Регистрация</Typography>
               </Button>
-              <Button onClick={handleOpenDialog} className="login-helper" color="primary">
+              <Button
+                onClick={handleOpenDialog}
+                className="login-helper"
+                color="secondary"
+                disabled={loading}
+              >
                 <Icon>help_outline</Icon>
               </Button>
             </ButtonGroup>

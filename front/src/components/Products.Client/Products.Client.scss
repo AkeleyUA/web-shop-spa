@@ -5,6 +5,9 @@
   .cards-list {
     height: 100%;
     min-height: 50vh;
+    .producrt-preloader {
+      height: 800px;
+    }
     .card {
       padding: 15px;
       min-width: 260px;

@@ -15,15 +15,19 @@ import ProductsForClient from '../Products.Client/Products.Client'
 
 import './Catalog.scss'
 import { bindActionCreators } from 'redux'
-import { setCurrentCategoryAction } from '../Categories.Client/action'
 import BottomNavBar from '../BottomNavBar/BottomNavBar'
-import { getPopularProductsRequestAction } from '../Products.Client/action'
+import { getPopularEventAction, changeCurrentPageAction, getBestPriceEventAction } from '../Products.Client/action'
 
 
-const Catalog = ({ getPopularProductsRequest, setCurrentCategory }) => {
-
+const Catalog = ({ getPopularProducts, setCurrentPage, getBestPrice }) => {
   const popularHandler = () => {
-    getPopularProductsRequest()
+    getPopularProducts()
+    setCurrentPage(1)
+  }
+
+  const bestPriceHandler = () => {
+    getBestPrice()
+    setCurrentPage(1)
   }
 
   return (
@@ -64,6 +68,7 @@ const Catalog = ({ getPopularProductsRequest, setCurrentCategory }) => {
                   fullWidth
                   color="secondary"
                   variant="contained"
+                  onClick={bestPriceHandler}
                   size="small"
                 >
                   Лучшие цены
@@ -96,8 +101,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentCategory: bindActionCreators(setCurrentCategoryAction, dispatch),
-  getPopularProductsRequest: bindActionCreators(getPopularProductsRequestAction, dispatch)
+  getPopularProducts: bindActionCreators(getPopularEventAction, dispatch),
+  getBestPrice: bindActionCreators(getBestPriceEventAction, dispatch),
+  setCurrentPage: bindActionCreators(changeCurrentPageAction, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Catalog)

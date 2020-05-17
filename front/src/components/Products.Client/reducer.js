@@ -9,7 +9,12 @@ import {
   CLEAR_MESSAGE,
   GET_POPULAR_PRODUCTS_REQUEST,
   GET_POPULAR_PRODUCTS_SUCCESS,
-  GET_POPULAR_PRODUCTS_FAILURE
+  GET_POPULAR_PRODUCTS_FAILURE,
+  GET_POPULAR_EVENT,
+  GET_BETS_PRICE_EVENT,
+  GET_BEST_PRICE_PRODUCTS_REQUEST,
+  GET_BEST_PRICE_PRODUCTS_SUCCESS,
+  GET_BEST_PRICE_PRODUCTS_FAILURE
 } from "./action"
 import { CHANGE_SEARCH_VALUE } from "../ProductsFilter/action"
 import { SET_CURRENT_CATEGORY } from "../Categories.Client/action"
@@ -97,6 +102,14 @@ export const clientProductsState = (state = initialState, action) => {
         search: action.payload
       }
     }
+    case GET_POPULAR_EVENT: {
+      return {
+        ...state,
+        isPopular: true,
+        isBestPrice: false,
+        search: null,
+      }
+    }
     case GET_POPULAR_PRODUCTS_REQUEST: {
       return {
         ...state,
@@ -104,9 +117,6 @@ export const clientProductsState = (state = initialState, action) => {
         message: null,
         products: [],
         productsLength: 0,
-        isPopular: true,
-        isBestPrice: false,
-        search: null,
       }
     }
     case GET_POPULAR_PRODUCTS_SUCCESS: {
@@ -118,6 +128,37 @@ export const clientProductsState = (state = initialState, action) => {
       }
     }
     case GET_POPULAR_PRODUCTS_FAILURE: {
+      return {
+        ...state,
+        loading: false,
+        message: action.payload
+      }
+    }
+    case GET_BETS_PRICE_EVENT: {
+      return {
+        ...state,
+        isBestPrice: true,
+        isPopular: false,
+        search: null
+      }
+    }
+    case GET_BEST_PRICE_PRODUCTS_REQUEST: {
+      return {
+        ...state,
+        loading: true,
+        products: [],
+        productsLength: 0
+      }
+    }
+    case GET_BEST_PRICE_PRODUCTS_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        productsLength: action.payload.productsLength,
+        products: action.payload.products
+      }
+    }
+    case GET_BEST_PRICE_PRODUCTS_FAILURE: {
       return {
         ...state,
         loading: false,

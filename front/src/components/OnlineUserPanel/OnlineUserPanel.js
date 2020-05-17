@@ -22,7 +22,7 @@ const config = [
   {
     label: 'Администраторов: ',
     key: 'admin',
-    lvl: 4
+    lvl: 10
   }
 ]
 
@@ -32,7 +32,7 @@ const OnlineUserPanel = ({ data, accessLevel }) => {
       {config
         .filter(item => item.lvl <= accessLevel)
         .map(item => (
-          <Grid item lg={3}>
+          <Grid key={item.label} item lg={3}>
             <Paper className="online-group-card">
               <Typography
                 align="center"
