@@ -10,7 +10,6 @@
     }
     .card {
       padding: 15px;
-      min-width: 260px;
       max-width: 320px;
       transition: all .1s cubic-bezier(0.6, 0.04, 0.98, 0.335);
       &:hover {
@@ -36,6 +35,10 @@
   }
   .price {
     height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 15px;
   }
 }
 

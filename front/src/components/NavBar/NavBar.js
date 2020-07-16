@@ -119,12 +119,14 @@ const NavBar = ({cart}) => {
             <Button
               variant="contained"
               color="primary"
+              size="small"
               startIcon={<Icon>phone</Icon>}
             >
               +380 73 069 XX XX
             </Button>
             <Divider orientation="vertical" flexItem />
             <Button
+              size="small"
               variant="contained"
               color="secondary"
               startIcon={<Icon>phone</Icon>}
@@ -193,9 +195,4 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NavBar)
+export default connect(mapStateToProps, null)(NavBar)

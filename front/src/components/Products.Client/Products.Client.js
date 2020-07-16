@@ -25,7 +25,7 @@ const limit = 16
 const productCreator = (arr) => {
   return arr.map(item => {
     return (
-      <Grid key={item._id} item xs={12} sm={6} md={4} lg={3}>
+      <Grid key={item._id} item xs={12} sm={6} md={6} lg={3} justify="space-around">
         <Card
           className="card"
           variant="outlined"
